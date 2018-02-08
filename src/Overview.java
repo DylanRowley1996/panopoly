@@ -6,22 +6,13 @@ import java.util.ArrayList;
 
 public class Overview extends JFrame {
 
-
-    JPanel overviewPanel = new JPanel();
-    JComboBox playerList = null;
-
-    //Array of players
-    Player[] players = null;
-
-    //Fields to represent
+    private JComboBox playerList = null;
+    private Player[] players = null;
     private JLabel playerInformation = new JLabel("");
-
-
 
     public Overview(Player[] players){
         super("Overview");
 
-        //Initialise the array of Players.
         this.players = players;
 
         //Populate ComboBox with Players names
@@ -36,7 +27,7 @@ public class Overview extends JFrame {
         //Add Panel to JFrame
         add(playerInformation);
 
-
+        //Check if current selection has changed.
         ActionListener comboBoxListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -47,23 +38,22 @@ public class Overview extends JFrame {
             }
         };
 
+        //Add the action listener to the combo box.
         playerList.addActionListener(comboBoxListener);
         playerList.setSelectedIndex(0);
 
-        //Add to JFrame
+        //Add combo box to JFrame
         add(playerList, BorderLayout.SOUTH);
-
-
 
         //Add panel to JFrame
         pack();
         setLocationRelativeTo(null);
-
         setSize(400,300);
-
+        getContentPane().setBackground(Color.decode("#71AE6F"));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
+    //Organises the currently selected players information and places it in the JLabel.
     public void organiseInformation(String playerToFind){
 
         boolean playerFound = false;
@@ -79,19 +69,13 @@ public class Overview extends JFrame {
             }
         }
 
-        /*
-            Possible fonts:
-            ms gothic
-            Plantagenet Cherokee font
-            century gothic font
-        * */
-
-        playerInformation.setFont(new Font("Century Gothic", Font.BOLD,15));
-        playerInformation.setText("<html><b><span style=\"font-family:Century Gothic;font-size:15px;\">Player</span></b>: "+players[i].getName()+ "<br/>" +
-                "<b><span style=\"font-family:Century Gothic;font-size:15px;\">Net worth: </span></b>"+players[i].getNetWorth()+ "<br/>" +
-                "<b><span style=\"font-family:Century Gothic;font-size:15px;\">Properties: </span></b> "+String.join(", ",players[i].getProperties())+ "<br/>"+
-                "<b><span style=\"font-family:Century Gothic;font-size:15px;\">Monopolies: </span></b> "+String.join(", ",players[i].getMonopolies())+ " <br/>"+
-                "<b><span style=\"font-family:Century Gothic;font-size:15px;\">Mortgages:  </span></b>"+String.join(", ",players[i].getMortgages())+ " <br/></html>");
+       //Format the data.
+        playerInformation.setFont(new Font("Rockwell", Font.BOLD,15));
+        playerInformation.setText("<html><b><span style=\"font-family:Rockwell;font-size:15px;\">Player</span></b>: "+players[i].getName()+ "<br/>" +
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Net worth: </span></b>"+players[i].getNetWorth()+ "<br/>" +
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Properties: </span></b> "+String.join(", ",players[i].getProperties())+ "<br/>"+
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Monopolies: </span></b> "+String.join(", ",players[i].getMonopolies())+ " <br/>"+
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Mortgages:  </span></b>"+String.join(", ",players[i].getMortgages())+ " <br/></html>");
 
 
     }

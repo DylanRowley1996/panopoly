@@ -22,7 +22,6 @@ public class Main {
         Player[] players = {player1,player2,player3};
 
 
-
         // set look and feel to the system look and feel
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

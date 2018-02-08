@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class BuyOrAuction extends JFrame{
 
@@ -16,13 +18,32 @@ public class BuyOrAuction extends JFrame{
         //Add Panel and Buttons to JFrame
         add(propertyInformation,BorderLayout.NORTH);
 
-
         //Add buttons to button panel
         buttonPanel.add(buy);
         buttonPanel.add(auction);
 
         //Add button panel to JFrame
         add(buttonPanel, BorderLayout.SOUTH);
+
+        //Check if current selection has changed.
+        ActionListener buttonListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if(e.getSource() == buy){
+                    System.out.println("Buy button pressed...\n\n");
+                    //currentPlayer.purchaseProperty();
+                }
+                else if(e.getSource() == auction){
+                    System.out.println("Auction button pressed...\n\n");
+                    Auction auction = new Auction("Hello");
+                }
+
+            }
+        };
+
+        buy.addActionListener(buttonListener);
+        auction.addActionListener(buttonListener);
 
         pack();
         setLocationRelativeTo(null);
@@ -31,6 +52,8 @@ public class BuyOrAuction extends JFrame{
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
+
+
 
 
 }
