@@ -8,15 +8,12 @@ public class DetailsPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private static final int TEXT_AREA_HEIGHT = 10;
-	private static final int TEXT_AREA_WIDTH = 9;
+	private static final int TEXT_AREA_WIDTH = 20;
 	private static final int FONT_SIZE = 14;
 
 	JTextArea textArea = new JTextArea(TEXT_AREA_HEIGHT, TEXT_AREA_WIDTH);
 	
 	DetailsPanel() {
-		setSize(50, 50);
-		setPreferredSize(new Dimension(50, 50));
-        setMaximumSize(new Dimension(50, 50));
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Serif", Font.BOLD, FONT_SIZE));
 		textArea.setLineWrap(true);
@@ -38,7 +35,7 @@ public class DetailsPanel extends JPanel {
 				else textArea.append("\nYou must pay rent on this property!");
 			}
 			else {
-				textArea.append("\nThis property is unowned! Choose to buy or put up for auction");
+				textArea.append("\nThis property is unowned! \nChoose to buy or put up for auction");
 				textArea.append("\nCost: $" + cost);
 				textArea.append("\nRent: $" + rent);
 			}

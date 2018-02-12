@@ -6,12 +6,41 @@ public class Main {
 	public static void main(String args[]) {
 		HistoryLog history = new HistoryLog();
 		DetailsPanel details = new DetailsPanel();
+		Board board = new Board();
+		Board.loadBoard();
+		JPanel boardPanel = board.getBoard();
 		JFrame frame = new JFrame();
 		
-		frame.setSize(500, 500);
-		frame.add(history, BorderLayout.LINE_START);
-		frame.add(details, BorderLayout.LINE_END);
-		frame.setLayout(new GridLayout());  //set layout
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setSize(screenSize.width, screenSize.height);
+		frame.setLayout(new GridBagLayout());
+	    GridBagConstraints c = new GridBagConstraints();
+	    
+	    c.fill = GridBagConstraints.HORIZONTAL;
+	    c.weightx = 0.5;
+	    c.gridwidth = 2;
+	    c.gridheight = 3;
+	    c.gridx = 0;
+	    c.gridy = 0;
+	    frame.add(boardPanel, c);
+	    
+	    c.fill = GridBagConstraints.HORIZONTAL;
+	    c.weightx = 1;
+	    c.gridwidth = 1;
+	    c.gridheight = 1;
+	    c.gridx = 2;
+	    c.gridy = 0;
+	    frame.add(details, c);
+	    c.fill = GridBagConstraints.HORIZONTAL;
+	    c.weightx = 0.5;
+	    c.gridwidth = 1;
+	    c.gridheight = 1;
+	    c.gridx = 2;
+	    c.gridy = 1;
+	    frame.add(history, c);
+
+	    
+	    frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
