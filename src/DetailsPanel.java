@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JPanel;
@@ -12,6 +13,7 @@ public class DetailsPanel extends JPanel {
 	private static final int FONT_SIZE = 14;
 
 	JTextArea textArea = new JTextArea(TEXT_AREA_HEIGHT, TEXT_AREA_WIDTH);
+	//Color c = new Color(255, 63, 51);
 	
 	DetailsPanel() {
 		textArea.setEditable(false);
@@ -19,6 +21,7 @@ public class DetailsPanel extends JPanel {
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
 		setLayout(new BorderLayout());
+		//textArea.setBackground(c);
 		add(textArea);
 		return;
 	}

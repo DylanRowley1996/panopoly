@@ -4,14 +4,14 @@ import java.io.*;
 import javax.imageio.*;
 import javax.swing.JPanel;
 
-public class Board extends JPanel
+public class BoardExample extends JPanel
 {
 	private static JPanel panel = new JPanel();
 	static BufferedImage img;
 	static int panelWidth;
 	static int panelHeight;
 
-	public Board()
+	public BoardExample()
 	{
 		try
 		{
@@ -34,7 +34,7 @@ public class Board extends JPanel
 
 	public static void loadBoard()
 	{
-		panel.add(new Board());
+		panel.add(new BoardExample());
 	}
 
 	public JPanel getBoard(){
