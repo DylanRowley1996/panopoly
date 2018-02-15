@@ -1,4 +1,7 @@
 import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,16 +10,33 @@ public class BuyOrAuction extends JFrame{
 
     private JPanel propertyInformation = new JPanel();
     private JPanel buttonPanel = new JPanel(new GridLayout(1,2));
+    private JSplitPane propertyInformation1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+    private JTextPane propertyName = new JTextPane();
+    private JTextArea propertyPrices = new JTextArea("Prices will go here.\n\n\n\n\n\n\n");
     private JButton buy = new JButton("Buy");
     private JButton auction = new JButton("Auction");
     private String property = "";
 
     //Change parameter to Property property when class is created and implemented
     public BuyOrAuction(String property){
+
+        StyledDocument doc = propertyName.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+        propertyName.setBackground(Color.decode("#E53C00"));
+        propertyName.setText("Property Name");
+        propertyName.setEditable(false);
+        propertyPrices.setLineWrap(true);
+
+        //Implement necessary fields in split pane.
+        propertyInformation1.setTopComponent(propertyName);
+        propertyInformation1.setBottomComponent(propertyPrices);
+
         this.property = property;
 
         //Add Panel and Buttons to JFrame
-        add(propertyInformation,BorderLayout.NORTH);
+        add(propertyInformation1,BorderLayout.NORTH);
 
         //Add buttons to button panel
         buttonPanel.add(buy);
@@ -48,7 +68,7 @@ public class BuyOrAuction extends JFrame{
         pack();
         setLocationRelativeTo(null);
 
-        setSize(400,300);
+        setSize(250,300);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
