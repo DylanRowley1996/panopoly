@@ -20,7 +20,7 @@ public class Auction extends JFrame{
     //All necessary components to display bidding history
     private JPanel biddingHistoryPanel = new JPanel();
     private JLabel biddingHistoryTitle = new JLabel("Bidding History");
-    private JTextArea biddingHistoryLog = new JTextArea("ONLY THE RECENT HISTORY OF BIDS WILL BE ENTERED HERE. Not all of them");
+    private JTextArea biddingHistoryArea = new JTextArea("ONLY THE RECENT HISTORY OF BIDS WILL BE ENTERED HERE. Not all of them");
 
     private JSplitPane propertyAndBiddingPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
     private JSplitPane splitBiddingPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -28,6 +28,9 @@ public class Auction extends JFrame{
 
     public Auction(String propertyName){
         propertyInformationArea.setLineWrap(true);
+        propertyInformationArea.setEditable(false);
+
+        biddingHistoryArea.setEditable(false);
 
         buttonPanel.setLayout(new FlowLayout(CENTER));
         buttonPanel.add(bidButton);
@@ -37,11 +40,11 @@ public class Auction extends JFrame{
 
         //Create bidding history panel
         biddingHistoryPanel.setLayout(new BorderLayout());
-        biddingHistoryLog.setLineWrap(true);
+        biddingHistoryArea.setLineWrap(true);
         biddingHistoryTitle.setHorizontalAlignment(JLabel.CENTER);
         biddingHistoryTitle.setVerticalAlignment(JLabel.CENTER);
         biddingHistoryPanel.add(biddingHistoryTitle, BorderLayout.PAGE_START);
-        biddingHistoryPanel.add(biddingHistoryLog, BorderLayout.CENTER);
+        biddingHistoryPanel.add(biddingHistoryArea, BorderLayout.CENTER);
 
         //Add bid and withdraw buttons to bidding JPanel.
         biddingProcessPanel.setLayout(new FlowLayout());

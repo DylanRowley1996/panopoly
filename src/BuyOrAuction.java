@@ -24,19 +24,27 @@ public class BuyOrAuction extends JFrame{
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
         propertyName.setBackground(Color.decode("#E53C00"));
         propertyName.setText("Property Name");
         propertyName.setEditable(false);
+
         propertyPrices.setLineWrap(true);
+        propertyPrices.setEditable(false);
+
+        propertyInformation.setLayout(new BorderLayout());
+        propertyInformation.add(propertyPrices);
 
         //Implement necessary fields in split pane.
         propertyInformation1.setTopComponent(propertyName);
-        propertyInformation1.setBottomComponent(propertyPrices);
+
+        //Add JPanel with property prices to SplitPane
+        propertyInformation1.setBottomComponent(propertyInformation);
 
         this.property = property;
 
         //Add Panel and Buttons to JFrame
-        add(propertyInformation1,BorderLayout.NORTH);
+        add(propertyInformation1);
 
         //Add buttons to button panel
         buttonPanel.add(buy);
