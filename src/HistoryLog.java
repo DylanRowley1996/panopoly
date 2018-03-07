@@ -3,7 +3,7 @@ import javax.swing.text.DefaultCaret;
 
 import java.awt.*;
 
-public class HistoryLog extends JPanel{
+public class HistoryLog extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private static final int TEXT_AREA_HEIGHT = 15;

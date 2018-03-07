@@ -7,15 +7,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class GUI {
-	HistoryLog history = new HistoryLog();
-	DetailsPanel details = new DetailsPanel();
-	BoardExample board = new BoardExample();
-	JPanel boardPanel = board.getBoard();
-	JFrame frame = new JFrame();
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private HistoryLog history = new HistoryLog();
+	private DetailsPanel details = new DetailsPanel();
+	private BoardExample board = new BoardExample();
+	private JPanel boardPanel = board.getBoard();
+	private JFrame frame = new JFrame();
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	GUI() {		
 		BoardExample.loadBoard();
+		frame.setTitle("Interdimensional Panopoly");
 		frame.setSize(screenSize.width, screenSize.height);
 		frame.setLayout(new GridBagLayout());
 	    GridBagConstraints c = new GridBagConstraints();
