@@ -31,7 +31,7 @@ public class MCQ {
 		
 		// Creating a Workbook from an Excel file (.xls or .xlsx)
     	//Workbook: A workbook is the high-level representation of a Spreadsheet.
-        Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));;
+        Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));
 		
         //Obtain the sheet and the random row.
         Sheet sheet = workbook.getSheetAt(0);
