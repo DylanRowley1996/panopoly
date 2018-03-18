@@ -99,12 +99,12 @@ public class CardGenerator {
    		finalOutcome += "You enter "+determiner+" "+location+".\nIt's "+ambience+
 	            "\nYou're "+interactions+" "+character+".\n";
    		
-   	/*	Determine if 'They' or 'You' comes first.
-   		If 'They' comes first 'You' comes second and vice versa
-   	*/
-   		
    	
-   		randomNumber = rand.nextInt(1);
+   		
+   		/*	Determine if 'They' or 'You' comes first using random number between 0-1.
+   		If 'They' comes first 'You' comes second and vice versa
+   		 */
+   		randomNumber = (int) Math.round(Math.random());
    		
    		if(randomNumber == 0){
    			finalOutcome += rewardPrecondition+" with "+props+".\n"+reward;
