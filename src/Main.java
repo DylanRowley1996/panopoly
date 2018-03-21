@@ -2,7 +2,10 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-
+       new GUI();
+      /*ButtonPanel buttons = new ButtonPanel();
+      buttons.showButton();*/
+/*
         String[] player1Properties = {"UCD", "TRINITY", "DCU"};
         String[] player1Monopolies = {"Red"};
         String[] player1Mortgages = {"TRINITY"};
@@ -48,6 +51,7 @@ public class Main {
             public void run() {
                 new BuyOrAuction("UCD").setVisible(true);
             }
-        });
+        });*/
     }
+    
 }

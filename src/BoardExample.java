@@ -28,7 +28,6 @@ public class BoardExample extends JPanel
 
 	public void paint(Graphics g)
 	{
-
 		g.drawImage(img, 0, 0, panelWidth, panelHeight, this); // paints the board image
 	}
 
