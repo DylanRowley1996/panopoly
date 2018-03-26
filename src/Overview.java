@@ -6,7 +6,11 @@ import java.util.ArrayList;
 
 public class Overview extends JFrame {
 
-    private JComboBox playerList = null;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JComboBox playerList = null;
     private Player[] players = null;
     private JLabel playerInformation = new JLabel("");
 
@@ -50,7 +54,7 @@ public class Overview extends JFrame {
         setLocationRelativeTo(null);
         setSize(400,300);
         getContentPane().setBackground(Color.decode("#71AE6F"));
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     //Organises the currently selected players information and places it in the JLabel.

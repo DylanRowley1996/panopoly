@@ -17,6 +17,7 @@ public class HistoryLog extends JPanel {
 	HistoryLog() {
 		setMaximumSize(new Dimension(15, 20));
 		//setBorder(LINE_END);
+		textArea.setBorder(BorderFactory.createCompoundBorder(textArea.getBorder(), BorderFactory.createEmptyBorder(5,5,5,5)));
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Serif", Font.BOLD, FONT_SIZE));
 		textArea.setLineWrap(true);

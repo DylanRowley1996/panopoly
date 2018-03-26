@@ -8,7 +8,7 @@ public class ButtonPanel extends JPanel
 	private static final long serialVersionUID = 1L;
 	private JLabel statusLabel;
 
-    public ButtonPanel()
+    public ButtonPanel(Player[] players)
     {
     	 setLayout(new GridLayout(4,2));
 
@@ -50,9 +50,22 @@ public class ButtonPanel extends JPanel
                  statusLabel.setText("Trade button clicked.")
          );
 
-         overviewButton.addActionListener(e ->
-                 statusLabel.setText("Overview button clicked.")
-         );
+         overviewButton.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						 SwingUtilities.invokeLater(new Runnable() {
+					            @Override
+					            public void run() {
+					                new Overview(players).setVisible(true);
+					            }
+					        });
+
+					}
+				 });
+        		//e ->
+               //  statusLabel.setText("Overview button clicked.")
+        // );
 
          assetsButton.addActionListener(e ->
                  statusLabel.setText("Assets button clicked.")

@@ -1,9 +1,16 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
+
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 public class DetailsPanel extends JPanel {
 	
@@ -13,15 +20,17 @@ public class DetailsPanel extends JPanel {
 	private static final int FONT_SIZE = 14;
 
 	JTextArea textArea = new JTextArea(TEXT_AREA_HEIGHT, TEXT_AREA_WIDTH);
-	//Color c = new Color(255, 63, 51);
+	JTextPane textPane = new JTextPane();
+	Color c = new Color(255, 63, 51);
 	
-	DetailsPanel() {
+	DetailsPanel() {	
+		textPane.setEditable(false);
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Serif", Font.BOLD, FONT_SIZE));
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
 		setLayout(new BorderLayout());
-		//textArea.setBackground(c);
+		textArea.setBackground(c);
 		add(textArea);
 		return;
 	}

@@ -12,19 +12,20 @@ import javax.swing.JSplitPane;
 public class GUI {
 	
 	private JFrame frame = new JFrame();
-	
 	private JSplitPane boardAndGameInformationPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	private JSplitPane buttonsAndGameInformation = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 	private JSplitPane detailsAndHistoryLog = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-
 	private HistoryLog history = new HistoryLog();
 	private DetailsPanel details = new DetailsPanel();
 	private BoardExample board = new BoardExample();
 	private JPanel boardPanel = board.getBoard();
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private ButtonPanel buttonPanel = new ButtonPanel();
+	private ButtonPanel buttonPanel = null;
+
+	GUI(Player[] players) {		
+		
+		buttonPanel = new ButtonPanel(players);
 	
-	GUI() {		
 		BoardExample.loadBoard();
 		detailsAndHistoryLog.setDividerLocation(.25);
 		detailsAndHistoryLog.setTopComponent(details);
@@ -33,7 +34,6 @@ public class GUI {
 		buttonsAndGameInformation.setDividerLocation(.5);
 		buttonsAndGameInformation.setTopComponent(detailsAndHistoryLog);
 		buttonsAndGameInformation.setBottomComponent(buttonPanel);
-		
 		
 		boardAndGameInformationPane.setDividerLocation(.3);
 		boardAndGameInformationPane.setLeftComponent(boardPanel);
@@ -50,9 +50,11 @@ public class GUI {
 	}
 	
 	private void test() {
+		
 		for(int i=0; i<100; i++) {
 			history.displayHistory("test");
 		}
+		
 		history.displayHistory("test2");
 		
 		details.displayDetails(true, "Location", "Owner", 150, 50, 5, false);
