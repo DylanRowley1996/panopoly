@@ -11,11 +11,11 @@ public class Main {
 		/*NocListReader nocListReader = new NocListReader();
 		nocListReader.readExcelFile();*/
 		
-		/*MCQ mcq = new MCQ();
-		mcq.createMCQ();*/
+		MCQ mcq = new MCQ();
+		mcq.createMCQ();
 		
-		/*CardGenerator cardGenerator = new CardGenerator();
-		cardGenerator.createCard();*/
+		CardGenerator cardGenerator = new CardGenerator();
+		cardGenerator.createCard();
 		
 	}
 

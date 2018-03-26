@@ -16,8 +16,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 public class CardGenerator {
 	
-    public static final String NOC_LIST_FILE_PATH = "C:/Users/Rowley/git/panopoly/Veale's NOC List/Veale's The NOC List.xlsx";
-    public static final String LOCATION_LISTING_FILE_PATH = "C:/Users/Rowley/git/panopoly/Veale's NOC List/Veale's location listing.xlsx";
+    public static final String NOC_LIST_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
+    public static final String LOCATION_LISTING_FILE_PATH = "Veale's NOC List/Veale's location listing.xlsx";
 
 
   /*  Sample card format:
@@ -43,7 +43,6 @@ public class CardGenerator {
 		Random rand = new Random();
 		
 		Workbook locationListingWb = WorkbookFactory.create(new File(LOCATION_LISTING_FILE_PATH));
-		
 		Sheet sheet = locationListingWb.getSheetAt(0);
 	    Row row = sheet.getRow(rand.nextInt(locationListingLineTotal));
 	    Cell cell;
