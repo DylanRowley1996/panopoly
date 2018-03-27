@@ -1,4 +1,4 @@
-package Interfaces;
+package interfaces;
 
 public interface Playable extends Identifiable {
 
