@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class Overview extends JFrame {
 
@@ -10,11 +9,13 @@ public class Overview extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JComboBox playerList = null;
-    private Player[] players = null;
+	@SuppressWarnings("rawtypes")
+	private JComboBox playerList;
+    private Player[] players;
     private JLabel playerInformation = new JLabel("");
 
-    public Overview(Player[] players){
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public Overview(Player[] players){
         super("Overview");
 
         this.players = players;

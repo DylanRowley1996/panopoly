@@ -20,7 +20,7 @@ public class GUI {
 	private BoardExample board = new BoardExample();
 	private JPanel boardPanel = board.getBoard();
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private ButtonPanel buttonPanel = null;
+	private ButtonPanel buttonPanel;
 
 	GUI(Player[] players) {		
 		
