@@ -15,7 +15,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 public class MCQ {
 	
-    public static final String SAMPLE_XLSX_FILE_PATH = "C:/Users/Rowley/git/panopoly/Veale's NOC List/Veale's The NOC List.xlsx";
+    public static final String SAMPLE_XLSX_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
 
 	public String createMCQ() throws IOException, InvalidFormatException{
 		
