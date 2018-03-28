@@ -1,8 +1,3 @@
-/Interfaces/
-/Template3.png
-/locations/
-/monopoly-board.jpg
-/panopoly/
 /Auction.class
 /BackgroundTextArea.class
 /BoardExample.class
@@ -14,9 +9,15 @@
 /DetailsPanel.class
 /GUI.class
 /HistoryLog.class
+/Interfaces/
 /Main.class
 /Overview$1.class
 /Overview.class
 /Player.class
+/Template3.png
 /WrapLayout.class
+/locations/
+/monopoly-board.jpg
+/panopoly/
 /interfaces/
+/SetupGame.class
