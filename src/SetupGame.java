@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -56,10 +57,14 @@ public class SetupGame {
 	    	 Row row = sheet.getRow(rand.nextInt(DOMAIN_LINE_TOTAL));
 	    	 
 	    	 //Retrieve the specific domain column from that row.
-	    	 Cell cell = row.getCell(1);
+	    	 Cell cell = row.getCell(0);
 	    	 
 	    	 //Get the specific domain as a string.
 	    	 List<String> themes = Arrays.asList(cell.getStringCellValue().split(", "));
+	    	 
+	    	 for(int k=0;k<themes.size();k++){
+					themes.set(k, themes.get(k).trim());
+			 }
 	    	 
 	    	 //System.out.println("This theme is "+theme+"\n");
 	    	 int i = 0;
@@ -97,11 +102,14 @@ public class SetupGame {
     	for(int i=0;i<themes.size();i++){
     		
     		int j = 0;
+    		int l = 0;
     		
-    		XSSFWorkbook wb = new XSSFWorkbook();
-    		XSSFSheet sheet = wb.createSheet("Character Sheet");
+    		Workbook wb = new XSSFWorkbook();
+    		Sheet sheet = wb.createSheet("Character Sheet");
     		//CreationHelper createHelper = wb.getCreationHelper();
     		
+    		//Open the NOC list for reading.
+    		ZipSecureFile.setMinInflateRatio(0.005);
     		Workbook nocListWb = WorkbookFactory.create(new File(NOC_LIST_FILE_PATH));
     		Sheet nocListSheet = nocListWb.getSheetAt(0);
     		Iterator<Row> rowIterator = nocListSheet.iterator();
@@ -116,29 +124,43 @@ public class SetupGame {
     			
     			Row row = rowIterator.next();
     			
+    			//System.out.println("On row: "+l++);
+    			
     			List<String> domainsOfCurrentRow = null;
     			
     			if(row.getCell(13) != null){
     				
-    				domainsOfCurrentRow = Arrays.asList(row.getCell(13).getStringCellValue().split(","));
+    				domainsOfCurrentRow = Arrays.asList(row.getCell(13).getStringCellValue().split(", "));
+    				
+    				for(int k=0;k<domainsOfCurrentRow.size();k++){
+    					domainsOfCurrentRow.set(k, domainsOfCurrentRow.get(k).trim());
+    					//System.out.println(domainsOfCurrentRow.get(k));
+    				}
     				
     				/*
         			 * If one of the current rows domains equals one of the current domains we've chosen,
         			 * add the character to the given .xlsx file
         			 */
+    				//sheet.createRow(j++).createCell(0).setCellValue(row.getCell(0).getStringCellValue());
+
+					//System.out.println("We about to attempt to match a domain");
     				if(domainsOfCurrentRow.contains(themes.get(i))){
+    					System.out.println("We have found a matching domain.");
         				sheet.createRow(j++).createCell(0).setCellValue(row.getCell(0).getStringCellValue());
         						//createHelper.createRichTextString(row.getCell(0).getStringCellValue()));
         			//	System.out.println("The value of this column is: "+sheet.getRow(j-1).getCell(0).getStringCellValue());
         			}
     				
     			}
+    			
+    			//domainsOfCurrentRow.clear();
     			 			
     		}
     		
-    	   // FileOutputStream fileOut = new FileOutputStream("C:/Users/Rowley/git/panopoly/Resources/"+themes.get(i)+".xlsx");
-    	    //wb.write(fileOut);
-    	    //fileOut.close(); 
+    	    FileOutputStream fileOut = new FileOutputStream("C:/Users/Rowley/git/panopoly/Resources/"+themes.get(i)+".xlsx");
+    	    wb.write(fileOut);
+    	    fileOut.close(); 
+    	    nocListWb.close();
     	}
     	
     }
