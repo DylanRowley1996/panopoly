@@ -1,5 +1,10 @@
+import java.io.IOException;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException {
     	
     	 String[] player1Properties = {"UCD", "TRINITY", "DCU"};
          String[] player1Monopolies = {"Red"};
@@ -20,6 +25,9 @@ public class Main {
          Player[] players = {player1,player2,player3};
          
          new GUI(players);
+         
+         SetupGame gameSetup = new SetupGame();
+         gameSetup.createAndPopulateFiles(gameSetup.findThemes());
       /*ButtonPanel buttons = new ButtonPanel();
       buttons.showButton();*/
 
