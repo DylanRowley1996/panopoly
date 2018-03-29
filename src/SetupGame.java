@@ -31,6 +31,7 @@ public class SetupGame {
     private static final int DOMAIN_LINE_TOTAL = 614;
     
     private static final int noOfPlayers = 6;
+    private ArrayList<ArrayList<String>> charactersAndThemes = new ArrayList<ArrayList<String>>(noOfPlayers);
     
     public SetupGame(){
     	
@@ -97,6 +98,13 @@ public class SetupGame {
     //Creates new .xlsx files that will store characters from certain themes. 
     public void createAndPopulateFiles(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException{
     	
+    	//Add themes to list.
+    	for(int i=0;i<themes.size();i++){
+    		charactersAndThemes.add(new ArrayList<String>());
+    		charactersAndThemes.get(i).add(themes.get(i));
+//    		/System.out.print(charactersAndThemes.get(i).get(0)+"\n");
+    	}
+    	
 
     	//Create new workbooks that correspond to the themes found.
     	for(int i=0;i<themes.size();i++){
@@ -104,8 +112,8 @@ public class SetupGame {
     		int j = 0;
     		int l = 0;
     		
-    		Workbook wb = new XSSFWorkbook();
-    		Sheet sheet = wb.createSheet("Character Sheet");
+    		//Workbook wb = new XSSFWorkbook();
+    		//Sheet sheet = wb.createSheet("Character Sheet");
     		//CreationHelper createHelper = wb.getCreationHelper();
     		
     		//Open the NOC list for reading.
@@ -145,10 +153,16 @@ public class SetupGame {
 
 					//System.out.println("We about to attempt to match a domain");
     				if(domainsOfCurrentRow.contains(themes.get(i))){
-    					System.out.println("We have found a matching domain.");
-        				sheet.createRow(j++).createCell(0).setCellValue(row.getCell(0).getStringCellValue());
+    					
+    					//System.out.println("We have found a matching domain.");
+        				//sheet.createRow(j++).createCell(0).setCellValue(row.getCell(0).getStringCellValue());
+        				charactersAndThemes.get(i).add(row.getCell(0).getStringCellValue());
+        				
+        				
+
         						//createHelper.createRichTextString(row.getCell(0).getStringCellValue()));
         			//	System.out.println("The value of this column is: "+sheet.getRow(j-1).getCell(0).getStringCellValue());
+        				
         			}
     				
     			}
@@ -157,10 +171,19 @@ public class SetupGame {
     			 			
     		}
     		
-    	    FileOutputStream fileOut = new FileOutputStream("C:/Users/Rowley/git/panopoly/Resources/"+themes.get(i)+".xlsx");
-    	    wb.write(fileOut);
-    	    fileOut.close(); 
-    	    nocListWb.close();
+    		for(int k=0;k<charactersAndThemes.size();k++){
+    			for(int x=0;x<charactersAndThemes.get(k).size();x++){
+    				System.out.println("Current Theme: "+charactersAndThemes.get(k).get(0));
+    				if((x+1) < charactersAndThemes.get(k).size())	
+    				System.out.println(" Current Character: "+charactersAndThemes.get(k).get(x+1)+"\n\n");
+    			}
+    			
+    		}
+    		
+    	   // FileOutputStream fileOut = new FileOutputStream("C:/Users/Rowley/git/panopoly/Resources/"+themes.get(i)+".xlsx");
+    	    //wb.write(fileOut);
+    	    //fileOut.close(); 
+    	    //nocListWb.close();
     	}
     	
     }
