@@ -28,8 +28,11 @@ public class Main {
          
          SetupGame gameSetup = new SetupGame();
          gameSetup.createAndPopulateFiles(gameSetup.findThemes());
-      /*ButtonPanel buttons = new ButtonPanel();
-      buttons.showButton();*/
+     // ButtonPanel buttons = new ButtonPanel();
+      //buttons.showButton();
+         
+        // BuyOrAuction bOrA = new BuyOrAuction("WEST-END");
+         
 
        
 

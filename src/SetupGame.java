@@ -65,7 +65,6 @@ public class SetupGame {
 					themes.set(k, themes.get(k).trim());
 			 }
 	    	 
-	    	 //System.out.println("This theme is "+theme+"\n");
 	    	 int i = 0;
 	    	 while(!newThemeFound && i < themes.size()){
 	    		 System.out.println("Current theme: "+themes.get(i)+"\n");
@@ -79,9 +78,6 @@ public class SetupGame {
 	    	 }
 	    	 
 	    	 newThemeFound = false;
-	    	 
-	    	 //Make sure the theme hasn't already been added.
-	    	// if(!listOfThemes.contains(theme)) listOfThemes.add(theme);
 	    	 
 	    	 //If we've enough unique themes then make sure loop exits.
 	    	 if(listOfThemes.size() == noOfPlayers) themesFound = true;
