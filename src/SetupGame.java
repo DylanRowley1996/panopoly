@@ -27,10 +27,10 @@ public class SetupGame {
     private static final String NOC_LIST_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
     private static final String DOMAIN_FILE_PATH = "Veale's NOC List/Veale's domains.xlsx";
     
-    private static final int NOC_LIST_LINE_TOTAL = 805;
     private static final int DOMAIN_LINE_TOTAL = 614;
     
     private static final int noOfPlayers = 6;
+    private ArrayList<ArrayList<String>> charactersAndThemes = new ArrayList<ArrayList<String>>(noOfPlayers);
     
     public SetupGame(){
     	
@@ -41,7 +41,6 @@ public class SetupGame {
     	
     	
     	ArrayList<String> listOfThemes = new ArrayList<String>();
-    	String theme = "";
     	boolean themesFound = false;
     	boolean newThemeFound = false;
     	
@@ -66,7 +65,6 @@ public class SetupGame {
 					themes.set(k, themes.get(k).trim());
 			 }
 	    	 
-	    	 //System.out.println("This theme is "+theme+"\n");
 	    	 int i = 0;
 	    	 while(!newThemeFound && i < themes.size()){
 	    		 System.out.println("Current theme: "+themes.get(i)+"\n");
@@ -81,9 +79,6 @@ public class SetupGame {
 	    	 
 	    	 newThemeFound = false;
 	    	 
-	    	 //Make sure the theme hasn't already been added.
-	    	// if(!listOfThemes.contains(theme)) listOfThemes.add(theme);
-	    	 
 	    	 //If we've enough unique themes then make sure loop exits.
 	    	 if(listOfThemes.size() == noOfPlayers) themesFound = true;
 	    		 
@@ -97,17 +92,16 @@ public class SetupGame {
     //Creates new .xlsx files that will store characters from certain themes. 
     public void createAndPopulateFiles(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException{
     	
+    	//Add themes to list.
+    	for(int i=0;i<themes.size();i++){
+    		charactersAndThemes.add(new ArrayList<String>());
+    		charactersAndThemes.get(i).add(themes.get(i));
+    	}
+    	
 
     	//Create new workbooks that correspond to the themes found.
     	for(int i=0;i<themes.size();i++){
-    		
-    		int j = 0;
-    		int l = 0;
-    		
-    		Workbook wb = new XSSFWorkbook();
-    		Sheet sheet = wb.createSheet("Character Sheet");
-    		//CreationHelper createHelper = wb.getCreationHelper();
-    		
+  
     		//Open the NOC list for reading.
     		ZipSecureFile.setMinInflateRatio(0.005);
     		Workbook nocListWb = WorkbookFactory.create(new File(NOC_LIST_FILE_PATH));
@@ -134,105 +128,33 @@ public class SetupGame {
     				
     				for(int k=0;k<domainsOfCurrentRow.size();k++){
     					domainsOfCurrentRow.set(k, domainsOfCurrentRow.get(k).trim());
-    					//System.out.println(domainsOfCurrentRow.get(k));
     				}
     				
     				/*
         			 * If one of the current rows domains equals one of the current domains we've chosen,
         			 * add the character to the given .xlsx file
         			 */
-    				//sheet.createRow(j++).createCell(0).setCellValue(row.getCell(0).getStringCellValue());
-
-					//System.out.println("We about to attempt to match a domain");
     				if(domainsOfCurrentRow.contains(themes.get(i))){
-    					System.out.println("We have found a matching domain.");
-        				sheet.createRow(j++).createCell(0).setCellValue(row.getCell(0).getStringCellValue());
-        						//createHelper.createRichTextString(row.getCell(0).getStringCellValue()));
-        			//	System.out.println("The value of this column is: "+sheet.getRow(j-1).getCell(0).getStringCellValue());
+        				charactersAndThemes.get(i).add(row.getCell(0).getStringCellValue());
         			}
     				
     			}
-    			
-    			//domainsOfCurrentRow.clear();
-    			 			
+    			    			 			
     		}
-    		
-    	    FileOutputStream fileOut = new FileOutputStream("C:/Users/Rowley/git/panopoly/Resources/"+themes.get(i)+".xlsx");
-    	    wb.write(fileOut);
-    	    fileOut.close(); 
-    	    nocListWb.close();
+
     	}
     	
-    }
-    
-    
-    
-    //Finds a list of characters from a given set of themes.
-    public ArrayList<String> createListsOfCharactersFromThemes(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException{
-    	    	
-    	ArrayList<String> characters = new ArrayList<String>();
-    	boolean charactersFound = false;
-    	String theme = "";
-    	
-    	Random rand = new Random();
-    	
-    	Workbook locationListingWb = WorkbookFactory.create(new File(NOC_LIST_FILE_PATH));
-    	
-		Sheet sheet = locationListingWb.getSheetAt(0);
-		
-    	Iterator<Row> rowIterator = sheet.iterator();
-    	
-    	while(rowIterator.hasNext()){
-    		Row row = rowIterator.next();
-    		row.getCell(13);
+    	System.out.println("Size of characters and themes: "+charactersAndThemes.size()+"\n");
+		for(int k=0;k<charactersAndThemes.size();k++){
+			for(int x=0;x<charactersAndThemes.get(k).size()-1;x++){
+				//if((x+1) < charactersAndThemes.get(k).size()){
+					System.out.println("k: "+k+", x: "+x+"\n");
+					System.out.println("Current Theme: "+charactersAndThemes.get(k).get(0));
+					System.out.println(" Current Character: "+charactersAndThemes.get(k).get(x+1)+"\n\n");	
+				//}
+    		}
     	}
-
-		
-		while(!charactersFound){
-			
-			System.out.println("Entered while loop\n");
-			
-			//Retrieve a random row.
-	    	 Row row = sheet.getRow(rand.nextInt(DOMAIN_LINE_TOTAL));
-	    	 
-	    	 //Retrieve the 'Specific domain' column from that row.
-	    	 Cell cell = row.getCell(13);
-	    	 
-	    	 //Get the specific domain as a string.
-	    	 theme = cell.getStringCellValue();
-	    	 
-	    	 List<String> listOfThemes =  Arrays.asList(theme.split(","));	    	 
-	    	 
-	    	 
-	    	 /*
-	    	  * If we find a row where the theme matches one of the given themes,
-	    	  * find the character from that row and add to a list.
-	    	  */
-	    	 for(int i=0;i<listOfThemes.size();i++){
-	    		 
-	    		 theme = listOfThemes.get(i);
-	    		 
-	    		 if(themes.contains(theme)){
-		 	    		
-	 	    		//Add character to the list of characters
-	 	    		characters.add(row.getCell(0).getStringCellValue());
-	 	    		
-	 	    		System.out.println("Found character name: "+row.getCell(0).getStringCellValue()+
-	 	    							"From theme "+ theme+"\n");
-
-	 	    		
-	 	    		//Remove the theme from the list so we don't find another character from that theme.
-	 	    		themes.remove(theme);
-	 	    	 }
-	    	 }
-	    	 
-	    	 
-	    	 if(characters.size() == noOfPlayers) charactersFound = true;
-			
-		}
-		
-		return characters;
-    	
     }
     
+   
 }
