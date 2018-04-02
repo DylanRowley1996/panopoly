@@ -6,8 +6,8 @@ import java.awt.*;
 public class HistoryLog extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
-	private static final int TEXT_AREA_HEIGHT = 15;
-	private static final int TEXT_AREA_WIDTH = 20;
+	private static final int TEXT_AREA_HEIGHT = 10;
+	private static final int TEXT_AREA_WIDTH = 10;
 	private static final int FONT_SIZE = 14;
 
 	private JTextArea textArea = new JTextArea(TEXT_AREA_HEIGHT, TEXT_AREA_WIDTH);
@@ -15,7 +15,7 @@ public class HistoryLog extends JPanel {
 	private DefaultCaret caret = (DefaultCaret)textArea.getCaret();
 	
 	HistoryLog() {
-		setMaximumSize(new Dimension(15, 20));
+		setMaximumSize(new Dimension(10, 10));
 		//setBorder(LINE_END);
 		textArea.setBorder(BorderFactory.createCompoundBorder(textArea.getBorder(), BorderFactory.createEmptyBorder(5,5,5,5)));
 		textArea.setEditable(false);

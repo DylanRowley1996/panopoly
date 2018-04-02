@@ -35,6 +35,7 @@ public class PropertyInformationPanel extends JPanel{
 
         //Top compononent is name of Property.
         propertyCard.setTopComponent(propertyName);
+        propertyInformation.setMaximumSize(new Dimension(10,10));
         //Bottom component is the properties pricing.
         propertyCard.setBottomComponent(propertyInformation);
 
