@@ -2,8 +2,8 @@ package locations;
 
 public class Shop extends NamedLocation {
 
-	public Shop(String n, int l) {
-		super(n, l);
+	public Shop(String name, int loc) {
+		super(name, loc);
 	}
 	
 	// TODO implement method to launch marketplace

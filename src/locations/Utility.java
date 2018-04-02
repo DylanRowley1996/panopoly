@@ -3,9 +3,9 @@ package locations;
 public class Utility extends PrivateProperty {
 
 	private int[] rentTable;
-	public Utility(String n, int l, int p, int m, int r, int[] rT) {
-		super(n, l, p, m, r);
-		rentTable = rT;
+	public Utility(String name, int loc, int price, int mortgage, int rent, int[] rentTable, String group) {
+		super(name, loc, price, mortgage, rent, group);
+		this.rentTable = rentTable;
 	}
 	
 	public int getRentMultiplier () {

@@ -3,17 +3,17 @@ import interfaces.Taxable;
 
 public class TaxableLocation extends NamedLocation implements Taxable {
 
-	private int incomePercentage;
+	private double incomePercentage;
 	private int flatAmount;
 	
-	public TaxableLocation(String n, int l, int iP, int fA) {
-		super(n, l);
+	public TaxableLocation(String name, int loc, double iP, int fA) {
+		super(name, loc);
 		incomePercentage = iP;
 		flatAmount = fA;
 	}
 
 	@Override
-	public int getIncomePercentage() {
+	public double getIncomePercentage() {
 		return incomePercentage;
 	}
 
