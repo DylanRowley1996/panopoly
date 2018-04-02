@@ -16,32 +16,30 @@ public class GUI {
 	
 	private JFrame frame = new JFrame();
 	private JSplitPane boardAndGameInformationPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-	private JSplitPane buttonsAndGameInformation = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+	private JSplitPane buttonsDetailsAndPropInfo = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 	private JSplitPane detailsAndHistoryLog = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 	private HistoryLog history = new HistoryLog();
 	private PropertyInformationPanel propertyInformationPanel = new PropertyInformationPanel();
 	private BoardExample board = new BoardExample();
 	private JPanel boardPanel = board.getBoard();
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private ButtonPanel buttonPanel;
+	private ButtonPanel buttonPanel = new ButtonPanel();
+
 
 	GUI(Player[] players) {		
-		
-		buttonPanel = new ButtonPanel(players);
-	
+			
 		BoardExample.loadBoard();
-		detailsAndHistoryLog.setDividerLocation(.25);
-		//detailsAndHistoryLog.setTopComponent(details);
+		detailsAndHistoryLog.setDividerLocation(.2);
 		detailsAndHistoryLog.setTopComponent(propertyInformationPanel);
 		detailsAndHistoryLog.setBottomComponent(history);
 		
-		buttonsAndGameInformation.setDividerLocation(.5);
-		buttonsAndGameInformation.setTopComponent(detailsAndHistoryLog);
-		buttonsAndGameInformation.setBottomComponent(buttonPanel);
+		buttonsDetailsAndPropInfo.setDividerLocation(.2);
+		buttonsDetailsAndPropInfo.setTopComponent(detailsAndHistoryLog);
+		buttonsDetailsAndPropInfo.setBottomComponent(buttonPanel);
 		
 		boardAndGameInformationPane.setDividerLocation(.3);
 		boardAndGameInformationPane.setLeftComponent(boardPanel);
-		boardAndGameInformationPane.setRightComponent(buttonsAndGameInformation);
+		boardAndGameInformationPane.setRightComponent(buttonsDetailsAndPropInfo);
 		
 		frame.add(boardAndGameInformationPane);
 		frame.setTitle("Interdimensional Panopoly");

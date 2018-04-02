@@ -1,26 +1,26 @@
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+
 import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class SetupGame {
 
@@ -31,6 +31,8 @@ public class SetupGame {
     
     private static final int noOfPlayers = 6;
     private ArrayList<ArrayList<String>> charactersAndThemes = new ArrayList<ArrayList<String>>(noOfPlayers);
+	private ArrayList<String> characters = new ArrayList<String>();
+
     
     public SetupGame(){
     	
@@ -90,7 +92,7 @@ public class SetupGame {
    }
     
     //Creates new .xlsx files that will store characters from certain themes. 
-    public void createAndPopulateFiles(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException{
+    public void findCharactersFromThemes(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException{
     	
     	//Add themes to list.
     	for(int i=0;i<themes.size();i++){
@@ -144,16 +146,69 @@ public class SetupGame {
 
     	}
     	
-    	System.out.println("Size of characters and themes: "+charactersAndThemes.size()+"\n");
+    	//System.out.println("Size of characters and themes: "+charactersAndThemes.size()+"\n");
 		for(int k=0;k<charactersAndThemes.size();k++){
 			for(int x=0;x<charactersAndThemes.get(k).size()-1;x++){
 				//if((x+1) < charactersAndThemes.get(k).size()){
-					System.out.println("k: "+k+", x: "+x+"\n");
+					/*System.out.println("k: "+k+", x: "+x+"\n");
 					System.out.println("Current Theme: "+charactersAndThemes.get(k).get(0));
-					System.out.println(" Current Character: "+charactersAndThemes.get(k).get(x+1)+"\n\n");	
+					System.out.println(" Current Character: "+charactersAndThemes.get(k).get(x+1)+"\n\n");	*/
 				//}
     		}
     	}
+    }
+    
+    public void compileChoiceOfCharacters(){    	
+    	Random rand = new Random();
+    	int i = 0;
+    	
+    	while(characters.size() != noOfPlayers){
+    		  int choice = rand.nextInt(charactersAndThemes.get(i).size());
+    		  
+    		  if(choice == 0) choice  += 1;
+    		  if(!characters.contains(charactersAndThemes.get(i).get(choice))){
+    			  System.out.println("Current Theme: "+charactersAndThemes.get(i).get(0)+" Current Character:"+charactersAndThemes.get(i).get(choice)+"\n");
+    			  characters.add(charactersAndThemes.get(i).get(choice));
+    			  i++;
+    		  }
+    	}
+   }
+    
+    @SuppressWarnings("unchecked")
+	public void launchSelectionPanel(){
+    	JFrame selectionPanel = new JFrame();
+    	JTextArea currentPlayer = new JTextArea();
+    	JComboBox<String> comboBox = new JComboBox(characters.toArray());
+    	JButton confirmButton = new JButton("Confirm");
+    	
+    	/*
+    	for(int i=0;i<characters.size();i++){
+    		comboBox.add(characters.get(i));
+    	}*/
+    	
+    	selectionPanel.setLayout(new GridLayout(3,1));
+    	selectionPanel.setSize(new Dimension(10,20));
+    	
+    	comboBox.setSelectedIndex(0);
+    	//comboBox.addActionListener();
+    	
+    	currentPlayer.setText("Select character for player 1");
+    	selectionPanel.add(currentPlayer);
+    	selectionPanel.add(comboBox);
+    	selectionPanel.add(confirmButton);
+    	
+    	//frame.add(boardAndGameInformationPane);
+		selectionPanel.setTitle("Selection panel\n");
+		selectionPanel.setSize(100, 100);
+		selectionPanel.pack();
+		selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		selectionPanel.setVisible(true);
+		//selectionPanel.setDefaultCloseOperation(Jframe.);
+    	
+    }
+    
+    public ArrayList<String> getCharacters(){
+    	return characters;
     }
     
    

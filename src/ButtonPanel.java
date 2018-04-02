@@ -17,9 +17,10 @@ public class ButtonPanel extends JPanel
     private JButton overviewButton = new JButton("OVERVIEW");
     private JButton assetsButton = new JButton("ASSETS");
     
-    public ButtonPanel(Player[] players)
+    public ButtonPanel()
     {
     	 setLayout(new GridLayout(5,2));
+    	 setMaximumSize(new Dimension(5,5));
          add(rollButton);
          add(sellButton);
          add(buyButton);

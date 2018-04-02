@@ -1,10 +1,13 @@
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public class Main {
-    public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException {
+    public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException {
     	
     	 String[] player1Properties = {"UCD", "TRINITY", "DCU"};
          String[] player1Monopolies = {"Red"};
@@ -24,10 +27,21 @@ public class Main {
 
          Player[] players = {player1,player2,player3};
          
-         new GUI(players);
+         //new GUI(players);
          
          SetupGame gameSetup = new SetupGame();
-         gameSetup.createAndPopulateFiles(gameSetup.findThemes());
+         gameSetup.findCharactersFromThemes(gameSetup.findThemes());
+         gameSetup.compileChoiceOfCharacters();
+         
+        //Finds images from web using the chosen characters.
+         FindImages findImages = new FindImages(gameSetup.getCharacters());
+         findImages.Search();
+         
+         
+        // gameSetup.launchSelectionPanel();
+         
+        // CharacterSelection characterSelect = new CharacterSelection(players);
+         
      // ButtonPanel buttons = new ButtonPanel();
       //buttons.showButton();
          
