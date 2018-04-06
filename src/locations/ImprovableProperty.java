@@ -6,8 +6,8 @@ public class ImprovableProperty extends PrivateProperty implements Improvable {
 	private int numHouses;
 	private int numHotels;
 	
-	public ImprovableProperty(String n, int l, int p, int m, int r) {
-		super(n, l, p, m, r);
+	public ImprovableProperty(String name, int loc, int price, int mortgage, int rent, String group) {
+		super(name, loc, price, mortgage, rent, group);
 		numHouses = 0;
 		numHotels = 0;
 	}
@@ -23,9 +23,9 @@ public class ImprovableProperty extends PrivateProperty implements Improvable {
 	}
 
 	@Override
-	public void buildHouses(int h) {
-		if(numHouses + h <= 4) {
-			numHouses += h;
+	public void buildHouses(int amount) {
+		if(numHouses + amount <= 4) {
+			numHouses += amount;
 		}
 		else System.out.println("Error: Too many houses!");
 	}

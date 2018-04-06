@@ -2,6 +2,6 @@ package interfaces;
 
 public interface Taxable {
 
-	public int getIncomePercentage();
+	public double getIncomePercentage();
 	public int getFlatAmount();
 }

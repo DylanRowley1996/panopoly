@@ -8,9 +8,9 @@ public class NamedLocation implements Locatable {
 	private Locatable right;
 	private int location;
 	
-	public NamedLocation(String n, int l) {
-		name = n;
-		location = l;
+	public NamedLocation(String name, int loc) {
+		this.name = name;
+		location = loc;
 	}
 		
 	@Override

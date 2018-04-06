@@ -8,13 +8,15 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	private int mortgageAmount;
 	protected int rentAmount;
 	private boolean isMortgaged;
+	private String group;
 	
-	public PrivateProperty(String n, int l, int p, int m, int r) {
-		super(n, l);
+	public PrivateProperty(String name, int loc, int price, int mortgage, int rent, String group) {
+		super(name, loc);
 		owner = null;
-		price = p;
-		mortgageAmount = m;
-		rentAmount = r;
+		this.price = price;
+		mortgageAmount = mortgage;
+		rentAmount = rent;
+		this.group = group;
 		isMortgaged = false;
 	}
 
@@ -46,6 +48,10 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	@Override
 	public boolean isMortgaged() {
 		return isMortgaged;
+	}
+	
+	public String getGroup() {
+		return group;
 	}
 
 }

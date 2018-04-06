@@ -4,9 +4,9 @@ public class Station extends PrivateProperty {
 	
 	private int[] rentTable;
 
-	public Station(String n, int l, int p, int m, int r, int[] rT) {
-		super(n, l, p, m, r);
-		rentTable = rT;
+	public Station(String name, int loc, int price, int mortgage, int rent, int[] rentTable, String group) {
+		super(name, loc, price, mortgage, rent, group);
+		this.rentTable = rentTable;
 	}
 	
 	public int getRent() {

@@ -30,10 +30,16 @@ public class Main {
          //new GUI(players);
          
          SetupGame gameSetup = new SetupGame();
-         gameSetup.findCharactersFromThemes(gameSetup.findThemes());
+         gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
          gameSetup.compileChoiceOfCharacters();
          
         /* Finds images from web using the chosen characters.
+=======
+         gameSetup.setUpLocations(gameSetup.findThemes(1, 1));
+         gameSetup.testLocations();
+         
+        //Finds images from web using the chosen characters.
+>>>>>>> c3d33e1801ab15bbb0f6bbad318785f51ce7f409
          FindImages findImages = new FindImages(gameSetup.getCharacters());
          findImages.Search();
          */
