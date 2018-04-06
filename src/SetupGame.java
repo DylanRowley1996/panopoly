@@ -1,9 +1,7 @@
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -13,17 +11,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-
 import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -38,8 +32,7 @@ import locations.*;
 
 public class SetupGame {
 	
-	private static Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-	private static int currentPlayerNumber = 0;
+	private static int currentPlayerNumber = 1;
 
 	private static final String NOC_LIST_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
 	private static final String DOMAIN_FILE_PATH = "Veale's NOC List/Veale's domains.xlsx";
@@ -242,7 +235,7 @@ public class SetupGame {
     	//Ensures the JLabel spans all columns when beneath the images.
     	c.gridwidth = noOfPlayers;
     
-    	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
+    	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber));
     	
     	//Add action listeners to all images.
     	for(int i=0;i<noOfPlayers;i++){
@@ -262,6 +255,11 @@ public class SetupGame {
                 	
                 	//Repaint JFrame so removed button is present to user.
                 	selectionPanel.repaint();
+                	
+                	//When all characters are chosen, close JFrame.
+                	if(currentPlayerNumber == 7){
+                		selectionPanel.dispose();
+                	}
                 }
     		});
        }
@@ -280,8 +278,6 @@ public class SetupGame {
     	return characters;
     }
     
-
-	@SuppressWarnings("deprecation")
 	public void setUpLocations(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException {
 
 		Random rand = new Random();
