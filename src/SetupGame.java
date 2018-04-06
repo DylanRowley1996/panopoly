@@ -246,11 +246,22 @@ public class SetupGame {
     	
     	//Add action listeners to all images.
     	for(int i=0;i<noOfPlayers;i++){
+    		
+    		//https://stackoverflow.com/questions/33799800/java-local-variable-mi-defined-in-an-enclosing-scope-must-be-final-or-effective
+    	    final Integer innerI = new Integer(i);
+    	    
     		imageButtons[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                	
                 	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
                 	currentPlayerNumber++;
+                	
+                	//Remove the corresponding button if character is chosen.
+                	characterPanel.remove(imageButtons[innerI]);
+                	
+                	//Repaint JFrame so removed button is present to user.
+                	selectionPanel.repaint();
                 }
     		});
        }
