@@ -33,17 +33,17 @@ public class Main {
          gameSetup.findCharactersFromThemes(gameSetup.findThemes());
          gameSetup.compileChoiceOfCharacters();
          
-        //Finds images from web using the chosen characters.
+        /* Finds images from web using the chosen characters.
          FindImages findImages = new FindImages(gameSetup.getCharacters());
          findImages.Search();
+         */
          
-         
-        // gameSetup.launchSelectionPanel();
+         gameSetup.launchSelectionPanel();
          
         // CharacterSelection characterSelect = new CharacterSelection(players);
          
-     // ButtonPanel buttons = new ButtonPanel();
-      //buttons.showButton();
+       // ButtonPanel buttons = new ButtonPanel();
+       //buttons.showButton();
          
         // BuyOrAuction bOrA = new BuyOrAuction("WEST-END");
          

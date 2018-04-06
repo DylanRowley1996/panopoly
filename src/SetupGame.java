@@ -1,5 +1,7 @@
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,9 +9,12 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 import java.util.List;
@@ -175,7 +180,9 @@ public class SetupGame {
    }
     
     @SuppressWarnings("unchecked")
-	public void launchSelectionPanel(){
+	public void launchSelectionPanel() throws IOException{
+    	
+    	JButton[] imageButtons = new JButton[noOfPlayers];
     	JFrame selectionPanel = new JFrame();
     	JTextArea currentPlayer = new JTextArea();
     	JComboBox<String> comboBox = new JComboBox(characters.toArray());
@@ -186,16 +193,34 @@ public class SetupGame {
     		comboBox.add(characters.get(i));
     	}*/
     	
-    	selectionPanel.setLayout(new GridLayout(3,1));
+    	selectionPanel.setLayout(new GridLayout(0,6));
     	selectionPanel.setSize(new Dimension(10,20));
     	
     	comboBox.setSelectedIndex(0);
+    	
+    	//https://stackoverflow.com/questions/3360255/how-to-get-a-single-file-from-a-folder-in-java
+        File dir = new File("C:/Users/Rowley/git/panopoly/savedImages");
+        File[] children = dir.listFiles();
+        
+         for(int i=0;i<noOfPlayers;i++){
+        	 System.out.println(children[i].toString());
+         }
+         
+    	for(int i=0;i<noOfPlayers;i++){
+    		imageButtons[i] = new JButton();
+    		BufferedImage myPicture = ImageIO.read(new File(children[i].toString()));
+    		Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        	//JLabel picLabel = new JLabel(new ImageIcon(myResizedPicture));
+        	imageButtons[i].setIcon(new ImageIcon(myResizedPicture));
+        	selectionPanel.add(imageButtons[i]);
+    	}
+
     	//comboBox.addActionListener();
     	
-    	currentPlayer.setText("Select character for player 1");
-    	selectionPanel.add(currentPlayer);
-    	selectionPanel.add(comboBox);
-    	selectionPanel.add(confirmButton);
+    	//currentPlayer.setText("Select character for player 1");
+    	//selectionPanel.add(currentPlayer);
+    	//selectionPanel.add(comboBox);
+    	//selectionPanel.add(confirmButton);
     	
     	//frame.add(boardAndGameInformationPane);
 		selectionPanel.setTitle("Selection panel\n");
@@ -203,7 +228,6 @@ public class SetupGame {
 		selectionPanel.pack();
 		selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		selectionPanel.setVisible(true);
-		//selectionPanel.setDefaultCloseOperation(Jframe.);
     	
     }
     

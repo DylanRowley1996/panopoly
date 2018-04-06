@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
 import com.google.gson.*;
 import java.awt.*;
@@ -59,20 +60,23 @@ public class FindImages {
     	  String key = "AIzaSyBsLxIF8LF3t3em5FSidHZMHtMg9AmHEDQ";
     	  String cx  = "008580275858431148289:yexe3mpvnwg";
     	      	  
-    	  for(int i =0;i<queries.length;i++){
-    		  URL url = new URL("https://www.googleapis.com/customsearch/v1?key="+key+"&cx="+cx+"&q="+queries[i]+"&searchType=image&fileType=jpg");
-        	  HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        	  conn.setRequestMethod("GET");
-        	  conn.setRequestProperty("Accept", "application/json");
-        	  BufferedReader br = new BufferedReader(new InputStreamReader ( ( conn.getInputStream() ) ) );
-        	  results = new Gson().fromJson(br, GResults.class);
-        	  String extenstion = getFileExtension(results.getThing(0).toString());
-        	  System.out.println("Extension: "+extenstion);
-        	  
-        	  String destinationFile = "savedImages/"+characters.get(i)+".jpg";
-        	  saveImage(results.getThing(0).toString(), destinationFile);
-        	  conn.disconnect();
-    	  }
+    	 for(int i =0;i<queries.length;i++){
+   		  URL url = new URL("https://www.googleapis.com/customsearch/v1?key="+key+"&cx="+cx+"&q="+queries[i]+"&searchType=image&fileType=jpg");
+       	  HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+       	  conn.setRequestMethod("GET");
+       	  conn.setRequestProperty("Accept", "application/json");
+         // conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB;     rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)");
+          conn.addRequestProperty("User-Agent", "Mozilla/4.0");
+
+       	  BufferedReader br = new BufferedReader(new InputStreamReader ( ( conn.getInputStream() ) ) );
+       	  results = new Gson().fromJson(br, GResults.class);
+       	  //String extenstion = getFileExtension(results.getThing(0).toString());
+       	  //System.out.println("Extension: "+extenstion);
+       	  
+       	  String destinationFile = "savedImages/"+characters.get(i)+".jpg";
+       	  saveImage(results.getThing(0).toString(), destinationFile);
+       	  conn.disconnect();
+   	  }
  
     }
   
