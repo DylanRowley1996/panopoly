@@ -6,7 +6,7 @@ import panopoly.MCQ;
 public class Main {
 	
 	public static void main(String args[]) throws InvalidFormatException, IOException {
-		new GUI();
+		//new GUI();
 	
 		/*NocListReader nocListReader = new NocListReader();
 		nocListReader.readExcelFile();*/
@@ -14,8 +14,8 @@ public class Main {
 		/*MCQ mcq = new MCQ();
 		mcq.createMCQ();*/
 		
-		/*CardGenerator cardGenerator = new CardGenerator();
-		cardGenerator.createCard();*/
+		CardGenerator cardGenerator = new CardGenerator();
+		cardGenerator.createCard();
 		
 	}
 
