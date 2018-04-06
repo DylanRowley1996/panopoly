@@ -17,15 +17,9 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 public class CardGenerator {
 	
-<<<<<<< HEAD
     public static final String NOC_LIST_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
     public static final String LOCATION_LISTING_FILE_PATH = "Veale's NOC List/Veale's location listing.xlsx";
 
-
-=======
-    public static final String NOC_LIST_FILE_PATH = "C:/Users/James/Documents/GitHub/panopoly/Veale's NOC List/Veale's The NOC List.xlsx";
-    public static final String LOCATION_LISTING_FILE_PATH = "C:/Users/James/Documents/GitHub/panopoly/Veale's NOC List/Veale's location listing.xlsx";
->>>>>>> Card
   /*  Sample card format:
    *  "You enter <determiner> <location>. It's <ambience>. You're <interactions> <character from NOC List>.
    *  <They/you> hit <you/them> with <props>. <enter reward or loss>. "
