@@ -9,7 +9,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 public class Main {
     public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException {
     	
-    	 String[] player1Properties = {"UCD", "TRINITY", "DCU"};
+    	/* String[] player1Properties = {"UCD", "TRINITY", "DCU"};
          String[] player1Monopolies = {"Red"};
          String[] player1Mortgages = {"TRINITY"};
 
@@ -26,22 +26,34 @@ public class Main {
          Player player3 = new Player("Sean", 100, player3Properties,player3Monopolies,player3Mortgages );
 
          Player[] players = {player1,player2,player3};
-         
+         */
          //new GUI(players);
          
-         SetupGame gameSetup = new SetupGame();
-         gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
-         gameSetup.compileChoiceOfCharacters();
-         
-        /* Finds images from web using the chosen characters.
-         gameSetup.setUpLocations(gameSetup.findThemes(1, 1));
-         gameSetup.testLocations();
-         
-        //Finds images from web using the chosen characters.
+         /*// Finds images from web using the chosen characters.
          FindImages findImages = new FindImages(gameSetup.getCharacters());
          findImages.Search();
          */
          
+         SetupGame gameSetup = new SetupGame();
+         /*gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
+         gameSetup.compileChoiceOfCharacters();
+         gameSetup.launchSelectionPanel();
+         */
+        /* //TODO Remove.
+         //Just checking paths to image icons are set correctly.
+         Player[] players = gameSetup.createPlayers();
+         for(int i=0;i<players.length;i++){
+        	System.out.println(players[i].getPathForImageIcon());
+         }
+         */
+         
+         
+         
+         
+         
+        /*Finds images from web using the chosen characters.
+         gameSetup.setUpLocations(gameSetup.findThemes(1, 1));
+         gameSetup.testLocations();
          gameSetup.launchSelectionPanel();
          
         // CharacterSelection characterSelect = new CharacterSelection(players);

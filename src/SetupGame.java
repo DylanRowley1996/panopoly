@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import java.util.List;
+
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
@@ -32,7 +34,7 @@ import locations.*;
 
 public class SetupGame {
 	
-	private static int currentPlayerNumber = 1;
+	private static int currentPlayerNumber = 0;
 
 	private static final String NOC_LIST_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
 	private static final String DOMAIN_FILE_PATH = "Veale's NOC List/Veale's domains.xlsx";
@@ -45,10 +47,12 @@ public class SetupGame {
 	private ArrayList<ArrayList<String>> charactersAndThemes = new ArrayList<ArrayList<String>>(noOfPlayers);
 	private ArrayList<String> characters = new ArrayList<String>();
 	private ArrayList<NamedLocation> locationList = new ArrayList<NamedLocation>(); // TODO maybe change to ArrayList of ArrayLists for multiple boards
+    private String[] pathsToIcons = new String[noOfPlayers];
 
-
-	public SetupGame(){
-
+	public SetupGame() throws EncryptedDocumentException, InvalidFormatException, IOException{
+		findCharactersFromThemes(findThemes(0, 0));
+        compileChoiceOfCharacters();
+        launchSelectionPanel();
 	}
 
 	//Randomly generate a list of unique themes depending on the number of players.
@@ -235,7 +239,7 @@ public class SetupGame {
     	//Ensures the JLabel spans all columns when beneath the images.
     	c.gridwidth = noOfPlayers;
     
-    	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber));
+    	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
     	
     	//Add action listeners to all images.
     	for(int i=0;i<noOfPlayers;i++){
@@ -247,18 +251,20 @@ public class SetupGame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                 	
-                	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
+                	setPathToIcon(children[innerI].toString(), currentPlayerNumber);
                 	currentPlayerNumber++;
-                	
-                	//Remove the corresponding button if character is chosen.
+                
                 	characterPanel.remove(imageButtons[innerI]);
-                	
+                                	
                 	//Repaint JFrame so removed button is present to user.
                 	selectionPanel.repaint();
                 	
-                	//When all characters are chosen, close JFrame.
-                	if(currentPlayerNumber == 7){
+                	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
+
+                	//When all characters are chosen, close JFrame and create players
+                	if(currentPlayerNumber == 6){
                 		selectionPanel.dispose();
+                		createPlayers();
                 	}
                 }
     		});
@@ -350,6 +356,36 @@ public class SetupGame {
 		}
 		System.out.println("\n");
 	}
+	
+	private Player[] createPlayers(){
+		
+		String[] pathsToIcons = getPathsToIcons();
+		Player[] players = new Player[noOfPlayers];
+		String[] properties = {"Hello", "World"};
+		String[] monopolies = {"No Monopolies"};
+		String[] mortgages = {"Hello"};
+		
+		//Instantiate all information for players
+		for(int i=0;i<noOfPlayers;i++){
+			
+			/*getBaseName removes full path and returns file name.
+			This is the character name*/
+			String characterName = FilenameUtils.getBaseName(pathsToIcons[i]);
+			players[i] = new Player(characterName,1000,properties,monopolies,mortgages,pathsToIcons[i]);
+           	System.out.println("Path to icon for player "+players[i].getName()+" PATH:"+players[i].getPathForImageIcon());
+		}
+		
+		return players;
+	}
+	
+	public void setPathToIcon(String filePath, int i){
+		this.pathsToIcons[i] = filePath;
+	}
+	
+	public String[] getPathsToIcons(){
+		return this.pathsToIcons;
+	}
+	
 	
 }
 
