@@ -1,6 +1,9 @@
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,15 +11,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
-
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -30,6 +31,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import locations.*;
 
 public class SetupGame {
+	
+	private static int currentPlayerNumber = 1;
 
 	private static final String NOC_LIST_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
 	private static final String DOMAIN_FILE_PATH = "Veale's NOC List/Veale's domains.xlsx";
@@ -190,58 +193,91 @@ public class SetupGame {
     	}
    }
     
-    @SuppressWarnings("unchecked")
 	public void launchSelectionPanel() throws IOException{
     	
+    	JPanel characterPanel = new JPanel(new GridBagLayout());
     	JButton[] imageButtons = new JButton[noOfPlayers];
     	JFrame selectionPanel = new JFrame();
-    	JTextArea currentPlayer = new JTextArea();
-    	JComboBox<String> comboBox = new JComboBox(characters.toArray());
-    	JButton confirmButton = new JButton("Confirm");
+    	JLabel informationArea = new JLabel("The label",SwingConstants.CENTER);
     	
-    	/*
-    	for(int i=0;i<characters.size();i++){
-    		comboBox.add(characters.get(i));
-    	}*/
-    	
-    	selectionPanel.setLayout(new GridLayout(0,6));
-    	selectionPanel.setSize(new Dimension(10,20));
-    	
-    	comboBox.setSelectedIndex(0);
-    	
+    	selectionPanel.setLayout(new GridBagLayout());
+    	GridBagConstraints c = new GridBagConstraints();
+
     	//https://stackoverflow.com/questions/3360255/how-to-get-a-single-file-from-a-folder-in-java
         File dir = new File("C:/Users/Rowley/git/panopoly/savedImages");
         File[] children = dir.listFiles();
         
-         for(int i=0;i<noOfPlayers;i++){
-        	 System.out.println(children[i].toString());
-         }
-         
+        //Ensures all images are resized evenly.
+        c.weightx = .5;
+        c.weighty = .5;
+        
+        /*
+         * Images are obtained from /savedImages.
+         * These are then resized and added to the buttons.
+         * Each button added to the JPanel.
+         */
     	for(int i=0;i<noOfPlayers;i++){
+    		c.fill = GridBagConstraints.HORIZONTAL;
+    		c.gridx = i;
+    		c.gridy = 0;
     		imageButtons[i] = new JButton();
     		BufferedImage myPicture = ImageIO.read(new File(children[i].toString()));
     		Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-        	//JLabel picLabel = new JLabel(new ImageIcon(myResizedPicture));
         	imageButtons[i].setIcon(new ImageIcon(myResizedPicture));
-        	selectionPanel.add(imageButtons[i]);
+        	characterPanel.add(imageButtons[i],c);
     	}
-
-    	//comboBox.addActionListener();
     	
-    	//currentPlayer.setText("Select character for player 1");
-    	//selectionPanel.add(currentPlayer);
-    	//selectionPanel.add(comboBox);
-    	//selectionPanel.add(confirmButton);
+    	//Constraints for JLabel that presents character selection info.
+        c.fill = GridBagConstraints.BOTH;
+    	c.gridx = 0;
+    	c.gridy = 1;
     	
-    	//frame.add(boardAndGameInformationPane);
+    	//Ensures the JLabel spans all columns when beneath the images.
+    	c.gridwidth = noOfPlayers;
+    
+    	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber));
+    	
+    	//Add action listeners to all images.
+    	for(int i=0;i<noOfPlayers;i++){
+    		
+    		//https://stackoverflow.com/questions/33799800/java-local-variable-mi-defined-in-an-enclosing-scope-must-be-final-or-effective
+    	    final Integer innerI = new Integer(i);
+    	    
+    		imageButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                	
+                	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
+                	currentPlayerNumber++;
+                	
+                	//Remove the corresponding button if character is chosen.
+                	characterPanel.remove(imageButtons[innerI]);
+                	
+                	//Repaint JFrame so removed button is present to user.
+                	selectionPanel.repaint();
+                	
+                	//When all characters are chosen, close JFrame.
+                	if(currentPlayerNumber == 7){
+                		selectionPanel.dispose();
+                	}
+                }
+    		});
+       }
+    	
+    	characterPanel.add(informationArea,c);//Add information about selecting characters under buttons with images
+    	selectionPanel.add(characterPanel);//Add this to JFrame.
+    	selectionPanel.setPreferredSize(new Dimension(1125,150));
+    	selectionPanel.pack();
+    	selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
+    	selectionPanel.setVisible(true);
+    	selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
  }
 		    
     public ArrayList<String> getCharacters(){
     	return characters;
     }
     
-
-	@SuppressWarnings("deprecation")
 	public void setUpLocations(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException {
 
 		Random rand = new Random();
