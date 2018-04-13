@@ -19,6 +19,11 @@ public class Player {
         this.mortgages = mortgages;
         this.pathToCharacterIcon = pathToIcon;
     }
+    
+    public Player(String name,String pathToCharacterIcon){
+    	this.name = name;
+        this.pathToCharacterIcon = pathToCharacterIcon;
+    }
 
     public String getName(){
         return name;

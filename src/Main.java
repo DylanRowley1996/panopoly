@@ -29,12 +29,14 @@ public class Main {
          */
          //new GUI(players);
          
-         /*// Finds images from web using the chosen characters.
-         FindImages findImages = new FindImages(gameSetup.getCharacters());
-         findImages.Search();
-         */
+         // Finds images from web using the chosen characters.
+        // FindImages findImages = new FindImages(gameSetup.getCharacters());
+        // findImages.Search();
+         
          
          SetupGame gameSetup = new SetupGame();
+        
+         
          /*gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
          gameSetup.compileChoiceOfCharacters();
          gameSetup.launchSelectionPanel();

@@ -1,4 +1,5 @@
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -7,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -48,11 +50,21 @@ public class SetupGame {
 	private ArrayList<String> characters = new ArrayList<String>();
 	private ArrayList<NamedLocation> locationList = new ArrayList<NamedLocation>(); // TODO maybe change to ArrayList of ArrayLists for multiple boards
     private String[] pathsToIcons = new String[noOfPlayers];
-
-	public SetupGame() throws EncryptedDocumentException, InvalidFormatException, IOException{
-		findCharactersFromThemes(findThemes(0, 0));
-        compileChoiceOfCharacters();
-        launchSelectionPanel();
+        
+    private FindImages imageRetriever;
+    private GUI gui;
+    
+	public SetupGame() throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException{
+		
+			findCharactersFromThemes(findThemes(0, 0));
+	        compileChoiceOfCharacters();
+	        //TODO - Uncomment code below when we need queries working
+	       // imageRetriever = new FindImages(characters);
+	        //imageRetriever.searchForCharacterImages();
+	        //imageRetriever.resizeAllImages();
+	        resizeAllImages();
+        	createAndLaunchSelectionFrame();
+        	
 	}
 
 	//Randomly generate a list of unique themes depending on the number of players.
@@ -197,7 +209,7 @@ public class SetupGame {
     	}
    }
     
-	public void launchSelectionPanel() throws IOException{
+	public void createAndLaunchSelectionFrame() throws IOException{
     	
     	JPanel characterPanel = new JPanel(new GridBagLayout());
     	JButton[] imageButtons = new JButton[noOfPlayers];
@@ -227,6 +239,7 @@ public class SetupGame {
     		imageButtons[i] = new JButton();
     		BufferedImage myPicture = ImageIO.read(new File(children[i].toString()));
     		Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+    		//ImageIO.write((BufferedImage)myResizedPicture, "jpg", new File(children[i].toString()));
         	imageButtons[i].setIcon(new ImageIcon(myResizedPicture));
         	characterPanel.add(imageButtons[i],c);
     	}
@@ -264,7 +277,13 @@ public class SetupGame {
                 	//When all characters are chosen, close JFrame and create players
                 	if(currentPlayerNumber == 6){
                 		selectionPanel.dispose();
-                		createPlayers();
+                		//createPlayers();
+                		try {
+							gui = new GUI(createPlayers());
+						} catch (EncryptedDocumentException | InvalidFormatException | IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
                 	}
                 }
     		});
@@ -277,7 +296,6 @@ public class SetupGame {
     	selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
     	selectionPanel.setVisible(true);
     	selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    
  }
 		    
     public ArrayList<String> getCharacters(){
@@ -357,23 +375,21 @@ public class SetupGame {
 		System.out.println("\n");
 	}
 	
-	private Player[] createPlayers(){
+	private ArrayList<Player> createPlayers() throws EncryptedDocumentException, InvalidFormatException, IOException{
 		
 		String[] pathsToIcons = getPathsToIcons();
-		Player[] players = new Player[noOfPlayers];
-		String[] properties = {"Hello", "World"};
-		String[] monopolies = {"No Monopolies"};
-		String[] mortgages = {"Hello"};
+		ArrayList<Player> players = new ArrayList<Player>();
 		
 		//Instantiate all information for players
 		for(int i=0;i<noOfPlayers;i++){
 			
-			/*getBaseName removes full path and returns file name.
+		/*	getBaseName removes full path and returns file name.
 			This is the character name*/
 			String characterName = FilenameUtils.getBaseName(pathsToIcons[i]);
-			players[i] = new Player(characterName,1000,properties,monopolies,mortgages,pathsToIcons[i]);
-           	System.out.println("Path to icon for player "+players[i].getName()+" PATH:"+players[i].getPathForImageIcon());
+			players.add(new Player(characterName,pathsToIcons[i]));
+           	System.out.println("Path to icon for player "+players.get(i).getName()+" PATH:"+players.get(i).getPathForImageIcon());
 		}
+		
 		
 		return players;
 	}
@@ -385,6 +401,33 @@ public class SetupGame {
 	public String[] getPathsToIcons(){
 		return this.pathsToIcons;
 	}
+	
+	private static BufferedImage resizeImage(BufferedImage originalImage, int type, int IMG_WIDTH, int IMG_HEIGHT) {
+	    BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+	    Graphics2D g = resizedImage.createGraphics();
+	    g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+	    g.dispose();
+	    return resizedImage;
+	}
+    
+    //Scales all images so they don't have to be constantly rescaled during the game
+    public void resizeAllImages() throws IOException{
+    	
+    	 File dir = new File("C:/Users/Rowley/git/panopoly/savedImages");
+         File[] children = dir.listFiles();
+    	
+    	//TODO - Change so it only loops on number of players
+    	for(int i=0;i<pathsToIcons.length;i++){
+    		 System.out.println("Trying to read: "+children[i].toString());
+    		 BufferedImage originalImage = ImageIO.read(new File(children[i].toString()));//change path to where file is located
+             int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+
+             BufferedImage resizeImageJpg = resizeImage(originalImage, type, 150, 150);
+             ImageIO.write(resizeImageJpg, "jpg", new File(children[i].toString())); //change path where you want it saved
+    	}
+    	
+    }
+	
 	
 	
 }
