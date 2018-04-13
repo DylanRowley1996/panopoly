@@ -427,8 +427,6 @@ public class SetupGame {
     	}
     	
     }
-	
-	
-	
+		
 }
 
