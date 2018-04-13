@@ -5,82 +5,81 @@ import java.awt.event.*;
 public class ButtonPanel extends JPanel
 {
     
-	private static final long serialVersionUID = 1L;
-	private JLabel statusLabel;
-
-    public ButtonPanel(Player[] players)
+	private JButton rollButton = new JButton("ROLL");
+	private JButton buyButton = new JButton("BUY");
+    private JButton auctionButton = new JButton("AUCTION");
+    private JButton sellButton = new JButton("SELL");
+    private JButton collectRentButton = new JButton("COLLECT RENT");
+    private JButton mortgageButton = new JButton("MORTGAGE");
+    private JButton redeemMortgageButton = new JButton("REDEEM MORTGAGE");
+    private JButton tradeButton = new JButton("TRADE");
+    private JButton overviewButton = new JButton("OVERVIEW");
+    private JButton assetsButton = new JButton("ASSETS");
+    private JButton finishTurnButton = new JButton("FINISH TURN");
+    
+    public ButtonPanel()
     {
-    	 setLayout(new GridLayout(4,2));
-
-         statusLabel = new JLabel("");
-         statusLabel.setVerticalAlignment(SwingConstants.BOTTOM);
-         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
-         
-         JButton rollButton = new JButton("ROLL");
-         JButton sellButton = new JButton("SELL");
-         JButton collectRentButton = new JButton("COLLECT RENT");
-         JButton mortgageButton = new JButton("MORTGAGE");
-         JButton redeemMortgageButton = new JButton("REDEEM MORTGAGE");
-         JButton tradeButton = new JButton("TRADE");
-         JButton overviewButton = new JButton("OVERVIEW");
-         JButton assetsButton = new JButton("ASSETS");
-
-         rollButton.addActionListener(e ->
-             statusLabel.setText("Roll button clicked")
-         );
-
-         sellButton.addActionListener(e ->
-                 statusLabel.setText("Sell button clicked.")
-         );
-
-         collectRentButton.addActionListener(e ->
-                 statusLabel.setText("Collect rent button clicked.")
-         );
-
-         mortgageButton.addActionListener(e ->
-                 statusLabel.setText("Mortgage button clicked.")
-
-         );
-
-         redeemMortgageButton.addActionListener(e ->
-                 statusLabel.setText("Redeem mortgage button clicked.")
-         );
-
-         tradeButton.addActionListener(e ->
-                 statusLabel.setText("Trade button clicked.")
-         );
-
-         overviewButton.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						 SwingUtilities.invokeLater(new Runnable() {
-					            @Override
-					            public void run() {
-					                new Overview(players).setVisible(true);
-					            }
-					        });
-
-					}
-				 });
-        		//e ->
-               //  statusLabel.setText("Overview button clicked.")
-        // );
-
-         assetsButton.addActionListener(e ->
-                 statusLabel.setText("Assets button clicked.")
-         );
-
+    	 setLayout(new GridLayout(5,2));
+    	 setMaximumSize(new Dimension(5,5));
          add(rollButton);
          add(sellButton);
+         add(buyButton);
+         add(auctionButton);
          add(collectRentButton);
          add(mortgageButton);
          add(redeemMortgageButton);         
          add(tradeButton);
          add(overviewButton);
-         add(assetsButton);
+         //add(assetsButton);
+         add(finishTurnButton);
     }
 
- 
-    
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public JButton getRollButton() {
+		return rollButton;
+	}
+
+	public JButton getBuyButton() {
+		return buyButton;
+	}
+
+	public JButton getAuctionButton() {
+		return auctionButton;
+	}
+
+	public JButton getSellButton() {
+		return sellButton;
+	}
+
+	public JButton getCollectRentButton() {
+		return collectRentButton;
+	}
+
+	public JButton getMortgageButton() {
+		return mortgageButton;
+	}
+
+	public JButton getRedeemMortgageButton() {
+		return redeemMortgageButton;
+	}
+
+	public JButton getTradeButton() {
+		return tradeButton;
+	}
+
+	public JButton getOverviewButton() {
+		return overviewButton;
+	}
+
+	public JButton getAssetsButton() {
+		return assetsButton;
+	}
+	
+	public JButton getFinishTurnButton(){
+		return finishTurnButton;
+	}
+	
 }

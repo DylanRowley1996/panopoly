@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /Auction.class
 /BackgroundTextArea.class
 /BoardExample.class
@@ -17,3 +18,8 @@
 /Main$2.class
 /ButtonPanel$1$1.class
 /ButtonPanel$1.class
+=======
+/interfaces/
+/locations/
+/panopoly/
+>>>>>>> origin/master

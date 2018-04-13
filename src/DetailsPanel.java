@@ -53,7 +53,4 @@ public class DetailsPanel extends JPanel {
 			}
 		}
 		//TODO show details of un-ownable locations
-	}
-	
 }
-

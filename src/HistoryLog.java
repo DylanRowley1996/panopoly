@@ -13,10 +13,9 @@ public class HistoryLog extends JPanel {
 	JTextArea textArea = new JTextArea(TEXT_AREA_HEIGHT, TEXT_AREA_WIDTH);
 	JScrollPane scrollPane = new JScrollPane(textArea);
 	DefaultCaret caret = (DefaultCaret)textArea.getCaret();
-	
+		
 	HistoryLog() {
-		setMaximumSize(new Dimension(15, 20));
-		//setBorder(LINE_END);
+		setMaximumSize(new Dimension(10, 10));
 		textArea.setBorder(BorderFactory.createCompoundBorder(textArea.getBorder(), BorderFactory.createEmptyBorder(5,5,5,5)));
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Serif", Font.BOLD, FONT_SIZE));
@@ -32,6 +31,10 @@ public class HistoryLog extends JPanel {
 	
 	public void displayHistory(String text) {
 		textArea.append(text+"\n");
+	}
+	
+	public JTextArea getTextArea(){
+		return this.textArea;
 	}
 	
 }
