@@ -20,15 +20,15 @@ public class GUI {
 	private JSplitPane detailsAndHistoryLog = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 	private HistoryLog history = new HistoryLog();
 	private PropertyInformationPanel propertyInformationPanel = new PropertyInformationPanel();
-	private BoardExample board = new BoardExample();
-	private JPanel boardPanel = board.getBoard();
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private ButtonPanel buttonPanel = new ButtonPanel();
+	private Board board;
 
 
 	GUI(Player[] players) {		
-			
-		BoardExample.loadBoard();
+		
+		board = new Board(15);
+		
 		detailsAndHistoryLog.setDividerLocation(.2);
 		detailsAndHistoryLog.setTopComponent(propertyInformationPanel);
 		detailsAndHistoryLog.setBottomComponent(history);
@@ -38,7 +38,7 @@ public class GUI {
 		buttonsDetailsAndPropInfo.setBottomComponent(buttonPanel);
 		
 		boardAndGameInformationPane.setDividerLocation(.3);
-		boardAndGameInformationPane.setLeftComponent(boardPanel);
+		boardAndGameInformationPane.setLeftComponent(board);
 		boardAndGameInformationPane.setRightComponent(buttonsDetailsAndPropInfo);
 		
 		frame.add(boardAndGameInformationPane);

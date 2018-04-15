@@ -279,7 +279,6 @@ public class SetupGame {
     }
     
 	public void setUpLocations(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException {
-
 		Random rand = new Random();
 		ArrayList<ArrayList<String>> locationsByTheme = new ArrayList<ArrayList<String>>();
 

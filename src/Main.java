@@ -27,22 +27,22 @@ public class Main {
 
          Player[] players = {player1,player2,player3};
          
-         //new GUI(players);
+         new GUI(players);
          
          SetupGame gameSetup = new SetupGame();
-         gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
-         gameSetup.compileChoiceOfCharacters();
+//         gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
+//         gameSetup.compileChoiceOfCharacters();
          
-        /* Finds images from web using the chosen characters.
-         gameSetup.setUpLocations(gameSetup.findThemes(1, 1));
-         gameSetup.testLocations();
+     
+//         gameSetup.setUpLocations(gameSetup.findThemes(1, 1));
+//         gameSetup.testLocations();
          
-        //Finds images from web using the chosen characters.
+        /*Finds images from web using the chosen characters.
          FindImages findImages = new FindImages(gameSetup.getCharacters());
          findImages.Search();
          */
          
-         gameSetup.launchSelectionPanel();
+         //gameSetup.launchSelectionPanel();
          
         // CharacterSelection characterSelect = new CharacterSelection(players);
          
