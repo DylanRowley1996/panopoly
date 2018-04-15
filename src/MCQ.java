@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -28,8 +27,8 @@ public class MCQ {
     private static final String VEHICLE_FLEET_PATH = "Veale's NOC List/Veale's vehicle fleet.xlsx";
     
     //By using List, we can take advantage of Collections.shuffle(list);
-    private static final List<String> answers = new ArrayList<String>();// // TODO - Remove 'static' if we're going to create several questions from same object
-    private static String answer = ""; // TODO - Remove 'static' if we're going to create several questions from same object
+    private List<String> answers = new ArrayList<String>();// // TODO - Remove 'static' if we're going to create several questions from same object
+    private String answer = ""; // TODO - Remove 'static' if we're going to create several questions from same object
    
 
 	public String createMCQ() throws IOException, InvalidFormatException{
@@ -120,6 +119,8 @@ public class MCQ {
 	
 	public String createVehicleQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
 		
+		answers.clear();
+		
 		//Prevent ZIP BOMB
 		ZipSecureFile.setMinInflateRatio(0.005);
 		
@@ -204,7 +205,7 @@ public class MCQ {
         //Shuffle List
         Collections.shuffle(answers);
                   
-        return "Question: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+" "+gender+" "+affordance+" "+determiner+" "+vehicle+". Is it: \nA. "+answers.get(0)+"\n"+
+        return "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+" "+gender+" "+affordance+" "+determiner+" "+vehicle+". Is it: \nA. "+answers.get(0)+"\n"+
 				  "B. "+answers.get(1)+"\n"+
 				  "C. "+answers.get(2)+"\n"+
 				  "D. "+answers.get(3)+"\n";
