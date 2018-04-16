@@ -5,9 +5,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import locations.*;
 
 public class Board extends JPanel {
 	
@@ -20,10 +24,12 @@ public class Board extends JPanel {
 	private final int boardWidth = (int) (screenSize.getWidth()*0.66);
 	private final int boardHeight = (int) (screenSize.getHeight()*0.9);
 	private final int boardRows;
+	ArrayList<NamedLocation> locations;
 	
-	public Board(int rows) {
+	public Board(int rows, ArrayList<NamedLocation> locList) {
 		
 		boardRows = rows;
+		locations = locList;
 		
 		FlowLayout layout = new FlowLayout();
 		layout.setVgap(0);
@@ -33,18 +39,24 @@ public class Board extends JPanel {
 		int squareWidth;
 		int squareHeight;
 		
+		Iterator<NamedLocation> locIt = locations.iterator();
+		
 		for(int i=0; i<boardRows; i++) {
 			for(int j=0; j<boardRows; j++) {
-				JPanel test = new JPanel();
+				JPanel square = new JPanel();
 				squareWidth = boardWidth/boardRows;
 				squareHeight = boardHeight/boardRows;
 				
 				if(i==0 || i==(boardRows-2) || j==0 || j==(boardRows-2)) {
 					int labelWidth = squareWidth;
 					int labelHeight = squareHeight;
-					String s = "The Adventures of Sean";
-					String text = "<html><div style='text-align: center;'>" + s + "</div></html>"; 
-				    JLabel jlabel = new JLabel(text);
+					String locName;
+					if(locIt.hasNext()) {
+						locName = locIt.next().getIdentifier();
+					}
+					else	locName = "Unnamed Location";
+					String wrappedName = "<html><div style='text-align: center;'>" + locName + "</div></html>"; 
+				    JLabel nameLabel = new JLabel(wrappedName);
 				    String nameLayout = BorderLayout.CENTER;
 					
 					if(i==0&&j==0 || i==0&&j==(boardRows-2)  || i==(boardRows-2)&&j==0 || i==(boardRows-2)&&j==(boardRows-2)) {
@@ -52,6 +64,7 @@ public class Board extends JPanel {
 						squareHeight = (boardHeight/boardRows)*2;
 						labelWidth = squareWidth;
 						labelHeight = squareHeight;
+						nameLayout = BorderLayout.CENTER;
 					}
 					else if(i==0 || i==(boardRows-2)) {
 						squareWidth = boardWidth/boardRows;
@@ -68,20 +81,21 @@ public class Board extends JPanel {
 						nameLayout = BorderLayout.WEST;
 					}
 					
-					test.setBackground(Color.WHITE);
-					test.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+					square.setBackground(Color.WHITE);
+					square.setBorder(BorderFactory.createLineBorder(Color.BLACK));
   
-					jlabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
-					jlabel.setFont(new Font("Verdana", 1, getFontSizeFit(jlabel, s, labelWidth)+1));
-
-				    test.setLayout(new BorderLayout());
-				    test.add(jlabel, nameLayout);
+					nameLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
+					//nameLabel.setFont(new Font("Verdana", 1, 12));
+					nameLabel.setFont(new Font(nameLabel.getFont().getFontName(), 1, getFontSizeFit(nameLabel, locName, labelWidth)));
+					
+				    square.setLayout(new BorderLayout());
+				    square.add(nameLabel, nameLayout);
 
 				}
 				
-				test.setPreferredSize(new Dimension(squareWidth, squareHeight));
+				square.setPreferredSize(new Dimension(squareWidth, squareHeight));
 				
-				squares.add(test);
+				squares.add(square);
 				
 				if(j==0 || j==(boardRows-2))	j++;
 			}

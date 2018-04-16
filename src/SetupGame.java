@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import javax.imageio.ImageIO;
@@ -31,7 +32,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import locations.*;
 
 public class SetupGame {
-	
+
 	private static int currentPlayerNumber = 1;
 
 	private static final String NOC_LIST_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
@@ -46,21 +47,45 @@ public class SetupGame {
 	private ArrayList<String> characters = new ArrayList<String>();
 	private ArrayList<NamedLocation> locationList = new ArrayList<NamedLocation>(); // TODO maybe change to ArrayList of ArrayLists for multiple boards
 
+	Random rand = new Random();
 
-	public SetupGame(){
 
+	public SetupGame() throws EncryptedDocumentException, InvalidFormatException, IOException{
+
+		String[] player1Properties = {"UCD", "TRINITY", "DCU"};
+		String[] player1Monopolies = {"Red"};
+		String[] player1Mortgages = {"TRINITY"};
+
+		String[] player2Properties = {"DIT", "ITCarlow", "SomeOtherShitHole"};
+		String[] player2Monopolies = {"Blue"};
+		String[] player2Mortgages = {"ITCarlow"};
+
+		String[] player3Properties = {"Dublin", "Monaghan", "Cork"};
+		String[] player3Monopolies = {"Green"};
+		String[] player3Mortgages = {"Cork"};
+		Player player1 = new Player("Dylan", 100, player1Properties,player1Monopolies,player1Mortgages );
+		Player player2 = new Player("Enna", 100, player2Properties,player2Monopolies,player2Mortgages );
+		Player player3 = new Player("Sean", 100, player3Properties,player3Monopolies,player3Mortgages );
+
+		Player[] players = {player1,player2,player3};
+
+		int noBoardRows = rand.nextInt(6) + 10;
+		int noLocations = (noBoardRows-3)*4;
+		System.out.println(noLocations);
+		int noGroups = (int) ((noLocations*0.8)-8)/3;
+		System.out.println(noGroups);
+		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
+		new GUI(players, noBoardRows, locationList);
 	}
 
 	//Randomly generate a list of unique themes depending on the number of players.
-	public ArrayList<String> findThemes(int c, int wB) throws EncryptedDocumentException, InvalidFormatException, IOException{
-
+	public ArrayList<String> findThemes(int c, int wB, int noOfThemes) throws EncryptedDocumentException, InvalidFormatException, IOException{
 
 		ArrayList<String> listOfThemes = new ArrayList<String>();
 		boolean themesFound = false;
 		boolean newThemeFound = false;
 		Workbook locationListingWb;
 
-		Random rand = new Random();
 
 		if(wB==0)	locationListingWb = WorkbookFactory.create(new File(DOMAIN_FILE_PATH));
 		else		locationListingWb = WorkbookFactory.create(new File(WORLDS_FILE_PATH));	
@@ -100,7 +125,7 @@ public class SetupGame {
 			newThemeFound = false;
 
 			//If we've enough unique themes then make sure loop exits.
-			if(listOfThemes.size() == noOfPlayers) themesFound = true;
+			if(listOfThemes.size() == noOfThemes) themesFound = true;
 
 		}
 
@@ -173,160 +198,191 @@ public class SetupGame {
 					System.out.println("Current Theme: "+charactersAndThemes.get(k).get(0));
 					System.out.println(" Current Character: "+charactersAndThemes.get(k).get(x+1)+"\n\n");	*/
 				//}
-    		}
-    	}
-    }
-    
-    public void compileChoiceOfCharacters(){    	
-    	Random rand = new Random();
-    	int i = 0;
-    	
-    	while(characters.size() != noOfPlayers){
-    		  int choice = rand.nextInt(charactersAndThemes.get(i).size());
-    		  
-    		  if(choice == 0) choice  += 1;
-    		  if(!characters.contains(charactersAndThemes.get(i).get(choice))){
-    			  System.out.println("Current Theme: "+charactersAndThemes.get(i).get(0)+" Current Character:"+charactersAndThemes.get(i).get(choice)+"\n");
-    			  characters.add(charactersAndThemes.get(i).get(choice));
-    			  i++;
-    		  }
-    	}
-   }
-    
-	public void launchSelectionPanel() throws IOException{
-    	
-    	JPanel characterPanel = new JPanel(new GridBagLayout());
-    	JButton[] imageButtons = new JButton[noOfPlayers];
-    	JFrame selectionPanel = new JFrame();
-    	JLabel informationArea = new JLabel("The label",SwingConstants.CENTER);
-    	
-    	selectionPanel.setLayout(new GridBagLayout());
-    	GridBagConstraints c = new GridBagConstraints();
+			}
+		}
+	}
 
-    	//https://stackoverflow.com/questions/3360255/how-to-get-a-single-file-from-a-folder-in-java
-        File dir = new File("C:/Users/Rowley/git/panopoly/savedImages");
-        File[] children = dir.listFiles();
-        
-        //Ensures all images are resized evenly.
-        c.weightx = .5;
-        c.weighty = .5;
-        
-        /*
-         * Images are obtained from /savedImages.
-         * These are then resized and added to the buttons.
-         * Each button added to the JPanel.
-         */
-    	for(int i=0;i<noOfPlayers;i++){
-    		c.fill = GridBagConstraints.HORIZONTAL;
-    		c.gridx = i;
-    		c.gridy = 0;
-    		imageButtons[i] = new JButton();
-    		BufferedImage myPicture = ImageIO.read(new File(children[i].toString()));
-    		Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-        	imageButtons[i].setIcon(new ImageIcon(myResizedPicture));
-        	characterPanel.add(imageButtons[i],c);
-    	}
-    	
-    	//Constraints for JLabel that presents character selection info.
-        c.fill = GridBagConstraints.BOTH;
-    	c.gridx = 0;
-    	c.gridy = 1;
-    	
-    	//Ensures the JLabel spans all columns when beneath the images.
-    	c.gridwidth = noOfPlayers;
-    
-    	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber));
-    	
-    	//Add action listeners to all images.
-    	for(int i=0;i<noOfPlayers;i++){
-    		
-    		//https://stackoverflow.com/questions/33799800/java-local-variable-mi-defined-in-an-enclosing-scope-must-be-final-or-effective
-    	    final Integer innerI = new Integer(i);
-    	    
-    		imageButtons[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                	
-                	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
-                	currentPlayerNumber++;
-                	
-                	//Remove the corresponding button if character is chosen.
-                	characterPanel.remove(imageButtons[innerI]);
-                	
-                	//Repaint JFrame so removed button is present to user.
-                	selectionPanel.repaint();
-                	
-                	//When all characters are chosen, close JFrame.
-                	if(currentPlayerNumber == 7){
-                		selectionPanel.dispose();
-                	}
-                }
-    		});
-       }
-    	
-    	characterPanel.add(informationArea,c);//Add information about selecting characters under buttons with images
-    	selectionPanel.add(characterPanel);//Add this to JFrame.
-    	selectionPanel.setPreferredSize(new Dimension(1125,150));
-    	selectionPanel.pack();
-    	selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
-    	selectionPanel.setVisible(true);
-    	selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    
- }
-		    
-    public ArrayList<String> getCharacters(){
-    	return characters;
-    }
-    
-	public void setUpLocations(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException {
+	public void compileChoiceOfCharacters(){    	
+		Random rand = new Random();
+		int i = 0;
+
+		while(characters.size() != noOfPlayers){
+			int choice = rand.nextInt(charactersAndThemes.get(i).size());
+
+			if(choice == 0) choice  += 1;
+			if(!characters.contains(charactersAndThemes.get(i).get(choice))){
+				System.out.println("Current Theme: "+charactersAndThemes.get(i).get(0)+" Current Character:"+charactersAndThemes.get(i).get(choice)+"\n");
+				characters.add(charactersAndThemes.get(i).get(choice));
+				i++;
+			}
+		}
+	}
+
+	public void launchSelectionPanel() throws IOException{
+
+		JPanel characterPanel = new JPanel(new GridBagLayout());
+		JButton[] imageButtons = new JButton[noOfPlayers];
+		JFrame selectionPanel = new JFrame();
+		JLabel informationArea = new JLabel("The label",SwingConstants.CENTER);
+
+		selectionPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+
+		//https://stackoverflow.com/questions/3360255/how-to-get-a-single-file-from-a-folder-in-java
+		File dir = new File("C:/Users/Rowley/git/panopoly/savedImages");
+		File[] children = dir.listFiles();
+
+		//Ensures all images are resized evenly.
+		c.weightx = .5;
+		c.weighty = .5;
+
+		/*
+		 * Images are obtained from /savedImages.
+		 * These are then resized and added to the buttons.
+		 * Each button added to the JPanel.
+		 */
+		for(int i=0;i<noOfPlayers;i++){
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.gridx = i;
+			c.gridy = 0;
+			imageButtons[i] = new JButton();
+			BufferedImage myPicture = ImageIO.read(new File(children[i].toString()));
+			Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+			imageButtons[i].setIcon(new ImageIcon(myResizedPicture));
+			characterPanel.add(imageButtons[i],c);
+		}
+
+		//Constraints for JLabel that presents character selection info.
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 0;
+		c.gridy = 1;
+
+		//Ensures the JLabel spans all columns when beneath the images.
+		c.gridwidth = noOfPlayers;
+
+		informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber));
+
+		//Add action listeners to all images.
+		for(int i=0;i<noOfPlayers;i++){
+
+			//https://stackoverflow.com/questions/33799800/java-local-variable-mi-defined-in-an-enclosing-scope-must-be-final-or-effective
+			final Integer innerI = new Integer(i);
+
+			imageButtons[i].addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
+					currentPlayerNumber++;
+
+					//Remove the corresponding button if character is chosen.
+					characterPanel.remove(imageButtons[innerI]);
+
+					//Repaint JFrame so removed button is present to user.
+					selectionPanel.repaint();
+
+					//When all characters are chosen, close JFrame.
+					if(currentPlayerNumber == 7){
+						selectionPanel.dispose();
+					}
+				}
+			});
+		}
+
+		characterPanel.add(informationArea,c);//Add information about selecting characters under buttons with images
+		selectionPanel.add(characterPanel);//Add this to JFrame.
+		selectionPanel.setPreferredSize(new Dimension(1125,150));
+		selectionPanel.pack();
+		selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
+		selectionPanel.setVisible(true);
+		selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	}
+
+	public ArrayList<String> getCharacters(){
+		return characters;
+	}
+
+	public void setUpLocations(ArrayList<String> themes, int noLocations, int noBoardRows) throws EncryptedDocumentException, InvalidFormatException, IOException {
 		Random rand = new Random();
 		ArrayList<ArrayList<String>> locationsByTheme = new ArrayList<ArrayList<String>>();
+		int noLocsAdded = 0;
 
 		//Open the Fictional Worlds list for reading.
 		ZipSecureFile.setMinInflateRatio(0.005);
 		Workbook worldsListWb = WorkbookFactory.create(new File(WORLDS_FILE_PATH));
 		Sheet worldsListSheet = worldsListWb.getSheetAt(0);
+		Row row;
 		//Iterator<Row> rowIterator = worldsListSheet.iterator();
 
 		for(int i=0;i<themes.size();i++) {
-			//System.out.println("Enter loop 1");
 			int locationsSelected = 0;
 			locationsByTheme.add(new ArrayList<String>());
 			locationsByTheme.get(i).add(themes.get(i));
 
 			while(locationsSelected<3) {
-				//System.out.println("Enter loop 2");
-				Row row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
+				row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
 
-				if(row.getCell(1).getStringCellValue().contains(themes.get(i))) {
+				if(row.getCell(1).getStringCellValue().contains(themes.get(i)) && !locationsByTheme.contains(row.getCell(0).getStringCellValue())) {
 					locationsByTheme.get(i).add(row.getCell(0).getStringCellValue());
+					noLocsAdded++;
 					locationsSelected++;
 				}
 			}
-			//System.out.println("Exit loop 2");
 
 		}
-		//System.out.println("Exit loop 1");
+
+		locationsByTheme.add(new ArrayList<String>());
+		locationsByTheme.get(themes.size()).add("Station");
+		int locationsSelected=0;
+		while(locationsSelected<4) {
+			row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
+			if(!locationsByTheme.contains(row.getCell(0).getStringCellValue())) {
+				locationsByTheme.get(themes.size()).add(row.getCell(0).getStringCellValue());
+				noLocsAdded++;
+				locationsSelected++;
+			}
+		}
+		
+		locationsByTheme.add(new ArrayList<String>());
+		locationsByTheme.get(themes.size()+1).add("Tax");
+		while(noLocsAdded<noLocations-4) {
+			row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
+			if(!locationsByTheme.contains(row.getCell(0).getStringCellValue())) {
+				locationsByTheme.get(themes.size()).add(row.getCell(0).getStringCellValue());
+				noLocsAdded++;
+			}
+		}
+		
 		worldsListWb.close();
 
-		locationList.add(new NamedLocation("Go", 0));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(0).get(1), 1, 150, 75, 35, locationsByTheme.get(0).get(0)));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(0).get(2), 2, 170, 80, 40, locationsByTheme.get(0).get(0)));
-		locationList.add(new TaxableLocation("Communism Spread The Wealth Tax", 2, 0.2, 250));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(0).get(3), 3, 165, 75, 30, locationsByTheme.get(0).get(0)));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(1).get(1), 4, 300, 135, 65, locationsByTheme.get(1).get(0)));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(1).get(2), 5, 280, 100, 80, locationsByTheme.get(1).get(0)));
-		locationList.add(new Station(locationsByTheme.get(5).get(1) + " Station", 6, 200, 90, 25, null, locationsByTheme.get(5).get(0)));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(1).get(3), 7, 1650, 75, 30, locationsByTheme.get(1).get(0)));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(2).get(1), 8, 300, 135, 65, locationsByTheme.get(2).get(0)));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(2).get(2), 9, 280, 100, 80, locationsByTheme.get(2).get(0)));
-		locationList.add(new Utility(locationsByTheme.get(5).get(2) + " Utility", 10, 200, 90, 25, null, locationsByTheme.get(5).get(0)));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(2).get(3), 11, 1650, 75, 30, locationsByTheme.get(2).get(0)));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(3).get(1), 12, 300, 135, 65, locationsByTheme.get(3).get(0)));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(3).get(2), 13, 280, 100, 80, locationsByTheme.get(3).get(0)));
-		locationList.add(new Station(locationsByTheme.get(5).get(3) + " Station", 14, 200, 90, 25, null, locationsByTheme.get(5).get(0)));
-		locationList.add(new ImprovableProperty(locationsByTheme.get(3).get(3), 15, 1650, 75, 30, locationsByTheme.get(3).get(0)));
-		locationList.add(new Shop("Marketplace", 16));
+	
+		while(noLocsAdded>0) {
+			int listNo = rand.nextInt(locationsByTheme.size());
+			if(locationsByTheme.get(listNo).size()>1) {
+				if(listNo==themes.size()) {
+					locationList.add(new Station(locationsByTheme.get(listNo).get(1) + " Station", 6, 200, 90, 25, null, locationsByTheme.get(listNo).get(0)));
+					locationsByTheme.get(listNo).remove(1);
+					noLocsAdded--;
+				}
+				else if(listNo==locationsByTheme.size()-1) {
+					locationList.add(new TaxableLocation("Communism Spread The Wealth Tax", 2, 0.2, 250));
+					locationsByTheme.get(listNo).remove(1);
+					noLocsAdded--;
+				}
+				else {
+					locationList.add(new ImprovableProperty(locationsByTheme.get(listNo).get(1), 1, 150, 75, 35, locationsByTheme.get(listNo).get(0)));
+					locationsByTheme.get(listNo).remove(1);
+					noLocsAdded--;
+				}
+			}
+		}
+		locationList.add(0, new NamedLocation("Go", 0));
+		locationList.add(noBoardRows-3, new NamedLocation("Jail", noBoardRows-3));
+		locationList.add((noLocations-1)-(noBoardRows-3), new NamedLocation("Go to Jail", noLocations-(noBoardRows-3)));
+		locationList.add(noLocations-1, new Shop("Marketplace", noLocations-1));
+
+
 
 		//set left and right locations
 		for(int i=1; i<locationList.size()-1; i++) {
@@ -349,6 +405,6 @@ public class SetupGame {
 		}
 		System.out.println("\n");
 	}
-	
+
 }
 

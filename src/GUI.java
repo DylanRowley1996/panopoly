@@ -5,12 +5,15 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
+
+import locations.NamedLocation;
 
 public class GUI {
 	
@@ -23,11 +26,12 @@ public class GUI {
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private ButtonPanel buttonPanel = new ButtonPanel();
 	private Board board;
+//	ArrayList<NamedLocation> locations;
 
 
-	GUI(Player[] players) {		
+	GUI(Player[] players, int squares, ArrayList<NamedLocation> locs) {		
 		
-		board = new Board(15);
+		board = new Board(squares, locs);
 		
 		detailsAndHistoryLog.setDividerLocation(.2);
 		detailsAndHistoryLog.setTopComponent(propertyInformationPanel);
