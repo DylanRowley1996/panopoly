@@ -218,10 +218,7 @@ public class MCQ {
 		
 		//Prevent ZIP BOMB
 		ZipSecureFile.setMinInflateRatio(0.005);
-		
-		
-		String[] potentialQuestions = {"You're at", "You just got run over by a", "You're offered a lift by a"};
-		
+				
 		//Stores potential answers for question.
 		//String[] names = new String[4];
 		String address = "";
@@ -278,5 +275,61 @@ public class MCQ {
         		+ "C: "+answers.get(2) + "\n"
          		+ "D: "+answers.get(3) + "\n";
 	}
+	
+	//Column j is typical activity
+	//Question format: You see someone <typical activity>
+	public String createTypicalActivityQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
+		
+		answers.clear();
+		
+		//Prevent ZIP BOMB
+		ZipSecureFile.setMinInflateRatio(0.005);
+		
+		String activity = "";
+		
+		int rowOfAnswer = 0;
+		int randomRowNumber = 0;
+					
+		// Creating a Workbook from an Excel file (.xls or .xlsx)
+    	//Workbook: A workbook is the high-level representation of a Spreadsheet.
+        Workbook workbook = WorkbookFactory.create(new File(NOC_LIST_PATH));
+        
+		//Generate a random number that will be used for finding a row from NOC List.
+		Random rand = new Random();
+		rowOfAnswer = rand.nextInt((NOC_LIST_LINE_COUNT-1)+1)+1;
+		
+		//Set answer
+		answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString();
+		answers.add(answer);
+		
+		//Get a list of typical activities for the character
+		//Pick a random activity from this list
+        List<String> listOfTypicalActivities = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(9).toString().split(", "));
+        activity = listOfTypicalActivities.get(rand.nextInt(listOfTypicalActivities.size())).trim();
+        
+        int i = 0;
+        //Find three more names to present as answers.
+        while(i < 3){
+        	//Generate a random row number again.
+        	randomRowNumber = rand.nextInt((NOC_LIST_LINE_COUNT-1)+1)+1;
+        	//If it's not the same as row we got answer from, continue.
+        	if(randomRowNumber != rowOfAnswer){
+        		answers.add(workbook.getSheetAt(0).getRow(randomRowNumber).getCell(0).toString());
+        		i++;
+        	}
+        }
+        
+        //Shuffle List of answers
+        Collections.shuffle(answers);
+    	
+        System.out.println("Answer: "+answer);
+		return "You see someone "+activity+"\nIs it: \n"
+		+ "A: "+answers.get(0) + "\n"
+		+ "B: "+answers.get(1) + "\n"
+		+ "C: "+answers.get(2) + "\n"
+ 		+ "D: "+answers.get(3) + "\n";
+	}
+	
+	
 	
 }
