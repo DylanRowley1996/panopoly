@@ -154,7 +154,6 @@ public class MCQ {
         //Find a row that doesn't have a null value for vehicle
         while(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(10).toString().equals("")){
         	rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
-        	System.out.println("Random row: "+rowOfAnswer);
         }
         
         answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString();
