@@ -1,22 +1,22 @@
 package locations;
 import interfaces.*;
 
-public class PrivateProperty extends NamedLocation implements Ownable, Rentable, Mortgageable {
+public class PrivateProperty extends NamedLocation implements Ownable, Rentable, Mortgageable, Groupable  {
 	
 	private Playable owner;
 	private int price;
 	private int mortgageAmount;
-	protected int rentAmount;
+	protected int[] rentArray;
 	private boolean isMortgaged;
-	private String group;
+	private PropertyGroup group;
 	
-	public PrivateProperty(String name, int loc, int price, int mortgage, int rent, String group) {
-		super(name, loc);
+	public PrivateProperty(String name, PropertyGroup group) {
+		super(name);
 		owner = null;
-		this.price = price;
-		mortgageAmount = mortgage;
-		rentAmount = rent;
 		this.group = group;
+		price = group.calculatePrice();
+		mortgageAmount = group.calculateMortgage();
+		rentArray = group.calculateRentArray();
 		isMortgaged = false;
 	}
 
@@ -42,15 +42,16 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 
 	@Override
 	public int getRentalAmount() {
-		return rentAmount;
+		return rentArray[0];
 	}
 
 	@Override
 	public boolean isMortgaged() {
 		return isMortgaged;
 	}
-	
-	public String getGroup() {
+
+	@Override
+	public PropertyGroup getGroup() {
 		return group;
 	}
 

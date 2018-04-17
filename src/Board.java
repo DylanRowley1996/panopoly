@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import interfaces.Groupable;
 import locations.*;
 
 public class Board extends JPanel {
@@ -48,11 +49,16 @@ public class Board extends JPanel {
 				squareHeight = boardHeight/boardRows;
 				
 				if(i==0 || i==(boardRows-2) || j==0 || j==(boardRows-2)) {
+					Color locColor = Color.WHITE;
 					int labelWidth = squareWidth;
 					int labelHeight = squareHeight;
 					String locName;
 					if(locIt.hasNext()) {
-						locName = locIt.next().getIdentifier();
+						NamedLocation loc = locIt.next();
+						locName = loc.getIdentifier();
+						if(loc instanceof Groupable) {
+							locColor = ((Groupable) loc).getGroup().getColor();
+						}
 					}
 					else	locName = "Unnamed Location";
 					String wrappedName = "<html><div style='text-align: center;'>" + locName + "</div></html>"; 
@@ -81,7 +87,7 @@ public class Board extends JPanel {
 						nameLayout = BorderLayout.WEST;
 					}
 					
-					square.setBackground(Color.WHITE);
+					square.setBackground(locColor);
 					square.setBorder(BorderFactory.createLineBorder(Color.BLACK));
   
 					nameLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));

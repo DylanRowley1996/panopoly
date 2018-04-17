@@ -6,5 +6,4 @@ public interface Locatable extends Identifiable {
 	public Locatable getRight();
 	public void setLeft(Locatable l);
 	public void setRight(Locatable r);
-	public int getLocation();
 }

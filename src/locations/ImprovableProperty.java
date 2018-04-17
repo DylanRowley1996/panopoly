@@ -6,8 +6,8 @@ public class ImprovableProperty extends PrivateProperty implements Improvable {
 	private int numHouses;
 	private int numHotels;
 	
-	public ImprovableProperty(String name, int loc, int price, int mortgage, int rent, String group) {
-		super(name, loc, price, mortgage, rent, group);
+	public ImprovableProperty(String name, PropertyGroup group) {
+		super(name, group);
 		numHouses = 0;
 		numHotels = 0;
 	}

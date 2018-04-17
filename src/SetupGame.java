@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -72,9 +73,8 @@ public class SetupGame {
 
 		int noBoardRows = rand.nextInt(6) + 10;
 		int noLocations = (noBoardRows-3)*4;
-		System.out.println(noLocations);
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
-		System.out.println(noGroups);
+
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
 		new GUI(players, noBoardRows, locationList);
 	}
@@ -306,6 +306,8 @@ public class SetupGame {
 	}
 
 	public void setUpLocations(ArrayList<String> themes, int noLocations, int noBoardRows) throws EncryptedDocumentException, InvalidFormatException, IOException {
+		ArrayList<PropertyGroup> groups = setUpGroups(themes);
+		
 		Random rand = new Random();
 		ArrayList<ArrayList<String>> locationsByTheme = new ArrayList<ArrayList<String>>();
 		int noLocsAdded = 0;
@@ -337,11 +339,10 @@ public class SetupGame {
 			}
 
 		}
-		
-		System.out.println("All locs found");
 
 		locationsByTheme.add(new ArrayList<String>());
 		locationsByTheme.get(themes.size()).add("Station");
+		PropertyGroup stationGroup = new PropertyGroup("Station", new int[]{100, 500}, Color.white);
 		int locationsSelected=0;
 		while(locationsSelected<4) {
 			row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
@@ -369,7 +370,7 @@ public class SetupGame {
 			int listNo = rand.nextInt(locationsByTheme.size());
 			if(locationsByTheme.get(listNo).size()>1) {
 				if(listNo==themes.size()) {
-					locationList.add(new Station(locationsByTheme.get(listNo).get(1) + " Station", 6, 200, 90, 25, null, locationsByTheme.get(listNo).get(0)));
+					locationList.add(new Station(locationsByTheme.get(listNo).get(1) + " Station", stationGroup));
 					locationsByTheme.get(listNo).remove(1);
 					noLocsAdded--;
 				}
@@ -379,15 +380,15 @@ public class SetupGame {
 					noLocsAdded--;
 				}
 				else {
-					locationList.add(new ImprovableProperty(locationsByTheme.get(listNo).get(1), 1, 150, 75, 35, locationsByTheme.get(listNo).get(0)));
+					locationList.add(new ImprovableProperty(locationsByTheme.get(listNo).get(1), groups.get(listNo)));
 					locationsByTheme.get(listNo).remove(1);
 					noLocsAdded--;
 				}
 			}
 		}
-		locationList.add(0, new NamedLocation("Go", 0));
-		locationList.add(noBoardRows-3, new NamedLocation("Jail", noBoardRows-3));
-		locationList.add((noLocations-1)-(noBoardRows-3), new NamedLocation("Go to Jail", noLocations-(noBoardRows-3)));
+		locationList.add(0, new NamedLocation("Go"));
+		locationList.add(noBoardRows-3, new NamedLocation("Jail"));
+		locationList.add((noLocations-1)-(noBoardRows-3), new NamedLocation("Go to Jail"));
 		locationList.add(noLocations-1, new Shop("Marketplace", noLocations-1));
 
 
@@ -403,6 +404,24 @@ public class SetupGame {
 		locationList.get(locationList.size()-1).setLeft(locationList.get(0));
 		locationList.get(locationList.size()-1).setRight(locationList.get(locationList.size()-2));
 
+	}
+	
+	public ArrayList<PropertyGroup> setUpGroups(ArrayList<String> themes) {
+		ArrayList<PropertyGroup> groups = new ArrayList<PropertyGroup>();
+		ArrayList<Color> colors = new ArrayList<>(Arrays.asList(Color.red, Color.green, Color.blue, Color.cyan, Color.magenta, Color.yellow, Color.pink, Color.lightGray, Color.orange, Color.gray));
+		ArrayList<int[]> prices = new ArrayList<>(Arrays.asList(new int[]{20, 80}, new int[]{80, 160}, new int[]{160, 250}, new int[]{100, 280},
+				new int[]{250, 400}, new int[]{400, 675}, new int[]{320, 435}, new int[]{550, 875}, new int[]{800, 1100}, new int[]{1200, 2000}));
+		int totalGroups = themes.size();
+		
+		for(int i=0; i<totalGroups; i++) {
+			int x = rand.nextInt(totalGroups-i);
+			int y = rand.nextInt(totalGroups-i);
+			groups.add(new PropertyGroup(themes.get(i), prices.get(x), colors.get(y)));
+			prices.remove(x);
+			colors.remove(y);
+		}
+		
+		return groups;
 	}
 
 	public void testLocations() { // TODO Remove

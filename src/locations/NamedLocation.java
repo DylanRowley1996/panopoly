@@ -6,11 +6,9 @@ public class NamedLocation implements Locatable {
 	private String name;
 	private Locatable left;
 	private Locatable right;
-	private int location;
 	
-	public NamedLocation(String name, int loc) {
+	public NamedLocation(String name) {
 		this.name = name;
-		location = loc;
 	}
 		
 	@Override
@@ -36,11 +34,6 @@ public class NamedLocation implements Locatable {
 	@Override
 	public void setRight(Locatable r) {
 		right = r;
-	}
-
-	@Override
-	public int getLocation() {
-		return location;
 	}
 	
 }
