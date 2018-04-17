@@ -211,4 +211,72 @@ public class MCQ {
     	
 	}
 	
+	//Question format: You're at <address> and you see a <positive/negative talking point> <gender>. Who is it?
+	public String createAddressAndTalkingPointQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
+		
+		answers.clear();
+		
+		//Prevent ZIP BOMB
+		ZipSecureFile.setMinInflateRatio(0.005);
+		
+		
+		String[] potentialQuestions = {"You're at", "You just got run over by a", "You're offered a lift by a"};
+		
+		//Stores potential answers for question.
+		//String[] names = new String[4];
+		String address = "";
+		String gender = "";
+		String talkingPoint = "";
+		
+		int rowOfAnswer = 0;
+		int randomRowNumber = 0;
+					
+		// Creating a Workbook from an Excel file (.xls or .xlsx)
+    	//Workbook: A workbook is the high-level representation of a Spreadsheet.
+        Workbook workbook = WorkbookFactory.create(new File(NOC_LIST_PATH));
+        
+		//Generate a random number that will be used for finding a row from NOC List.
+		Random rand = new Random();
+		rowOfAnswer = rand.nextInt((NOC_LIST_LINE_COUNT-1)+1)+1;
+		
+		//Set answer
+		answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString();
+		answers.add(answer);
+    	
+		//Get gender of character
+		gender = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(2).toString();
+       
+        //Get characters address from columns 3,4 and 5
+        for(int i=3;i<6;i++){
+            	address += workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().trim()+" ";
+        }
+        
+        //Get a random talking point (positive or negative), columns 22 and 23 from NOC List.
+        int column = rand.nextInt(((23-22)+1))+22;
+        List<String> listOfTalkingPoints = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(column, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().split(", "));
+        talkingPoint = listOfTalkingPoints.get(rand.nextInt(listOfTalkingPoints.size())).trim();
+        
+        int i = 0;
+        //Find three more names to present as answers.
+        while(i < 3){
+        	//Generate a random row number again.
+        	randomRowNumber = rand.nextInt((NOC_LIST_LINE_COUNT-1)+1)+1;
+        	//If it's not the same as row we got answer from, continue.
+        	if(randomRowNumber != rowOfAnswer){
+        		answers.add(workbook.getSheetAt(0).getRow(randomRowNumber).getCell(0).toString());
+        		i++;
+        	}
+        }
+        
+        //Shuffle List of answers
+        Collections.shuffle(answers);
+        
+        System.out.println("Answer: "+answer);
+        return "You're at "+address+"and you see a "+talkingPoint+" "+gender+".\nIs it: \n"
+        		+ "A: "+answers.get(0) + "\n"
+        		+ "B: "+answers.get(1) + "\n"
+        		+ "C: "+answers.get(2) + "\n"
+         		+ "D: "+answers.get(3) + "\n";
+	}
+	
 }
