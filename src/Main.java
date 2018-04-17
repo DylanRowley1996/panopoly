@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +31,10 @@ public class Main {
 //         new GUI(players);
          
          SetupGame gameSetup = new SetupGame();
+//         ArrayList<String> test = new ArrayList<String>();
+//         test.add("Donald Trump");
+//         FindImages image = new FindImages(test);
+//         image.Search();
 //         gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
 //         gameSetup.compileChoiceOfCharacters();
          

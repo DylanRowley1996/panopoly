@@ -1,3 +1,4 @@
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -132,6 +133,7 @@ public class SetupGame {
 		locationListingWb.close();
 
 		if(listOfThemes.size() == 0) System.out.println("\nBROKEN!\n");
+		System.out.println("Themes: " + listOfThemes.size());
 		return listOfThemes;
 	}
 
@@ -320,24 +322,30 @@ public class SetupGame {
 			locationsByTheme.add(new ArrayList<String>());
 			locationsByTheme.get(i).add(themes.get(i));
 
-			while(locationsSelected<3) {
+			int duplicateError = 0;
+			while(locationsSelected<3 && duplicateError<10) {
 				row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
 
-				if(row.getCell(1).getStringCellValue().contains(themes.get(i)) && !locationsByTheme.contains(row.getCell(0).getStringCellValue())) {
-					locationsByTheme.get(i).add(row.getCell(0).getStringCellValue());
-					noLocsAdded++;
-					locationsSelected++;
+				if(row.getCell(1).getStringCellValue().contains(themes.get(i))) {
+					if(!nestedContains(locationsByTheme, row.getCell(0).getStringCellValue())) {
+						locationsByTheme.get(i).add(row.getCell(0).getStringCellValue());
+						noLocsAdded++;
+						locationsSelected++;
+					}
+					else duplicateError++;
 				}
 			}
 
 		}
+		
+		System.out.println("All locs found");
 
 		locationsByTheme.add(new ArrayList<String>());
 		locationsByTheme.get(themes.size()).add("Station");
 		int locationsSelected=0;
 		while(locationsSelected<4) {
 			row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
-			if(!locationsByTheme.contains(row.getCell(0).getStringCellValue())) {
+			if(!nestedContains(locationsByTheme, row.getCell(0).getStringCellValue())) {
 				locationsByTheme.get(themes.size()).add(row.getCell(0).getStringCellValue());
 				noLocsAdded++;
 				locationsSelected++;
@@ -348,8 +356,8 @@ public class SetupGame {
 		locationsByTheme.get(themes.size()+1).add("Tax");
 		while(noLocsAdded<noLocations-4) {
 			row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
-			if(!locationsByTheme.contains(row.getCell(0).getStringCellValue())) {
-				locationsByTheme.get(themes.size()).add(row.getCell(0).getStringCellValue());
+			if(!nestedContains(locationsByTheme, row.getCell(0).getStringCellValue())) {
+				locationsByTheme.get(themes.size()+1).add(row.getCell(0).getStringCellValue());
 				noLocsAdded++;
 			}
 		}
@@ -405,6 +413,15 @@ public class SetupGame {
 		}
 		System.out.println("\n");
 	}
+	
+	private boolean nestedContains(ArrayList<?> outer, Object obj) {
+		  for (Object inner : outer) {
+		    if (((ArrayList<?>) inner).contains(obj)) {
+		      return true;
+		   }
+		  }
+		  return false;
+		}
 
 }
 
