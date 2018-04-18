@@ -16,6 +16,7 @@ public class ButtonPanel extends JPanel
     private JButton tradeButton = new JButton("TRADE");
     private JButton overviewButton = new JButton("OVERVIEW");
     private JButton assetsButton = new JButton("ASSETS");
+    private JButton finishTurnButton = new JButton("FINISH TURN");
     
     public ButtonPanel()
     {
@@ -30,7 +31,8 @@ public class ButtonPanel extends JPanel
          add(redeemMortgageButton);         
          add(tradeButton);
          add(overviewButton);
-         add(assetsButton);
+         //add(assetsButton);
+         add(finishTurnButton);
     }
 
 	public static long getSerialversionuid() {
@@ -76,5 +78,9 @@ public class ButtonPanel extends JPanel
 	public JButton getAssetsButton() {
 		return assetsButton;
 	}
-    
+	
+	public JButton getFinishTurnButton(){
+		return finishTurnButton;
+	}
+	
 }

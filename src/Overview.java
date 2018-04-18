@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Overview extends JFrame {
 
@@ -11,19 +12,19 @@ public class Overview extends JFrame {
 	private static final long serialVersionUID = 1L;
 	@SuppressWarnings("rawtypes")
 	private JComboBox playerList;
-    private Player[] players;
+    private ArrayList<Player> players;
     private JLabel playerInformation = new JLabel("");
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	public Overview(Player[] players){
+	public Overview(ArrayList<Player> players){
         super("Overview");
 
         this.players = players;
 
         //Populate ComboBox with Players names
-        String[] playersNames = new String[5];
-        for(int i=0; i<players.length; i++){
-            playersNames[i] = players[i].getName();
+        String[] playersNames = new String[6];
+        for(int i=0; i<players.size(); i++){
+            playersNames[i] = players.get(i).getName();
         }
 
         playerList = new JComboBox(playersNames);
@@ -66,7 +67,7 @@ public class Overview extends JFrame {
 
         //Find the correct player
         while(!playerFound){
-            if(players[i].getName().equals(playerToFind)){
+            if(players.get(i).getName().equals(playerToFind)){
                 playerFound = true;
             }
             else{
@@ -76,11 +77,11 @@ public class Overview extends JFrame {
 
        //Format the data.
         playerInformation.setFont(new Font("Rockwell", Font.BOLD,15));
-        playerInformation.setText("<html><b><span style=\"font-family:Rockwell;font-size:15px;\">Player</span></b>: "+players[i].getName()+ "<br/>" +
-                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Net worth: </span></b>"+players[i].getNetWorth()+ "<br/>" +
-                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Properties: </span></b> "+String.join(", ",players[i].getProperties())+ "<br/>"+
-                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Monopolies: </span></b> "+String.join(", ",players[i].getMonopolies())+ " <br/>"+
-                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Mortgages:  </span></b>"+String.join(", ",players[i].getMortgages())+ " <br/></html>");
+        playerInformation.setText("<html><b><span style=\"font-family:Rockwell;font-size:15px;\">Player</span></b>: "+players.get(i).getName()+ "<br/>" +
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Net worth: </span></b>"+players.get(i).getNetWorth()+ "<br/>" +
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Properties: </span></b> "+String.join(", ",players.get(i).getProperties())+ "<br/>"+
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Monopolies: </span></b> "+String.join(", ",players.get(i).getMonopolies())+ " <br/>"+
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Mortgages:  </span></b>"+String.join(", ",players.get(i).getMortgages())+ " <br/></html>");
 
 
     }

@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +24,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import java.util.List;
+
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
@@ -35,7 +39,7 @@ import locations.*;
 
 public class SetupGame {
 
-	private static int currentPlayerNumber = 1;
+	private static int currentPlayerNumber = 0;
 
 	private static final String NOC_LIST_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
 	private static final String DOMAIN_FILE_PATH = "Veale's NOC List/Veale's domains.xlsx";
@@ -50,33 +54,40 @@ public class SetupGame {
 	private ArrayList<NamedLocation> locationList = new ArrayList<NamedLocation>(); // TODO maybe change to ArrayList of ArrayLists for multiple boards
 
 	Random rand = new Random();
+	private String[] pathsToIcons = new String[noOfPlayers];
+
+	private FindImages imageRetriever;
+	private GUI gui;
+	private boolean launchGUI = false;
 
 
 	public SetupGame() throws EncryptedDocumentException, InvalidFormatException, IOException{
-
-		String[] player1Properties = {"UCD", "TRINITY", "DCU"};
-		String[] player1Monopolies = {"Red"};
-		String[] player1Mortgages = {"TRINITY"};
-
-		String[] player2Properties = {"DIT", "ITCarlow", "SomeOtherShitHole"};
-		String[] player2Monopolies = {"Blue"};
-		String[] player2Mortgages = {"ITCarlow"};
-
-		String[] player3Properties = {"Dublin", "Monaghan", "Cork"};
-		String[] player3Monopolies = {"Green"};
-		String[] player3Mortgages = {"Cork"};
-		Player player1 = new Player("Dylan", 100, player1Properties,player1Monopolies,player1Mortgages );
-		Player player2 = new Player("Enna", 100, player2Properties,player2Monopolies,player2Mortgages );
-		Player player3 = new Player("Sean", 100, player3Properties,player3Monopolies,player3Mortgages );
-
-		Player[] players = {player1,player2,player3};
 
 		int noBoardRows = rand.nextInt(6) + 10;
 		int noLocations = (noBoardRows-3)*4;
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
 
+		createAndLaunchSelectionFrame();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		new GUI(players, noBoardRows, locationList);
+		while(!launchGUI) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		gui = new GUI(createPlayers(), noBoardRows, locationList);
+
+		findCharactersFromThemes(findThemes(0, 0, 6/*noCharacters*/));
+		compileChoiceOfCharacters();
+		//TODO - Uncomment code below when we need queries working
+		// imageRetriever = new FindImages(characters);
+		//imageRetriever.searchForCharacterImages();
+		//imageRetriever.resizeAllImages();
+		resizeAllImages();
+		createAndLaunchSelectionFrame();
+
 	}
 
 	//Randomly generate a list of unique themes depending on the number of players.
@@ -138,7 +149,7 @@ public class SetupGame {
 	}
 
 	//Creates new .xlsx files that will store characters from certain themes. 
-	public void findCharactersFromThemes(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException{
+	public void findCharactersFromThemes(ArrayList<String> themes) throws EncryptedDocumentException, InvalidFormatException, IOException {
 
 		//Add themes to list.
 		for(int i=0;i<themes.size();i++){
@@ -204,6 +215,8 @@ public class SetupGame {
 		}
 	}
 
+
+
 	public void compileChoiceOfCharacters(){    	
 		Random rand = new Random();
 		int i = 0;
@@ -220,7 +233,7 @@ public class SetupGame {
 		}
 	}
 
-	public void launchSelectionPanel() throws IOException{
+	public void createAndLaunchSelectionFrame() throws IOException{
 
 		JPanel characterPanel = new JPanel(new GridBagLayout());
 		JButton[] imageButtons = new JButton[noOfPlayers];
@@ -231,7 +244,7 @@ public class SetupGame {
 		GridBagConstraints c = new GridBagConstraints();
 
 		//https://stackoverflow.com/questions/3360255/how-to-get-a-single-file-from-a-folder-in-java
-		File dir = new File("C:/Users/Rowley/git/panopoly/savedImages");
+		File dir = new File("savedImages");
 		File[] children = dir.listFiles();
 
 		//Ensures all images are resized evenly.
@@ -250,6 +263,7 @@ public class SetupGame {
 			imageButtons[i] = new JButton();
 			BufferedImage myPicture = ImageIO.read(new File(children[i].toString()));
 			Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+			//ImageIO.write((BufferedImage)myResizedPicture, "jpg", new File(children[i].toString()));
 			imageButtons[i].setIcon(new ImageIcon(myResizedPicture));
 			characterPanel.add(imageButtons[i],c);
 		}
@@ -262,7 +276,7 @@ public class SetupGame {
 		//Ensures the JLabel spans all columns when beneath the images.
 		c.gridwidth = noOfPlayers;
 
-		informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber));
+		informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
 
 		//Add action listeners to all images.
 		for(int i=0;i<noOfPlayers;i++){
@@ -274,18 +288,28 @@ public class SetupGame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
+					setPathToIcon(children[innerI].toString(), currentPlayerNumber);
 					currentPlayerNumber++;
 
-					//Remove the corresponding button if character is chosen.
 					characterPanel.remove(imageButtons[innerI]);
 
 					//Repaint JFrame so removed button is present to user.
 					selectionPanel.repaint();
 
-					//When all characters are chosen, close JFrame.
-					if(currentPlayerNumber == 7){
+					informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
+
+					//When all characters are chosen, close JFrame and create players
+					if(currentPlayerNumber == 6){
 						selectionPanel.dispose();
+						//createPlayers();
+//						try {
+//							gui = new GUI(createPlayers());
+//						} catch (EncryptedDocumentException | InvalidFormatException | IOException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
+						launchGUI = true;
+						return;
 					}
 				}
 			});
@@ -298,8 +322,8 @@ public class SetupGame {
 		selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
 		selectionPanel.setVisible(true);
 		selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 	}
+
 
 	public ArrayList<String> getCharacters(){
 		return characters;
@@ -307,7 +331,7 @@ public class SetupGame {
 
 	public void setUpLocations(ArrayList<String> themes, int noLocations, int noBoardRows) throws EncryptedDocumentException, InvalidFormatException, IOException {
 		ArrayList<PropertyGroup> groups = setUpGroups(themes);
-		
+
 		Random rand = new Random();
 		ArrayList<ArrayList<String>> locationsByTheme = new ArrayList<ArrayList<String>>();
 		int noLocsAdded = 0;
@@ -352,7 +376,7 @@ public class SetupGame {
 				locationsSelected++;
 			}
 		}
-		
+
 		locationsByTheme.add(new ArrayList<String>());
 		locationsByTheme.get(themes.size()+1).add("Tax");
 		while(noLocsAdded<noLocations-4) {
@@ -362,10 +386,10 @@ public class SetupGame {
 				noLocsAdded++;
 			}
 		}
-		
+
 		worldsListWb.close();
 
-	
+
 		while(noLocsAdded>0) {
 			int listNo = rand.nextInt(locationsByTheme.size());
 			if(locationsByTheme.get(listNo).size()>1) {
@@ -405,14 +429,14 @@ public class SetupGame {
 		locationList.get(locationList.size()-1).setRight(locationList.get(locationList.size()-2));
 
 	}
-	
+
 	public ArrayList<PropertyGroup> setUpGroups(ArrayList<String> themes) {
 		ArrayList<PropertyGroup> groups = new ArrayList<PropertyGroup>();
 		ArrayList<Color> colors = new ArrayList<>(Arrays.asList(Color.red, Color.green, Color.blue, Color.cyan, Color.magenta, Color.yellow, Color.pink, Color.lightGray, Color.orange, Color.gray));
 		ArrayList<int[]> prices = new ArrayList<>(Arrays.asList(new int[]{20, 80}, new int[]{80, 160}, new int[]{160, 250}, new int[]{100, 280},
 				new int[]{250, 400}, new int[]{400, 675}, new int[]{320, 435}, new int[]{550, 875}, new int[]{800, 1100}, new int[]{1200, 2000}));
 		int totalGroups = themes.size();
-		
+
 		for(int i=0; i<totalGroups; i++) {
 			int x = rand.nextInt(totalGroups-i);
 			int y = rand.nextInt(totalGroups-i);
@@ -420,7 +444,7 @@ public class SetupGame {
 			prices.remove(x);
 			colors.remove(y);
 		}
-		
+
 		return groups;
 	}
 
@@ -432,15 +456,70 @@ public class SetupGame {
 		}
 		System.out.println("\n");
 	}
-	
+
+
 	private boolean nestedContains(ArrayList<?> outer, Object obj) {
-		  for (Object inner : outer) {
-		    if (((ArrayList<?>) inner).contains(obj)) {
-		      return true;
-		   }
-		  }
-		  return false;
+		for (Object inner : outer) {
+			if (((ArrayList<?>) inner).contains(obj)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private ArrayList<Player> createPlayers() throws EncryptedDocumentException, InvalidFormatException, IOException{
+
+		String[] pathsToIcons = getPathsToIcons();
+		ArrayList<Player> players = new ArrayList<Player>();
+
+		//Instantiate all information for players
+		for(int i=0;i<noOfPlayers;i++){
+
+			/*	getBaseName removes full path and returns file name.
+			This is the character name*/
+			String characterName = FilenameUtils.getBaseName(pathsToIcons[i]);
+			players.add(new Player(characterName,pathsToIcons[i]));
+			System.out.println("Path to icon for player "+players.get(i).getName()+" PATH:"+players.get(i).getPathForImageIcon());
 		}
 
+
+		return players;
+	}
+
+	public void setPathToIcon(String filePath, int i){
+		this.pathsToIcons[i] = filePath;
+	}
+
+	public String[] getPathsToIcons(){
+		return this.pathsToIcons;
+	}
+
+	private static BufferedImage resizeImage(BufferedImage originalImage, int type, int IMG_WIDTH, int IMG_HEIGHT) {
+		BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+		Graphics2D g = resizedImage.createGraphics();
+		g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+		g.dispose();
+		return resizedImage;
+	}
+
+	//Scales all images so they don't have to be constantly rescaled during the game
+	public void resizeAllImages() throws IOException{
+
+		File dir = new File("C:/Users/Rowley/git/panopoly/savedImages");
+		File[] children = dir.listFiles();
+
+		//TODO - Change so it only loops on number of players
+		for(int i=0;i<pathsToIcons.length;i++){
+			System.out.println("Trying to read: "+children[i].toString());
+			BufferedImage originalImage = ImageIO.read(new File(children[i].toString()));//change path to where file is located
+			int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+
+			BufferedImage resizeImageJpg = resizeImage(originalImage, type, 150, 150);
+			ImageIO.write(resizeImageJpg, "jpg", new File(children[i].toString())); //change path where you want it saved
+		}
+
+	}
+	
 }
+
 

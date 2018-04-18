@@ -1,8 +1,6 @@
-import javax.imageio.ImageIO;
-import javax.net.ssl.HttpsURLConnection;
-import javax.swing.*;
 import com.google.gson.*;
-import java.awt.*;
+
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,7 +17,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 
+/*
+ *This class searches the web for images relating to character names
+ */
 public class FindImages {
 	
 	private GResults results;
@@ -56,7 +58,7 @@ public class FindImages {
 	
 	
 	 
-    void Search()  throws MalformedURLException, URISyntaxException, IOException {
+    void searchForCharacterImages()  throws MalformedURLException, URISyntaxException, IOException {
     	  String key = "AIzaSyBsLxIF8LF3t3em5FSidHZMHtMg9AmHEDQ";
     	  String cx  = "008580275858431148289:yexe3mpvnwg";
     	      	  
@@ -65,13 +67,11 @@ public class FindImages {
        	  HttpURLConnection conn = (HttpURLConnection) url.openConnection();
        	  conn.setRequestMethod("GET");
        	  conn.setRequestProperty("Accept", "application/json");
-         // conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB;     rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)");
+          // conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB;     rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)");
           conn.addRequestProperty("User-Agent", "Mozilla/4.0");
 
        	  BufferedReader br = new BufferedReader(new InputStreamReader ( ( conn.getInputStream() ) ) );
        	  results = new Gson().fromJson(br, GResults.class);
-       	  //String extenstion = getFileExtension(results.getThing(0).toString());
-       	  //System.out.println("Extension: "+extenstion);
        	  
        	  String destinationFile = "savedImages/"+characters.get(i)+".jpg";
        	  saveImage(results.getThing(0).toString(), destinationFile);
@@ -96,15 +96,28 @@ public class FindImages {
 		is.close();
 		os.close();
 	}
+      
+    //https://stackoverflow.com/questions/12620158/save-resized-image-java
+    private static BufferedImage resizeImage(BufferedImage originalImage, int type, int IMG_WIDTH, int IMG_HEIGHT) {
+	    BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+	    Graphics2D g = resizedImage.createGraphics();
+	    g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+	    g.dispose();
+	    return resizedImage;
+	}
     
-   //https://stackoverflow.com/questions/3571223/how-do-i-get-the-file-extension-of-a-file-in-java
-    private String getFileExtension(String fileName) {
-        //String name = file.getName();
-        try {
-            return fileName.substring(fileName.lastIndexOf(".") + 1);
-        } catch (Exception e) {
-            return "";
-        }
+    //Scales all images so they don't have to be constantly rescaled during the game
+    public void resizeAllImages() throws IOException{
+    	
+    	//TODO - Change so it only loops on number of players
+    	for(int i=0;i<6;i++){
+    		 BufferedImage originalImage = ImageIO.read(new File("savedImages/"+characters.get(i)+".jpg"));//change path to where file is located
+             int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+
+             BufferedImage resizeImageJpg = resizeImage(originalImage, type, 150, 150);
+             ImageIO.write(resizeImageJpg, "jpg", new File("savedImages/"+characters.get(i)+".jpg")); //change path where you want it saved
+    	}
+    	
     }
     
 }
