@@ -67,17 +67,6 @@ public class SetupGame {
 		int noLocations = (noBoardRows-3)*4;
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
 
-		createAndLaunchSelectionFrame();
-		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		while(!launchGUI) {
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		gui = new GUI(createPlayers(), noBoardRows, locationList);
 
 		findCharactersFromThemes(findThemes(0, 0, 6/*noCharacters*/));
 		compileChoiceOfCharacters();
@@ -86,8 +75,10 @@ public class SetupGame {
 		//imageRetriever.searchForCharacterImages();
 		//imageRetriever.resizeAllImages();
 		resizeAllImages();
-		createAndLaunchSelectionFrame();
-
+		//createAndLaunchSelectionFrame();
+		
+		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
+		gui = new GUI(createPlayers(), noBoardRows, locationList);
 	}
 
 	//Randomly generate a list of unique themes depending on the number of players.
@@ -302,12 +293,12 @@ public class SetupGame {
 					if(currentPlayerNumber == 6){
 						selectionPanel.dispose();
 						//createPlayers();
-//						try {
-//							gui = new GUI(createPlayers());
-//						} catch (EncryptedDocumentException | InvalidFormatException | IOException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
+						//						try {
+						//							gui = new GUI(createPlayers());
+						//						} catch (EncryptedDocumentException | InvalidFormatException | IOException e1) {
+						//							// TODO Auto-generated catch block
+						//							e1.printStackTrace();
+						//						}
 						launchGUI = true;
 						return;
 					}
@@ -505,7 +496,7 @@ public class SetupGame {
 	//Scales all images so they don't have to be constantly rescaled during the game
 	public void resizeAllImages() throws IOException{
 
-		File dir = new File("C:/Users/Rowley/git/panopoly/savedImages");
+		File dir = new File("savedImages");
 		File[] children = dir.listFiles();
 
 		//TODO - Change so it only loops on number of players
@@ -519,7 +510,7 @@ public class SetupGame {
 		}
 
 	}
-	
+
 }
 
 
