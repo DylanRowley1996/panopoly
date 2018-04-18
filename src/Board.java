@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
@@ -26,6 +27,7 @@ public class Board extends JPanel {
 	private final int boardHeight = (int) (screenSize.getHeight()*0.9);
 	private final int boardRows;
 	ArrayList<NamedLocation> locations;
+	HashMap<NamedLocation, JPanel> locationMap = new HashMap<NamedLocation, JPanel>();
 	
 	public Board(int rows, ArrayList<NamedLocation> locList) {
 		
@@ -49,12 +51,13 @@ public class Board extends JPanel {
 				squareHeight = boardHeight/boardRows;
 				
 				if(i==0 || i==(boardRows-2) || j==0 || j==(boardRows-2)) {
+					NamedLocation loc = null;
 					Color locColor = Color.WHITE;
 					int labelWidth = squareWidth;
 					int labelHeight = squareHeight;
 					String locName;
 					if(locIt.hasNext()) {
-						NamedLocation loc = locIt.next();
+						loc = locIt.next();
 						locName = loc.getIdentifier();
 						if(loc instanceof Groupable) {
 							locColor = ((Groupable) loc).getGroup().getColor();
@@ -97,6 +100,7 @@ public class Board extends JPanel {
 				    square.setLayout(new BorderLayout());
 				    square.add(nameLabel, nameLayout);
 
+				    locationMap.put(loc, square);
 				}
 				
 				square.setPreferredSize(new Dimension(squareWidth, squareHeight));
