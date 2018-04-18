@@ -330,6 +330,54 @@ public class MCQ {
  		+ "D: "+answers.get(3) + "\n";
 	}
 	
+	//Question: You see someone shooting <arch nemesis> with a <weapon>
+	//Determiner: a	Weapon: .22 caliber Colt	Affordances: shooting with, pistol-whipping with
+	public String createWeaponArchNemesisQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
+		
+		answers.clear();
+		
+		//Prevent ZIP BOMB
+		ZipSecureFile.setMinInflateRatio(0.005);
+				
+		//Stores potential answers for question.
+		//String[] names = new String[4];
+		String weapon = "";
+		String archNemesis = "";
+		//String talkingPoint = "";
+		
+		int rowOfAnswer = 0;
+		int randomRowNumber = 0;
+					
+		// Creating a Workbook from an Excel file (.xls or .xlsx)
+    	//Workbook: A workbook is the high-level representation of a Spreadsheet.
+        Workbook workbook = WorkbookFactory.create(new File(NOC_LIST_PATH));
+        
+		//Generate a random number that will be used for finding a row from NOC List.
+		Random rand = new Random();
+		rowOfAnswer = rand.nextInt((NOC_LIST_LINE_COUNT-1)+1)+1;
+		
+		//Find a 
+		while(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue() == false&& 
+			  workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue() == false){
+			  
+			  rowOfAnswer = rand.nextInt((NOC_LIST_LINE_COUNT-1)+1)+1;
+		}
+		
+		System.out.println("Arch nemesis: "+workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(8).toString());
+		System.out.println("Weapon of choice: "+workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(11).toString());
+		
+		//Set answer
+		answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString();
+		answers.add(answer);
+    	
+		//Get gender of character
+	//	gender = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(2).toString();
+       
+		
+		
+		return "";
+	}
+	
 	
 	
 }

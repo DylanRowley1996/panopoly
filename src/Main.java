@@ -10,7 +10,8 @@ public class Main {
     	for(int i=0;i<100;i++){
         //	System.out.println(mcq.createAddressAndTalkingPointQuestion());
         //	System.out.println(mcq.createVehicleQuestion());
-    		System.out.println(mcq.createTypicalActivityQuestion());
+    	//	System.out.println(mcq.createTypicalActivityQuestion());
+    		System.out.println(mcq.createWeaponArchNemesisQuestion());
     	}
     	
     	
