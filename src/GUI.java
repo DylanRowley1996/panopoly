@@ -26,7 +26,6 @@ public class GUI {
 	private JSplitPane boardAndGameInformationPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	private JSplitPane buttonsDetailsAndPropInfo = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 	private JSplitPane detailsAndHistoryLog = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-
 	private JSplitPane imageDetailsAndHistory = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
 	private HistoryLog history = new HistoryLog();
@@ -39,9 +38,18 @@ public class GUI {
 
 	private JPanel characterImagePanel = new JPanel();
 	private JLabel characterImage = new JLabel();
+	private int noOfPlayersInstantiated = 0;
 
 	GUI(ArrayList<Player> players) throws IOException {
-
+		
+		SelectionPanel selectionPanel = new SelectionPanel(players);
+		
+		while(noOfPlayersInstantiated != players.size()){
+			noOfPlayersInstantiated = selectionPanel.getCurrentPlayerNumber();
+			//System.out.println("No. of players: "+noOfPlayersInstantiated);
+		}
+		
+		
 		BoardExample.loadBoard();
 
 		detailsAndHistoryLog.setDividerLocation(.2);

@@ -65,6 +65,8 @@ public class SetupGame {
 	        resizeAllImages();
         	createAndLaunchSelectionFrame();
         	
+        	//GUI(createAndLaunchSelectionFrame)
+        	
 	}
 
 	//Randomly generate a list of unique themes depending on the number of players.

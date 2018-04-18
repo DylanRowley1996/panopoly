@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,33 +9,26 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public class Main {
     public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException {
-    	
-    	/* String[] player1Properties = {"UCD", "TRINITY", "DCU"};
-         String[] player1Monopolies = {"Red"};
-         String[] player1Mortgages = {"TRINITY"};
-
-         String[] player2Properties = {"DIT", "ITCarlow", "SomeOtherShitHole"};
-         String[] player2Monopolies = {"Blue"};
-         String[] player2Mortgages = {"ITCarlow"};
-
-         String[] player3Properties = {"Dublin", "Monaghan", "Cork"};
-         String[] player3Monopolies = {"Green"};
-         String[] player3Mortgages = {"Cork"};
-
-         Player player1 = new Player("Dylan", 100, player1Properties,player1Monopolies,player1Mortgages );
-         Player player2 = new Player("Enna", 100, player2Properties,player2Monopolies,player2Mortgages );
-         Player player3 = new Player("Sean", 100, player3Properties,player3Monopolies,player3Mortgages );
-
-         Player[] players = {player1,player2,player3};
-         */
+    
          //new GUI(players);
-         
          // Finds images from web using the chosen characters.
         // FindImages findImages = new FindImages(gameSetup.getCharacters());
         // findImages.Search();
+    	String[] properties = {"EMPTY PROP"};
+    	String[] monopolies = {"EMPTY MONOP"};
+    	String[] mortgages = {"EMPTY MORT"};
+    	ArrayList<Player> players = new ArrayList<Player>();
+    	for(int i=0;i<5;i++){
+    		//String name,int netWorth, String[] properties, String[] monopolies, String[] mortgages, String pathToIcon
+    		players.add(new Player("Dylan",0,properties,monopolies,mortgages,""));
+    	}
+    	
+    	//SelectionPanel panel = new SelectionPanel(players);
+    	
+    	GUI gui = new GUI(players);
          
          
-         SetupGame gameSetup = new SetupGame();
+        // SetupGame gameSetup = new SetupGame();
         
          
          /*gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
