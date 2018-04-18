@@ -77,8 +77,9 @@ public class SetupGame {
 		resizeAllImages();
 		//createAndLaunchSelectionFrame();
 		
+		ArrayList<Player> players = createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		gui = new GUI(createPlayers(), noBoardRows, locationList);
+		gui = new GUI(players, noBoardRows, locationList);
 	}
 
 	//Randomly generate a list of unique themes depending on the number of players.

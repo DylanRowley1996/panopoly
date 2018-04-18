@@ -48,11 +48,15 @@ public class GUI {
 		
 		SelectionPanel selectionPanel = new SelectionPanel(players);
 		
-		while(noOfPlayersInstantiated != players.size()){
+		while(noOfPlayersInstantiated < players.size()){
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			noOfPlayersInstantiated = selectionPanel.getCurrentPlayerNumber();
-			System.out.println("No. of players: "+noOfPlayersInstantiated);
 		}
-		
 
 		detailsAndHistoryLog.setDividerLocation(.2);
 		detailsAndHistoryLog.setTopComponent(propertyInformationPanel);
@@ -117,7 +121,7 @@ public class GUI {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						if (currentPlayer == 5) {
+						if (currentPlayer == players.size()-1) {
 							currentPlayer = 0;
 						} else {
 							currentPlayer++;
