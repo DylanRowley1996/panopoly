@@ -26,6 +26,9 @@ public class MCQ {
     //Path to Vehicle fleet.
     private static final String VEHICLE_FLEET_PATH = "Veale's NOC List/Veale's vehicle fleet.xlsx";
     
+    //Path to the Clothing Line.
+    private static final String CLOTHING_LINE_PATH = "Veale's NOC List/Veale's clothing line.xlsx";
+    
     //By using List, we can take advantage of Collections.shuffle(list);
     private List<String> answers = new ArrayList<String>();// // TODO - Remove 'static' if we're going to create several questions from same object
     private String answer = ""; // TODO - Remove 'static' if we're going to create several questions from same object
@@ -193,10 +196,10 @@ public class MCQ {
             
             //If the current row contains the car we're looking for, get the necessary info to form a question.
             if(row.getCell(1).toString().trim().equals(vehicle)){
-            	determiner = row.getCell(0).toString();
-            	List<String> listOfAffordances = Arrays.asList(row.getCell(2).toString().split(", "));
-                affordance =  listOfAffordances.get(rand.nextInt(listOfAffordances.size()));
-            	vehicleFound = true;
+	            	determiner = row.getCell(0).toString();
+	            	List<String> listOfAffordances = Arrays.asList(row.getCell(2).toString().split(", "));
+	            affordance =  listOfAffordances.get(rand.nextInt(listOfAffordances.size()));
+	            	vehicleFound = true;
             }
             
         }
@@ -378,6 +381,215 @@ public class MCQ {
 		return "";
 	}
 	
+	// Question: You see someone fighting <opponent>. Is it:
+	// Answer = Character (cell 1), Opponent = Opponent (cell 9)
+	public String createOpponentQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException
+	{
+		answers.clear();
+		
+		//Prevent ZIP BOMB
+		ZipSecureFile.setMinInflateRatio(0.005);
+				
+		String[] potentialQuestions = {"You see someone fighting"}; // Need to think of other ways to phrase this
+				
+		String opponent = "";
+						
+		int rowOfAnswer = 0;
+		
+		//Generate a random number that will be used for finding a row from NOC List.
+		Random rand = new Random();
+		int randomRowNumber = rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
+		
+		Workbook workbook = WorkbookFactory.create(new File(NOC_LIST_PATH));
+		
+		while(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(8).toString().equals("")) // Makes sure there is no empty string
+		{
+			rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
+        }
+		
+		answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString();
+        answers.add(answer);
+        
+        List<String> listOfOpponents = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(8).toString().split(", "));
+        opponent =  listOfOpponents.get(rand.nextInt(listOfOpponents.size())).trim();
+        
+        int i = 1;
+        
+        while(i < 4)
+        {
+        		randomRowNumber = rand.nextInt(NOC_LIST_LINE_COUNT);
+
+        		if(randomRowNumber != rowOfAnswer){
+            		answers.add(workbook.getSheetAt(0).getRow(randomRowNumber).getCell(0).toString());
+            		i++;
+            	}
+        }
+		
+        Workbook workbook1 = WorkbookFactory.create(new File(VEHICLE_FLEET_PATH));
+        
+        Row row;
+        Iterator<Row> rowIterator = workbook1.getSheetAt(0).rowIterator();
+        
+        boolean opponentFound = false;
+        
+		while (rowIterator.hasNext() && !opponentFound )
+		{
+        	
+        	//Get the next row.
+            row = rowIterator.next();
+            
+            //If the current row contains the car we're looking for, get the necessary info to form a question.
+            if(row.getCell(1).toString().trim().equals(opponent))
+            {
+            		opponentFound = true;
+            }
+		}        
+        
+		Collections.shuffle(answers);
+            
+        return "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+" "+opponent+". Is it: \nA. "+answers.get(0)+"\n"+
+	  	  "B. "+answers.get(1)+"\n"+
+	  	  "C. "+answers.get(2)+"\n"+
+	  	  "D. "+answers.get(3)+"\n";
+	}
 	
+	public String createSeenWearingQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException
+	{
+		answers.clear();
+		
+		//Prevent ZIP BOMB
+		ZipSecureFile.setMinInflateRatio(0.005);
+				
+		String[] potentialQuestions = {"You see someone wearing ", "You see someone looking fantastic in ", "You're envious of someone wearing "}; // Need to think of other ways to phrase this
+				
+		String seenWearing = "";
+		String determiner = "";
+						
+		int rowOfAnswer = 0;
+		
+		//Generate a random number that will be used for finding a row from NOC List.
+		Random rand = new Random();
+		int randomRowNumber = rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
+		
+		Workbook workbook = WorkbookFactory.create(new File(NOC_LIST_PATH));
+		
+		while(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(12).toString().equals("")) // Makes sure there is no empty string
+		{
+			rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
+        }
+		
+		answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString();
+        answers.add(answer);
+        
+        List<String> listOfOutfits = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(12).toString());
+        seenWearing =  listOfOutfits.get(rand.nextInt(listOfOutfits.size())).trim();
+        
+        int i = 1;
+        
+        while(i < 4)
+        {
+        		randomRowNumber = rand.nextInt(NOC_LIST_LINE_COUNT);
+
+        		if(randomRowNumber != rowOfAnswer){
+            		answers.add(workbook.getSheetAt(0).getRow(randomRowNumber).getCell(0).toString());
+            		i++;
+            	}
+        }
+		
+        Workbook workbook1 = WorkbookFactory.create(new File(CLOTHING_LINE_PATH));
+        
+        Row row;
+        Iterator<Row> rowIterator = workbook1.getSheetAt(0).rowIterator();
+        
+        boolean outfitFound = false;
+        
+		while (rowIterator.hasNext() && !outfitFound )
+		{
+			//Get the next row.
+            row = rowIterator.next();
+            
+            //If the current row contains the car we're looking for, get the necessary info to form a question.
+            if(row.getCell(1).toString().trim().equals(seenWearing))
+            {
+            		determiner = row.getCell(0).toString();
+            		outfitFound = true;
+            }
+		}        
+        
+		Collections.shuffle(answers);
+        
+        return "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+determiner+" "+seenWearing+". Is it: \nA. "+answers.get(0)+"\n"+
+	  	  "B. "+answers.get(1)+"\n"+
+	  	  "C. "+answers.get(2)+"\n"+
+	  	  "D. "+answers.get(3)+"\n";
+	}
 	
+	public String createPortrayedBy() throws EncryptedDocumentException, InvalidFormatException, IOException
+	{
+		answers.clear();
+		
+		//Prevent ZIP BOMB
+		ZipSecureFile.setMinInflateRatio(0.005);
+				
+		String[] potentialQuestions = {"Who plays ", "What actor portrays "}; // Need to think of other ways to phrase this
+				
+		String character = "";
+						
+		int rowOfAnswer = 0;
+		
+		//Generate a random number that will be used for finding a row from NOC List.
+		Random rand = new Random();
+		int randomRowNumber = rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
+		
+		Workbook workbook = WorkbookFactory.create(new File(NOC_LIST_PATH));
+		
+		while(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString().equals("")) // Makes sure there is no empty string
+		{
+			rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
+        }
+		
+		answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(16).toString();
+        answers.add(answer);
+        
+        List<String> listOfCharacters = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString().split(", "));
+        character =  listOfCharacters.get(rand.nextInt(listOfCharacters.size())).trim();
+        
+        int i = 1;
+        
+        while(i < 4)
+        {
+        		randomRowNumber = rand.nextInt(NOC_LIST_LINE_COUNT);
+
+        		if(randomRowNumber != rowOfAnswer){
+            		answers.add(workbook.getSheetAt(0).getRow(randomRowNumber).getCell(16).toString());
+            		i++;
+            	}
+        }
+		
+        Workbook workbook1 = WorkbookFactory.create(new File(VEHICLE_FLEET_PATH));
+        
+        Row row;
+        Iterator<Row> rowIterator = workbook1.getSheetAt(0).rowIterator();
+        
+        boolean characterFound = false;
+        
+		while (rowIterator.hasNext() && !characterFound )
+		{     	
+        	//Get the next row.
+            row = rowIterator.next();
+            
+            //If the current row contains the character we're looking for, get the necessary info to form a question.
+            if(row.getCell(1).toString().trim().equals(character))
+            {
+            		characterFound = true;
+            }
+		}        
+        
+		Collections.shuffle(answers);
+            
+        return "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+character+". Is it: \nA. "+answers.get(0)+"\n"+
+	  	  "B. "+answers.get(1)+"\n"+
+	  	  "C. "+answers.get(2)+"\n"+
+	  	  "D. "+answers.get(3)+"\n";
+	}
 }
