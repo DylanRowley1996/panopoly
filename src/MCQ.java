@@ -561,7 +561,7 @@ public class MCQ {
         		randomRowNumber = rand.nextInt(NOC_LIST_LINE_COUNT);
 
         		if(randomRowNumber != rowOfAnswer){
-            		answers.add(workbook.getSheetAt(0).getRow(randomRowNumber).getCell(16).toString());
+            		answers.add(workbook.getSheetAt(0).getRow(randomRowNumber).getCell(0).toString());
             		i++;
             	}
         }
@@ -592,4 +592,6 @@ public class MCQ {
 	  	  "C. "+answers.get(2)+"\n"+
 	  	  "D. "+answers.get(3)+"\n";
 	}
+	
+	
 }
