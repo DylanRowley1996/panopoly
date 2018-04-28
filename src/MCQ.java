@@ -26,6 +26,8 @@ public class MCQ {
     //Path to Vehicle fleet.
     private static final String VEHICLE_FLEET_PATH = "Veale's NOC List/Veale's vehicle fleet.xlsx";
     
+    private static final String WEAPON_ARSENAL = "Veale's NOC List/Veale's weapon arsenal.xlsx";
+    
     //Path to the Clothing Line.
     private static final String CLOTHING_LINE_PATH = "Veale's NOC List/Veale's clothing line.xlsx";
     
@@ -334,6 +336,7 @@ public class MCQ {
 	}
 	
 	//Question: You see someone shooting <arch nemesis> with a <weapon>
+	//Question: You see someone <affordance> <arch nemesis> with a <weapon>
 	//Determiner: a	Weapon: .22 caliber Colt	Affordances: shooting with, pistol-whipping with
 	public String createWeaponArchNemesisQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
 		
@@ -346,6 +349,8 @@ public class MCQ {
 		//String[] names = new String[4];
 		String weapon = "";
 		String archNemesis = "";
+		String determiner = "";
+		String affordance = "";
 		//String talkingPoint = "";
 		
 		int rowOfAnswer = 0;
@@ -359,26 +364,93 @@ public class MCQ {
 		Random rand = new Random();
 		rowOfAnswer = rand.nextInt((NOC_LIST_LINE_COUNT-1)+1)+1;
 		
-		//Find a 
-		while(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue() == false&& 
-			  workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue() == false){
+		//Find a row where the character has an arch nemesis and a weapon of choice.
+		while(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString() == "" ||
+			  workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString() == ""){
 			  
 			  rowOfAnswer = rand.nextInt((NOC_LIST_LINE_COUNT-1)+1)+1;
 		}
 		
-		System.out.println("Arch nemesis: "+workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(8).toString());
-		System.out.println("Weapon of choice: "+workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(11).toString());
-		
 		//Set answer
 		answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString();
 		answers.add(answer);
+		
+		//Get the characters list of weapons then pick a random one.
+        List<String> listOfWeapons = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(11).toString().split(", "));
+        weapon = listOfWeapons.get(rand.nextInt(listOfWeapons.size())).trim();
+        
+        //TODO - Find the weapons affordance
+        Workbook workbook1 = WorkbookFactory.create(new File(WEAPON_ARSENAL));
+
+        //For Iterating over the rows of current file.
+        Row row;
+        Iterator<Row> rowIterator = workbook1.getSheetAt(0).rowIterator();
+
+        boolean weaponFound= false;
+
+        //Iterate through rows of weapon arsenal fleet until we find the correct one.
+        while (rowIterator.hasNext() && !weaponFound ) {
+        	
+        	//Get the next row.
+            row = rowIterator.next();
+            
+            //If the current row contains the weapon we're looking for, get the necessary info to form a question.
+            if(row.getCell(1).toString().trim().equals(weapon)){
+            	if(row.getCell(0) != null){
+	            	determiner = row.getCell(0).toString().trim();
+            	}
+            	
+	            	List<String> listOfWeaponAffordances = Arrays.asList(row.getCell(2).toString().split(", "));
+	            affordance =  listOfWeaponAffordances.get(rand.nextInt(listOfWeaponAffordances.size()));
+	            	weaponFound = true;
+            }
+            
+        }
+
+        //Get the characters list of arch nemesis then pick a random one.
+        List<String> listOfArchNemesis = Arrays.asList( workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(8).toString().split(", "));
+		archNemesis = listOfArchNemesis.get(rand.nextInt(listOfArchNemesis.size())).trim();
+		
+		List<String> affordancesParts = Arrays.asList(affordance.split(" "));
+
+		//TODO - REmove when tested
+		/*System.out.println("Arch nemesis: "+archNemesis);
+		System.out.println("Weapon of choice: "+weapon);
+		System.out.println("Determiner: "+determiner);
+		System.out.println("Affordance: "+affordance);*/
+		//System.out.println("You see someone "+affordancesParts.get(0)+" "+archNemesis+" "+ affordancesParts.get(1)+" "+determiner+" "+weapon);
+		
+		
     	
-		//Get gender of character
-	//	gender = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(2).toString();
-       
-		
-		
-		return "";
+		 int i = 0;
+	     //Find three more names to present as answers.
+	     while(i < 3){
+	      	//Generate a random row number again.
+	       	randomRowNumber = rand.nextInt((NOC_LIST_LINE_COUNT-1)+1)+1;
+	       	//If it's not the same as row we got answer from, continue.
+	       	if(randomRowNumber != rowOfAnswer){
+	       		answers.add(workbook.getSheetAt(0).getRow(randomRowNumber).getCell(0).toString());
+        		i++;
+        	}
+	     }  
+	     
+	     //Shuffle List of answers
+	     Collections.shuffle(answers);
+	     String question = "";
+	     if(affordancesParts.size() == 1){
+	    	 question = "You see someone "+affordancesParts.get(0)+" "+archNemesis+" "+determiner+" "+weapon;
+	     }
+	     else{
+	    	 question = "You see someone "+affordancesParts.get(0)+" "+archNemesis+" "+ affordancesParts.get(1)+" "+determiner+" "+weapon;
+	     }
+	    	
+	    System.out.println("Answer: "+answer);
+		return question+"\nIs it: \n"
+			+ "A: "+answers.get(0) + "\n"
+			+ "B: "+answers.get(1) + "\n"
+			+ "C: "+answers.get(2) + "\n"
+	 		+ "D: "+answers.get(3) + "\n";
+				
 	}
 	
 	// Question: You see someone fighting <opponent>. Is it:
