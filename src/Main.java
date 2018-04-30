@@ -11,10 +11,11 @@ public class Main {
 //        	System.out.println(mcq.createAddressAndTalkingPointQuestion());
 //        	System.out.println(mcq.createVehicleQuestion());
 //    		System.out.println(mcq.createTypicalActivityQuestion());
-    		System.out.println(mcq.createWeaponArchNemesisQuestion());
+//    		System.out.println(mcq.createWeaponArchNemesisQuestion());
 //    		System.out.println(mcq.createOpponentQuestion());
 //    		System.out.println(mcq.createSeenWearingQuestion());
  //   		System.out.println(mcq.createPortrayedBy());
+    		System.out.println(mcq.creatorAndCreation());
     	}
     	
     	

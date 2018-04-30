@@ -411,17 +411,13 @@ public class MCQ {
         List<String> listOfArchNemesis = Arrays.asList( workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(8).toString().split(", "));
 		archNemesis = listOfArchNemesis.get(rand.nextInt(listOfArchNemesis.size())).trim();
 		
+		//This splits the affordances into different parts.
+		/*E.G -> Affordance: beating black and blue
+		  This is split so we can insert character name between sentence:
+		   beating <character name> black and blue
+		*/
 		List<String> affordancesParts = Arrays.asList(affordance.split(" "));
 
-		//TODO - REmove when tested
-		/*System.out.println("Arch nemesis: "+archNemesis);
-		System.out.println("Weapon of choice: "+weapon);
-		System.out.println("Determiner: "+determiner);
-		System.out.println("Affordance: "+affordance);*/
-		//System.out.println("You see someone "+affordancesParts.get(0)+" "+archNemesis+" "+ affordancesParts.get(1)+" "+determiner+" "+weapon);
-		
-		
-    	
 		 int i = 0;
 	     //Find three more names to present as answers.
 	     while(i < 3){
@@ -436,12 +432,24 @@ public class MCQ {
 	     
 	     //Shuffle List of answers
 	     Collections.shuffle(answers);
-	     String question = "";
+	     
+	     //Begin to form the question
+	     String question = "You see someone ";
 	     if(affordancesParts.size() == 1){
-	    	 question = "You see someone "+affordancesParts.get(0)+" "+archNemesis+" "+determiner+" "+weapon;
+	    	 question += affordancesParts.get(0)+" "+archNemesis+" "+determiner+" "+weapon.trim();
 	     }
+	     
+	     /*
+	      * This deals with longer than normal affordances i.e ass kicking with instead of shooting with
+	      */
 	     else{
-	    	 question = "You see someone "+affordancesParts.get(0)+" "+archNemesis+" "+ affordancesParts.get(1)+" "+determiner+" "+weapon;
+	    	 question += affordancesParts.get(0)+" "+archNemesis+" ";//+ affordancesParts.get(affordancesParts.size()-1)+" "+determiner+" "+weapon;
+	    	 i = 1;
+	    	 while(i<affordancesParts.size()){
+	    		 question += affordancesParts.get(i)+" ";
+	    		 i++;
+	    	 }
+	    	 question += determiner+" "+weapon;
 	     }
 	    	
 	    System.out.println("Answer: "+answer);
@@ -462,7 +470,7 @@ public class MCQ {
 		//Prevent ZIP BOMB
 		ZipSecureFile.setMinInflateRatio(0.005);
 				
-		String[] potentialQuestions = {"You see someone fighting"}; // Need to think of other ways to phrase this
+		String[] potentialQuestions = {"You see someone fighting"}; //TODO Need to think of other ways to phrase this
 				
 		String opponent = "";
 						
@@ -663,6 +671,115 @@ public class MCQ {
 	  	  "B. "+answers.get(1)+"\n"+
 	  	  "C. "+answers.get(2)+"\n"+
 	  	  "D. "+answers.get(3)+"\n";
+	}
+	
+	public String creatorAndCreation() throws EncryptedDocumentException, InvalidFormatException, IOException{
+		
+		//Prevent ZIP BOMB
+		ZipSecureFile.setMinInflateRatio(0.005);
+				
+		String question = "";
+		String character = "";
+		
+		answers.clear();
+		
+		
+		int rowOfAnswer = 0;
+		
+		//Generate a random number that will be used for finding a row from NOC List.
+		Random rand = new Random();
+		int randomRowNumber = rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
+		
+		Workbook workbook = WorkbookFactory.create(new File(NOC_LIST_PATH));
+		
+		boolean foundAcceptableRow = false;
+		
+		while(!foundAcceptableRow){
+			
+			//Is row fictional? Check to ensure it has a creator/creation
+			if(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(16,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("fictional")){
+				
+				//If the fictional character has a creator AND creation, randomly choose one of these to form a question
+				//Cell 17 is creator, Cell 18 is creation
+				if(!workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(17,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("") &&
+				   !workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(18,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("")	){
+					
+					//Store characters name
+					character = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString();
+					
+					//If 0, use creator. If 1, use creation
+					int decideQuestion = rand.nextInt(2);
+					
+					//Creator of character
+					if(decideQuestion == 0){
+						answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(17).toString().trim();
+						
+						question += "Who created "+character;
+						foundAcceptableRow = true;
+					}
+					
+					//Creation of character
+					else if(decideQuestion == 1){
+				        List<String> listOfCreations = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(18).toString().split(", "));
+						answer =  listOfCreations.get(rand.nextInt(listOfCreations.size()));
+						question += "What did "+character+" create?";
+						foundAcceptableRow = true;
+					}
+				}
+				
+				
+				//Else, if character has no creation and only a creator, use this to form a question
+				else if(!workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(17, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("") &&
+						workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(18, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("") ){
+					
+					answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(17).toString().trim();
+					question += "Who created "+character;
+					foundAcceptableRow = true;
+				}
+			}
+			
+			//If character has no fictional status, check to see if they have a creation.
+			else if(!workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(18,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("")){
+					List<String> listOfCreations = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(18).toString().split(", "));
+					String creation =  listOfCreations.get(rand.nextInt(listOfCreations.size()));
+					question += "Who created "+creation+"?";
+					answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString().trim();
+					foundAcceptableRow = true;
+				}
+			
+			//No suitable row found, generate another.
+			else{
+				randomRowNumber = rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
+			}
+			
+		}
+		
+		
+		
+		answers.add(answer);
+		
+		//Get 3 more random characters as options for answers
+		int i=0;
+		while(i < 3){
+	        	randomRowNumber = rand.nextInt(NOC_LIST_LINE_COUNT);
+	        	
+	        	if(randomRowNumber != rowOfAnswer){
+	           		answers.add(workbook.getSheetAt(0).getRow(randomRowNumber).getCell(0).toString());
+	           		i++;
+	           	}
+	    }
+		
+		Collections.shuffle(answers);
+		
+		System.out.println(answer);
+		question += " Was it, \nA:"+answers.get(0)+"\n"
+							+"B: "+answers.get(1)+"\n"
+							+"C: "+answers.get(2)+"\n"
+							+"D: "+answers.get(3)+"\n";
+		
+	
+		
+		return question;
 	}
 	
 	
