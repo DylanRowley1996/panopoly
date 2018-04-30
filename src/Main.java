@@ -7,7 +7,7 @@ public class Main {
   
     	MCQ mcq = new MCQ();
     	
-    	for(int i=0;i<100;i++){
+    	for(int i=0;i<10;i++){
 //        	System.out.println(mcq.createAddressAndTalkingPointQuestion());
 //        	System.out.println(mcq.createVehicleQuestion());
 //    		System.out.println(mcq.createTypicalActivityQuestion());
@@ -15,7 +15,8 @@ public class Main {
 //    		System.out.println(mcq.createOpponentQuestion());
 //    		System.out.println(mcq.createSeenWearingQuestion());
  //   		System.out.println(mcq.createPortrayedBy());
-    		System.out.println(mcq.creatorAndCreation());
+//    		System.out.println(mcq.creatorAndCreation());
+    		System.out.println(mcq.domainCategoryTalkingPointQuestion());
     	}
     	
     	

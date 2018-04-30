@@ -782,5 +782,93 @@ public class MCQ {
 		return question;
 	}
 	
+	/*Question: You're transported into the world of <domain>
+	and you see a <negative talking point> but <postive talking point> <category>. Is it.....*/
+	public String domainCategoryTalkingPointQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
+		
+		//Prevent ZIP BOMB
+		ZipSecureFile.setMinInflateRatio(0.005);
+						
+		//Question and it's parts.
+		String question = "You're transported into the world of ";
+		String character = "";
+		String domain = "";
+		String positiveTalkingPoint = "";
+		String negativeTalkingPoint = "";
+		String category = "";
+		
+		List<String> listOfDomains;
+		List<String> listOfCategories;
+		List<String> listOfPositiveTalkingPoints;
+		List<String> listOfNegativeTalkingPoints;
+				
+		answers.clear();
+				
+		int rowOfAnswer = 0;
+				
+		//Generate a random number that will be used for finding a row from NOC List.
+		Random rand = new Random();
+		int randomRowNumber = rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
+				
+		Workbook workbook = WorkbookFactory.create(new File(NOC_LIST_PATH));
+				
+		//Find a row that has a domain, category and a postive and negative talking point
+		while(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(13,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("") &&
+			  workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(21,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("") &&
+			  workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(22,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("") &&
+			  workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(23,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("") ) {
+			 //Generate new row numbers
+			 rowOfAnswer = rand.nextInt(NOC_LIST_LINE_COUNT);
+		}
+		
+		
+		System.out.println("Row of list "+rowOfAnswer+"\n");
+		answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString().trim();
+		answers.add(answer);
+		
+		//Gather the choices of information for forming the question and randomly select from them.
+		if(!workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(13,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("")){
+			listOfDomains = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(13).toString().split(", "));
+			domain = listOfDomains.get(rand.nextInt(listOfDomains.size()));
+		}
+		if(!workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(21,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("")){
+			listOfCategories = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(21).toString().split(", "));
+			category = listOfCategories.get(rand.nextInt(listOfCategories.size()));
+
+		}
+		if(!workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(22,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("")){
+			listOfPositiveTalkingPoints = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(22).toString().split(", "));
+			positiveTalkingPoint = listOfPositiveTalkingPoints.get(rand.nextInt(listOfPositiveTalkingPoints.size()));
+
+		}
+		if(!workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(23,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).toString().equals("")){
+			listOfNegativeTalkingPoints = Arrays.asList(workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(23).toString().split(", "));
+			negativeTalkingPoint = listOfNegativeTalkingPoints.get(rand.nextInt(listOfNegativeTalkingPoints.size()));
+
+		}
+
+
+		//Get 3 more random characters as options for answers
+		int i=0;
+		while(i < 3){
+	        	randomRowNumber = rand.nextInt(NOC_LIST_LINE_COUNT);
+	        	
+	        	if(randomRowNumber != rowOfAnswer){
+	           		answers.add(workbook.getSheetAt(0).getRow(randomRowNumber).getCell(0).toString());
+	           		i++;
+	           	}
+	    }
+		
+		//Form the question.
+		question += domain+" and you see a "+negativeTalkingPoint+" but "+positiveTalkingPoint+" "+category;
+				
+		question += ". Is it, \nA:"+answers.get(0)+"\n"
+						+"B: "+answers.get(1)+"\n"
+						+"C: "+answers.get(2)+"\n"
+						+"D: "+answers.get(3)+"\n";
+		
+		return question;
+	}
+	
 	
 }
