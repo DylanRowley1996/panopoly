@@ -1,3 +1,4 @@
+package panopoly;
 
 
 import java.awt.Graphics;
