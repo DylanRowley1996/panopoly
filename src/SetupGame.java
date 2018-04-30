@@ -80,6 +80,10 @@ public class SetupGame {
 		ArrayList<Player> players = createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
 		gui = new GUI(players, noBoardRows, locationList);
+//		for(Player p:players) {
+//			System.out.println(gui.getStartPosition().toString());
+//			p.setLocation(gui.getStartPosition());
+//		}
 	}
 
 	//Randomly generate a list of unique themes depending on the number of players.
@@ -344,9 +348,9 @@ public class SetupGame {
 			while(locationsSelected<3 && duplicateError<10) {
 				row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
 
-				if(row.getCell(1).getStringCellValue().contains(themes.get(i))) {
-					if(!nestedContains(locationsByTheme, row.getCell(0).getStringCellValue())) {
-						locationsByTheme.get(i).add(row.getCell(0).getStringCellValue());
+				if(row.getCell(1).toString().contains(themes.get(i))) {
+					if(!nestedContains(locationsByTheme, row.getCell(0).toString())) {
+						locationsByTheme.get(i).add(row.getCell(0).toString());
 						noLocsAdded++;
 						locationsSelected++;
 					}
@@ -373,8 +377,8 @@ public class SetupGame {
 		locationsByTheme.get(themes.size()+1).add("Tax");
 		while(noLocsAdded<noLocations-4) {
 			row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
-			if(!nestedContains(locationsByTheme, row.getCell(0).getStringCellValue())) {
-				locationsByTheme.get(themes.size()+1).add(row.getCell(0).getStringCellValue());
+			if(!nestedContains(locationsByTheme, row.getCell(0).toString())) {
+				locationsByTheme.get(themes.size()+1).add(row.getCell(0).toString());
 				noLocsAdded++;
 			}
 		}
@@ -509,9 +513,7 @@ public class SetupGame {
 			BufferedImage resizeImageJpg = resizeImage(originalImage, type, 150, 150);
 			ImageIO.write(resizeImageJpg, "jpg", new File(children[i].toString())); //change path where you want it saved
 		}
-
 	}
-
 }
 
 

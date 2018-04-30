@@ -93,6 +93,14 @@ public class GUI {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+	
+		//add player icons to board
+		for(Player p:players) {
+			BufferedImage myImage = ImageIO.read(new File(p.getPathForImageIcon()));
+			p.setLocation(this.getStartPosition());
+			board.paintCharacterIcons(p , myImage);
+		}
+
 
 		buttonPanel.getRollButton().addActionListener(e -> history.getTextArea().setText("Roll button clicked"));
 
@@ -155,7 +163,6 @@ public class GUI {
 
 			}
 		});
-
 		// test();
 
 	}
@@ -163,5 +170,8 @@ public class GUI {
 	public void makeGuiVisible() {
 		this.frame.setVisible(true);
 	}
-
+	
+	NamedLocation getStartPosition() {
+		return board.getStartLocation();
+	}
 }

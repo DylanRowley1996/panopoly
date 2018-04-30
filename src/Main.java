@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
+import locations.NamedLocation;
+
 public class Main {
     public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException {
 
@@ -19,16 +21,17 @@ public class Main {
     	ArrayList<Player> players = new ArrayList<Player>();
     	for(int i=0;i<5;i++){
     		//String name,int netWorth, String[] properties, String[] monopolies, String[] mortgages, String pathToIcon
-    		players.add(new Player("Dylan",0,properties,monopolies,mortgages,""));
+    		//locations.get(0);
+    		
+    //		players.add(new Player("Dylan",0,properties,monopolies,mortgages,"", ));
     	}
     	
     	//SelectionPanel panel = new SelectionPanel(players);
     	
-
          
          
         SetupGame gameSetup = new SetupGame();
-        
+             
          
          /*gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
          gameSetup.compileChoiceOfCharacters();
