@@ -7,7 +7,7 @@ public class Main {
   
     	MCQ mcq = new MCQ();
     	
-    	for(int i=0;i<10;i++){
+    	for(int i=0;i<1;i++){
 //        	System.out.println(mcq.createAddressAndTalkingPointQuestion());
 //        	System.out.println(mcq.createVehicleQuestion());
 //    		System.out.println(mcq.createTypicalActivityQuestion());

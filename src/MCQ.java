@@ -1,3 +1,5 @@
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,7 +8,17 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
 import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.hssf.usermodel.examples.AddDimensionedImage;
 import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
@@ -35,6 +47,10 @@ public class MCQ {
     private List<String> answers = new ArrayList<String>();// // TODO - Remove 'static' if we're going to create several questions from same object
     private String answer = ""; // TODO - Remove 'static' if we're going to create several questions from same object
    
+    
+
+    
+    private JFrame mcqFrame = new JFrame("MCQ QUESTION");
 
 	public String createMCQ() throws IOException, InvalidFormatException{
 		
@@ -862,12 +878,58 @@ public class MCQ {
 		//Form the question.
 		question += domain+" and you see a "+negativeTalkingPoint+" but "+positiveTalkingPoint+" "+category;
 				
-		question += ". Is it, \nA:"+answers.get(0)+"\n"
+		question += ". Is it";
+		
+		/* , \nA:"+answers.get(0)+"\n"
 						+"B: "+answers.get(1)+"\n"
 						+"C: "+answers.get(2)+"\n"
-						+"D: "+answers.get(3)+"\n";
+						+"D: "+answers.get(3)+"\n";*/
+		
+		createMCQPanel(question,answer,answers);
 		
 		return question;
+	}
+	
+	public void createMCQPanel(String question, String answer, List<String> answers){
+		
+		JButton confirmation = new JButton("Confirm");
+		JLabel questionLabel = new JLabel(question);
+		
+		
+		//JPanel and it's Components of used to present the question
+		JPanel mcqPanel = new JPanel();
+	    ButtonGroup group = new ButtonGroup();
+	    JRadioButton firstChoice = new JRadioButton("A:"+answers.get(0));
+	    JRadioButton secondChoice = new JRadioButton("B:"+answers.get(1));
+	    JRadioButton thirdChoice = new JRadioButton("C:"+answers.get(2));
+	    JRadioButton fourthChoice = new JRadioButton("D:"+answers.get(3));
+	    
+	    //Group the radio buttons
+	    group.add(firstChoice);
+	    group.add(secondChoice);
+	    group.add(thirdChoice);
+	    group.add(fourthChoice);
+	    
+	    
+	    //Put the radio buttons in a column in a panel.
+        JPanel radioPanel = new JPanel(new GridLayout(0, 1));
+        radioPanel.add(questionLabel);
+        radioPanel.add(firstChoice);
+        radioPanel.add(secondChoice);
+        radioPanel.add(thirdChoice);
+        radioPanel.add(fourthChoice);
+        radioPanel.add(confirmation);
+ 
+        mcqPanel.add(radioPanel, BorderLayout.LINE_START);
+        mcqPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        mcqPanel.setVisible(true);
+        
+        mcqFrame.add(mcqPanel);
+        mcqFrame.setVisible(true);
+        mcqFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mcqFrame.pack();
+        
+        
 	}
 	
 	
