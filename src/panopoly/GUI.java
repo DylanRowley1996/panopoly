@@ -1,5 +1,6 @@
 package panopoly;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,6 +39,11 @@ public class GUI {
 	private int noOfPlayersInstantiated = 0;
 
 	GUI(ArrayList<Player> players, int squares, ArrayList<NamedLocation> locs) throws IOException {	
+		
+		//Set the frame icon to an image loaded from a file.
+		BufferedImage myPhoto = ImageIO.read(new File("savedImages/Monopoly (1).png"));
+		Image myGameIcon = myPhoto.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+    	frame.setIconImage(myGameIcon);
 		
 		board = new Board(squares, locs);
 		
@@ -88,6 +94,13 @@ public class GUI {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		
+		//add player icons to board
+		for(Player p:players) {
+			BufferedImage myImage = ImageIO.read(new File(p.getPathForImageIcon()));
+			p.setLocation(this.getStartPosition());
+			board.paintCharacterIcons(p , myImage);
+		}
 
 		buttonPanel.getRollButton().addActionListener(e -> history.getTextArea().setText("Roll button clicked"));
 
@@ -157,6 +170,10 @@ public class GUI {
 
 	public void makeGuiVisible() {
 		this.frame.setVisible(true);
+	}
+	
+	NamedLocation getStartPosition() {
+		return board.getStartLocation();
 	}
 
 }

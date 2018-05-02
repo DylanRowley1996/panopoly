@@ -606,5 +606,3 @@ public class SetupGame {
 	}
 
 }
-
-
