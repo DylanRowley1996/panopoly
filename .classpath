@@ -18,5 +18,11 @@
 	<classpathentry exported="true" kind="lib" path="JAR library/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="JAR library/poi-scratchpad-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="JAR library/xmlbeans-2.6.0.jar"/>
+<<<<<<< HEAD
+=======
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/gson-library"/>
+	<classpathentry kind="lib" path="JAR library/gson.jar"/>
+	<classpathentry kind="lib" path="JAR library/commons-io.jar"/>
+>>>>>>> refs/remotes/origin/master
 	<classpathentry kind="output" path="bin"/>
 </classpath>
