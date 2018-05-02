@@ -65,7 +65,7 @@ public class SetupGame {
 	private boolean launchGUI = false;
 
 
-	public SetupGame() throws EncryptedDocumentException, InvalidFormatException, IOException{
+	public SetupGame(int noOfPlayers) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException{
 
 		int noBoardRows = rand.nextInt(6) + 10;
 		int noLocations = (noBoardRows-3)*4; //total number of squares on the board
@@ -75,9 +75,9 @@ public class SetupGame {
 		findCharactersFromThemes(findThemes(0, 0, 6/*noCharacters*/));
 		compileChoiceOfCharacters();
 		//TODO - Uncomment code below when we need queries working
-		// imageRetriever = new FindImages(characters);
-		//imageRetriever.searchForCharacterImages();
-		//imageRetriever.resizeAllImages();
+		/*imageRetriever = new FindImages(characters);
+		imageRetriever.searchForCharacterImages();
+		imageRetriever.resizeAllImages();*/
 		resizeAllImages();
 		//createAndLaunchSelectionFrame();
 
