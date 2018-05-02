@@ -19,10 +19,20 @@
 	<classpathentry exported="true" kind="lib" path="JAR library/poi-scratchpad-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="JAR library/xmlbeans-2.6.0.jar"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> a60be5876a89d3ca19e48fe34248b12cce0a6aa0
 =======
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/gson-library"/>
 	<classpathentry kind="lib" path="JAR library/gson.jar"/>
 	<classpathentry kind="lib" path="JAR library/commons-io.jar"/>
+<<<<<<< HEAD
 >>>>>>> master
+=======
+>>>>>>> refs/remotes/origin/master
+=======
+>>>>>>> ecbe6720653c5ff2b8062132af99fb2bc86115ef
+>>>>>>> a60be5876a89d3ca19e48fe34248b12cce0a6aa0
 	<classpathentry kind="output" path="bin"/>
 </classpath>

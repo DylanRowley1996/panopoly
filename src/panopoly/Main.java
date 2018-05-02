@@ -115,4 +115,8 @@ public class Main {
         });*/
     }
 }
+<<<<<<< HEAD
 >>>>>>> master:src/panopoly/Main.java
+=======
+>>>>>>> refs/remotes/origin/master:src/panopoly/Main.java
+>>>>>>> a60be5876a89d3ca19e48fe34248b12cce0a6aa0
