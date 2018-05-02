@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -130,14 +132,7 @@ public class MCQ {
         
         //Format the question.
         question = "You see a "+gender+" with a "+weapon+". Is it:";
-       
-       /* System.out.println("Question: You see a "+gender+" with a "+weapon+". Is it:");
-        System.out.println("A. "+answers.get(0)+"\n"+
-        				   "B. "+answers.get(1)+"\n"+
-        				   "C. "+answers.get(2)+"\n"+
-        				   "D. "+answers.get(3)+"\n");*/
-		
-			
+    		
 	}
 	
 	public void createVehicleQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
@@ -150,7 +145,6 @@ public class MCQ {
 		String[] potentialQuestions = {"You see a", "You just got run over by a", "You're offered a lift by a"};
 		
 		//Stores potential answers for question.
-		//String[] names = new String[4];
 		String vehicle = "";
 		String gender = "";
 		String determiner = "";
@@ -228,10 +222,6 @@ public class MCQ {
         Collections.shuffle(answers);
           
        question = potentialQuestions[rand.nextInt(potentialQuestions.length)]+" "+gender+" "+affordance+" "+determiner+" "+vehicle+". Is it:";
-        /*return "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+" "+gender+" "+affordance+" "+determiner+" "+vehicle+". Is it: \nA. "+answers.get(0)+"\n"+
-				  "B. "+answers.get(1)+"\n"+
-				  "C. "+answers.get(2)+"\n"+
-				  "D. "+answers.get(3)+"\n";*/
     	
 	}
 	
@@ -293,11 +283,7 @@ public class MCQ {
         Collections.shuffle(answers);
         
         question = "You're at "+address+"and you see a "+talkingPoint+" "+gender+".\nIs it:";
-        /*return "You're at "+address+"and you see a "+talkingPoint+" "+gender+".\nIs it: \n"
-        		+ "A: "+answers.get(0) + "\n"
-        		+ "B: "+answers.get(1) + "\n"
-        		+ "C: "+answers.get(2) + "\n"
-         		+ "D: "+answers.get(3) + "\n";*/
+
 	}
 	
 	//Column j is typical activity
@@ -347,11 +333,7 @@ public class MCQ {
         Collections.shuffle(answers);
     	
         question = "You see someone "+activity+"\nIs it:";
-		/*return "You see someone "+activity+"\nIs it: \n"
-		+ "A: "+answers.get(0) + "\n"
-		+ "B: "+answers.get(1) + "\n"
-		+ "C: "+answers.get(2) + "\n"
- 		+ "D: "+answers.get(3) + "\n";*/
+
 	}
 	
 	//Question: You see someone shooting <arch nemesis> with a <weapon>
@@ -613,7 +595,7 @@ public class MCQ {
         
 		Collections.shuffle(answers);
 		
-		question = "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+determiner+" "+seenWearing+". Is it:";
+		question = potentialQuestions[rand.nextInt(potentialQuestions.length)]+determiner+" "+seenWearing+". Is it:";
 
 	}
 	
@@ -681,7 +663,7 @@ public class MCQ {
         
 		Collections.shuffle(answers);
             
-		question = "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+character+". Is it,";
+		question = potentialQuestions[rand.nextInt(potentialQuestions.length)]+character+". Is it,";
 
 	}
 	
@@ -869,7 +851,7 @@ public class MCQ {
 		
 		Random rand = new Random();
 		
-		int questionChoiceNumber = rand.nextInt(10);
+		int questionChoiceNumber = rand.nextInt(noOfQuestions);
 		
 		switch(questionChoiceNumber){
 		case 0:
@@ -904,23 +886,65 @@ public class MCQ {
 			break;
 		}
 		
-		JButton confirmation = new JButton("Confirm");
 		JLabel questionLabel = new JLabel(question);
-		
 		
 		//JPanel and it's Components of used to present the question
 		JPanel mcqPanel = new JPanel();
 	    ButtonGroup group = new ButtonGroup();
-	    JRadioButton firstChoice = new JRadioButton("A:"+answers.get(0));
-	    JRadioButton secondChoice = new JRadioButton("B:"+answers.get(1));
-	    JRadioButton thirdChoice = new JRadioButton("C:"+answers.get(2));
-	    JRadioButton fourthChoice = new JRadioButton("D:"+answers.get(3));
+	    JRadioButton firstChoice = new JRadioButton("A: "+answers.get(0));
+	    JRadioButton secondChoice = new JRadioButton("B: "+answers.get(1));
+	    JRadioButton thirdChoice = new JRadioButton("C: "+answers.get(2));
+	    JRadioButton fourthChoice = new JRadioButton("D: "+answers.get(3));
+	    
+	    JRadioButton choices[] = {firstChoice, secondChoice, thirdChoice, fourthChoice}; 
+	    
+	    //Determine which button has the correct answer.
+	    int i=0;
+	    boolean answerFound = false;
+	    while(i < 4 && !answerFound){
+	    	if(answer.equals(answers.get(i))){
+	    		answerFound = true;
+	    	}
+	    	else{
+	    		i++;
+	    	}
+	    }
+	    
+	    //Create reference of the correct button
+	    JRadioButton correctButton = choices[i];
 	    
 	    //Group the radio buttons
 	    group.add(firstChoice);
 	    group.add(secondChoice);
 	    group.add(thirdChoice);
 	    group.add(fourthChoice);
+	    
+	    //Create the button for choice confirmation.
+	    JButton confirmationButton = new JButton("Confirm");
+		
+	    //Will confirm if user has selected the correct answer
+		 confirmationButton.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                if (correctButton.isSelected()) {
+	                    System.out.println("CORRECT");
+	                    try {
+	                    	question = "";
+	                    	answers.clear();
+	                    	mcqFrame = new JFrame("MCQ QUESTION");
+	                    	
+	                    
+	                    			
+							createMCQPanel();
+						} catch (InvalidFormatException | IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+	                } else {
+	                    System.out.println("FALSE");
+	                }
+	            }
+	        });
 	    
 	    
 	    //Put the radio buttons in a column in a panel.
@@ -930,7 +954,7 @@ public class MCQ {
         radioPanel.add(secondChoice);
         radioPanel.add(thirdChoice);
         radioPanel.add(fourthChoice);
-        radioPanel.add(confirmation);
+        radioPanel.add(confirmationButton);
  
         mcqPanel.add(radioPanel, BorderLayout.LINE_START);
         mcqPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
@@ -940,6 +964,7 @@ public class MCQ {
         mcqFrame.setVisible(true);
         mcqFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mcqFrame.pack();
+        mcqFrame.setLocationRelativeTo(null);
         return mcqPanel;
         
         
