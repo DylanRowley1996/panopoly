@@ -44,6 +44,12 @@ public class GUI {
 
 	GUI(ArrayList<Player> players, int squares, ArrayList<NamedLocation> locs) throws IOException {	
 		
+
+		//Set the frame icon to an image loaded from a file.
+		BufferedImage myPhoto = ImageIO.read(new File("savedImages/Monopoly (1).png"));
+		Image myGameIcon = myPhoto.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+    	frame.setIconImage(myGameIcon);
+		
 		board = new Board(squares, locs);
 		
 		SelectionPanel selectionPanel = new SelectionPanel(players);
