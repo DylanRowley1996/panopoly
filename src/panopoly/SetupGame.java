@@ -66,7 +66,7 @@ public class SetupGame {
 
 
 	public SetupGame(int noOfPlayers) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException{
-
+		
 		int noBoardRows = rand.nextInt(6) + 10;
 		int noLocations = (noBoardRows-3)*4; //total number of squares on the board
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
@@ -83,7 +83,7 @@ public class SetupGame {
 
 		ArrayList<Player> players = createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		gui = new GUI(players, noBoardRows, locationList);
+		new GUI(players, noBoardRows, locationList);
 	}
 
 	//Randomly generate a list of unique themes depending on the number of players.
@@ -304,7 +304,6 @@ public class SetupGame {
 						//							// TODO Auto-generated catch block
 						//							e1.printStackTrace();
 						//						}
-						launchGUI = true;
 						return;
 					}
 				}
@@ -357,9 +356,9 @@ public class SetupGame {
 			while(locationsSelected<3 && duplicateError<10) {
 				row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
 
-				if(row.getCell(1).getStringCellValue().contains(themes.get(i))) {
-					if(!nestedContains(locationsByTheme, row.getCell(0).getStringCellValue())) {
-						locationsByTheme.get(i).add(row.getCell(0).getStringCellValue());
+				if(row.getCell(1).toString().contains(themes.get(i))) {
+					if(!nestedContains(locationsByTheme, row.getCell(0).toString())) {
+						locationsByTheme.get(i).add(row.getCell(0).toString());
 						noLocsAdded++;
 						locationsSelected++;
 					}

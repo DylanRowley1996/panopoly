@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import interfaces.Locatable;
 import interfaces.Playable;
 import locations.NamedLocation;
+import locations.PropertyGroup;
 
 
 //Test class used to test features of Overview.java
@@ -11,20 +12,12 @@ public class Player implements Playable {
 
     private String name = "";
     private int netWorth = 0;
-    private String[] properties = new String[5];
-    private String[] monopolies = new String[5];
-    private String[] mortgages = new String[5];
+    private ArrayList<NamedLocation> properties = new ArrayList<NamedLocation>();
+    private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
+    private ArrayList<PropertyGroup> mortgages = new ArrayList<PropertyGroup>();
+    
     private String pathToCharacterIcon = "";
     private NamedLocation location = null;
-
-    public Player(String name,int netWorth, String[] properties, String[] monopolies, String[] mortgages, String pathToIcon){
-        this.name = name;
-        this.netWorth = netWorth;
-        this.properties = properties;
-        this.monopolies = monopolies;
-        this.mortgages = mortgages;
-        this.pathToCharacterIcon = pathToIcon;
-    }
     
     public Player(String name,String pathToCharacterIcon){
     	this.name = name;
@@ -38,19 +31,26 @@ public class Player implements Playable {
     public int getNetWorth() {
         return netWorth;
     }
+    public void buyProperty(NamedLocation target) {
+    	if(!properties.contains(target)) {
+        	properties.add(target);
+    	}  	
+    }
 
-    public String[] getProperties() {
+    public ArrayList<NamedLocation> getProperties() {
         return properties;
     }
 
-    public String[] getMonopolies() {
-        return monopolies;
-    }
-
-    public String[] getMortgages() {
-        return mortgages;
-    }
-    
+//    public ArrayList<NamedLocation> getMortgages() {
+//    	mortgages.clear();
+//    	for(NamedLocation currLocation:properties) {
+//    		if(currLocation.isMortgaged) {
+//    			mortgages.add(currLocation);
+//    		}
+//    	}
+//        return mortgages;
+//    }
+//    
     public String getPathForImageIcon(){
     	return this.pathToCharacterIcon;
     }
