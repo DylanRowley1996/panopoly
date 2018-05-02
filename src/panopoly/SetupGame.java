@@ -325,6 +325,11 @@ public class SetupGame {
 		return characters;
 	}
 
+	/*
+	 * Take list of themes based on amount of locations.
+	 * Read Fictional Worlds file and retrieves 3 locations based on each theme.
+	 * 
+	 */
 	public void setUpLocations(ArrayList<String> themes, int noLocations, int noBoardRows) throws EncryptedDocumentException, InvalidFormatException, IOException {
 		ArrayList<PropertyGroup> groups = setUpGroups(themes);
 
@@ -344,6 +349,10 @@ public class SetupGame {
 			locationsByTheme.add(new ArrayList<String>());
 			locationsByTheme.get(i).add(themes.get(i));
 
+			/*
+			 * If you keep finding duplicates,
+			 * just accept the unique properties you've
+			 * already retreived and continue*/
 			int duplicateError = 0;
 			while(locationsSelected<3 && duplicateError<10) {
 				row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
@@ -360,12 +369,15 @@ public class SetupGame {
 
 		}
 
+		//Creating Stations
+		//Stations have no theme, they're a random fictional world from the NOC List
 		locationsByTheme.add(new ArrayList<String>());
 		locationsByTheme.get(themes.size()).add("Station");
 		PropertyGroup stationGroup = new PropertyGroup("Station", new int[]{100, 500}, Color.white);
 		int stationsSelected=0;
 		while(stationsSelected<4) {
 			row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
+			//Make sure other themes don't contain the name chosen for the station.
 			if(!nestedContains(locationsByTheme, row.getCell(0).getStringCellValue())) {
 				locationsByTheme.get(themes.size()).add(row.getCell(0).getStringCellValue());
 				noLocsAdded++;
@@ -373,12 +385,18 @@ public class SetupGame {
 			}
 		}
 
+		//Other locations are MCQ, Utilities, Cards etc
 		ArrayList<NamedLocation> otherLocationList = createRandomLocationList((noLocations-4) - noLocsAdded);
 		noLocsAdded = noLocations-4;
 		
 		worldsListWb.close();
 
 
+		/* 
+		 * All property names have been gathered.
+		 * Now create actual instances of property
+		 * and store in location list.
+		 */
 		while(noLocsAdded>0) {
 			int listNo = rand.nextInt(locationsByTheme.size());
 			if(locationsByTheme.get(listNo).size()>1) { 
@@ -402,12 +420,14 @@ public class SetupGame {
 			}
 		}
 		
+		// shuffles if stations are too close to each other
 		boolean stationCheck = false;
-		while(!stationCheck) { // shuffles if stations are too close to each other
+		while(!stationCheck) { 
 			Collections.shuffle(locationList);
 			stationCheck = checkStationLocations(noBoardRows);
 		}
 
+		//Add Properties that need to be present every time to the corners.
 		locationList.add(0, new NamedLocation("Go"));
 		locationList.add(noBoardRows-3, new NamedLocation("Jail"));
 		locationList.add((noLocations-1)-(noBoardRows-3), new NamedLocation("Go to Jail"));
