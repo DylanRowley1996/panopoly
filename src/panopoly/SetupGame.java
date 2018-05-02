@@ -348,9 +348,9 @@ public class SetupGame {
 			while(locationsSelected<3 && duplicateError<10) {
 				row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
 
-				if(row.getCell(1).getStringCellValue().contains(themes.get(i))) {
-					if(!nestedContains(locationsByTheme, row.getCell(0).getStringCellValue())) {
-						locationsByTheme.get(i).add(row.getCell(0).getStringCellValue());
+				if(row.getCell(1).toString().contains(themes.get(i))) {
+					if(!nestedContains(locationsByTheme, row.getCell(0).toString())) {
+						locationsByTheme.get(i).add(row.getCell(0).toString());
 						noLocsAdded++;
 						locationsSelected++;
 					}

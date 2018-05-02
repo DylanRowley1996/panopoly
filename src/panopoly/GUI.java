@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import locations.NamedLocation;
 
@@ -48,7 +49,7 @@ public class GUI {
 		board = new Board(squares, locs);
 		
 		SelectionPanel selectionPanel = new SelectionPanel(players);
-		
+
 		while(noOfPlayersInstantiated < players.size()){
 			try {
 				Thread.sleep(10);
@@ -90,7 +91,8 @@ public class GUI {
 		frame.add(boardAndGameInformationPane);
 
 		frame.setTitle("Interdimensional Panopoly");
-		frame.setSize(screenSize.width, screenSize.height);
+		//frame.setSize(screenSize.width, screenSize.height);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -102,7 +104,7 @@ public class GUI {
 			board.paintCharacterIcons(p , myImage);
 		}
 
-		buttonPanel.getRollButton().addActionListener(e -> history.getTextArea().setText("Roll button clicked"));
+		buttonPanel.getRollButton().addActionListener(e -> history.getTextArea().setText("Roll button clicked."));
 
 		buttonPanel.getSellButton().addActionListener(e -> history.getTextArea().setText("Sell button clicked."));
 
@@ -175,5 +177,6 @@ public class GUI {
 	NamedLocation getStartPosition() {
 		return board.getStartLocation();
 	}
+
 
 }
