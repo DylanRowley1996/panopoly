@@ -4,21 +4,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 
+import locations.*;
+
 public class TurnControlExample {
 
 	private static Boolean cond, roll, rentOwed;
 	private static Boolean playGame = true;
-	private static ArrayList<Locations> locations = (ArrayList<Locations>) SetUp.getLocationsList();
-	private static ArrayList<Players> players = SetUp.getPlayers();
-	private static Iterator<Players> it;
+	private static ArrayList<NamedLocation> locations = (ArrayList<NamedLocation>) SetupGame.getLocationList();
+	private static ArrayList<Player> players = SetupGame.getPlayers();
+	private static Iterator<Player> it;
 	private static int numDoubles = 0;
 	private static boolean endTurn = true;
 
 	public static void turn() {
 		for(it = players.iterator(); it.hasNext(); ) { // iterator iterates through the players arrayList. This avoids a ConcurrentModificationException when declaring bankruptcy and removing elements
-			Players currPlayer = it.next();
+			Player currPlayer = it.next();
 			if(playGame) {
-				Info_Panel.UserInput("\n" + currPlayer.getName() + "'s turn");
 				roll = true;
 				cond = true;
 				rentOwed = false;
@@ -41,11 +42,11 @@ public class TurnControlExample {
 		}
 	}
 
-	private static void cmdCheck(Players currPlayer) {
+	private static void cmdCheck(Player currPlayer) {
 		while(cond){
 
 			Info_Panel.UserInput("Enter Command: ");
-			Locations loc;
+			Locatable loc;
 			String[] s = Cmd_panel.getCommand().split(" "); //input commands are split into words and stored in array
 			String command = s[0];
 			switch(command){
@@ -78,7 +79,7 @@ public class TurnControlExample {
 						if(currPlayer.getBalance() > ((Propertys) loc).getValue()) { //checks if transaction won't leave players balance below 0
 							currPlayer.deductBalance(((Propertys) loc).getValue());
 							((Propertys) loc).setOwner(currPlayer); //sets owner of property
-							currPlayer.propertyBought((Propertys) loc); // adds property name to propertyNames array in Players which will be use for querying owned property
+							currPlayer.propertyBought((Propertys) loc); // adds property name to propertyNames array in Player which will be use for querying owned property
 							Info_Panel.UserInput(currPlayer.getName() + " bought " + loc.getName() + " for $" + ((Propertys) loc).getValue());
 						} else Info_Panel.UserInput("Error: Insufficient funds");
 					} else Info_Panel.UserInput("Error: Property already bought");
@@ -89,7 +90,7 @@ public class TurnControlExample {
 						if(currPlayer.getBalance() > ((Services) loc).getValue()) { //checks if transaction won't leave players balance below 0
 							currPlayer.deductBalance(((Services) loc).getValue());
 							((Services) loc).setOwner(currPlayer); //sets owner of property
-							currPlayer.servicesBought((Services) loc); // adds property name to propertyNames array in Players which will be use for querying owned property
+							currPlayer.servicesBought((Services) loc); // adds property name to propertyNames array in Player which will be use for querying owned property
 							Info_Panel.UserInput(currPlayer.getName() + " bought " + loc.getName() + " for $" + ((Services) loc).getValue());
 
 						} else Info_Panel.UserInput("Error: Insufficient funds");
@@ -205,7 +206,7 @@ public class TurnControlExample {
 				}
 				if(s[1].equalsIgnoreCase("names")){
 					Info_Panel.UserInput("");
-					for(Locations property : locations) {
+					for(Locatable property : locations) {
 						if(property instanceof Propertys) { //checks that the property object is a property
 							Info_Panel.UserInput(property.getName() + " - " + ((Propertys) property).getInputName());
 						}
@@ -219,7 +220,7 @@ public class TurnControlExample {
 
 			case "bankrupt" :
 				Info_Panel.UserInput(currPlayer.getName() + " has declared bankrupty");
-				for(Locations property : locations) {
+				for(Locatable property : locations) {
 					if(property instanceof Propertys) { //checks that the property object is a property
 						if(currPlayer==((Propertys) property).getOwner()) { // if the player owns the property
 							((Propertys) property).setOwner(null);
@@ -252,20 +253,20 @@ public class TurnControlExample {
 				break;
 
 			case "card" :
-					if(currPlayer.getJail() && !endTurn){
-						if(currPlayer.getJailCard() > 0){
-							currPlayer.leaveJail();
-							currPlayer.useJailCard();
-							endTurn = true;
-							roll = false;
-							Info_Panel.UserInput("you have used a get out of jail card");
-						} else {
-							Info_Panel.UserInput("you don't have any get out of jail cards");
-						}
+				if(currPlayer.getJail() && !endTurn){
+					if(currPlayer.getJailCard() > 0){
+						currPlayer.leaveJail();
+						currPlayer.useJailCard();
+						endTurn = true;
+						roll = false;
+						Info_Panel.UserInput("you have used a get out of jail card");
 					} else {
-						Info_Panel.UserInput("You can't use this now");
+						Info_Panel.UserInput("you don't have any get out of jail cards");
 					}
-					break;
+				} else {
+					Info_Panel.UserInput("You can't use this now");
+				}
+				break;
 			case "build" :
 				if(!(s.length == 3)){
 					Info_Panel.UserInput("type 'build <propertyname> <number of units>' to buy houses for property");
@@ -396,9 +397,9 @@ public class TurnControlExample {
 
 
 			case "quit" :
-				ArrayList<Players> players = SetUp.getPlayers();
+				ArrayList<Player> players = SetUp.getPlayers();
 				Info_Panel.UserInput("Game Over!");
-				Players winner = players.get(0); // sets the initial winner to be the first player in the arrayList
+				Player winner = players.get(0); // sets the initial winner to be the first player in the arrayList
 				String winnerName = winner.getName();
 				StringBuilder winningNames = new StringBuilder(winnerName);
 
@@ -452,7 +453,7 @@ public class TurnControlExample {
 	}
 
 	private static int rollNum;
-	public static int roll(Players element) { //returns dice roll
+	public static int roll(Player element) { //returns dice roll
 		int dice1 = ThreadLocalRandom.current().nextInt(1, 6 + 1);
 		int dice2 = ThreadLocalRandom.current().nextInt(1, 6 + 1);
 		Info_Panel.UserInput(element.getName() + " rolled a " + dice1 + " and a " + dice2);
@@ -473,7 +474,7 @@ public class TurnControlExample {
 		return rollNum;
 	}
 
-	public static int initialRoll(Players element) { //returns dice roll
+	public static int initialRoll(Player element) { //returns dice roll
 		int dice1 = ThreadLocalRandom.current().nextInt(1, 6 + 1);
 		int dice2 = ThreadLocalRandom.current().nextInt(1, 6 + 1);
 		Info_Panel.UserInput(element.getName() + " rolled a " + dice1 + " and a " + dice2);
@@ -485,9 +486,9 @@ public class TurnControlExample {
 		return rollNum;
 	}
 
-	static void squareInfo(Players currPlayer) {
+	static void squareInfo(Player currPlayer) {
 		//info on square
-		Locations loc = locations.get(currPlayer.getLocation());
+		Locatable loc = locations.get(currPlayer.getLocation());
 		Info_Panel.UserInput("\n" + loc.getName());
 		if(loc instanceof Propertys) {
 			Info_Panel.UserInput("Cost: " + Integer.toString(((Propertys) loc).getValue()));
@@ -531,7 +532,7 @@ public class TurnControlExample {
 	}
 
 	private static Propertys propertyFinder(String propName){
-		for(Locations property : locations) {
+		for(Locatable property : locations) {
 			if(property instanceof Propertys){
 				if( (((Propertys) property).getInputName()).equalsIgnoreCase(propName)){
 					return (Propertys) property;
@@ -542,7 +543,7 @@ public class TurnControlExample {
 	}
 
 	private static Services serviceFinder(String serviceName){
-		for(Locations service : locations){
+		for(Locatable service : locations){
 			if(service instanceof Services){
 				if( (((Services) service).getInputName()).equalsIgnoreCase(serviceName)){
 					return (Services) service;
@@ -552,8 +553,8 @@ public class TurnControlExample {
 		return null;
 	}
 
-	public static boolean groupCheck(Players player, String group){
-		for (Locations property : locations){
+	public static boolean groupCheck(Player player, String group){
+		for (Locatable property : locations){
 			if(property instanceof Propertys){
 				if ( ( (Propertys) property).getGroup().equals(group) && ((Propertys) property).getOwner() != player) return false;
 			}
@@ -561,8 +562,8 @@ public class TurnControlExample {
 		return true;
 	}
 
-	public static boolean rentOwed(Players player) {
-		Locations loc = locations.get(player.getLocation());
+	public static boolean rentOwed(Player player) {
+		Locatable loc = locations.get(player.getLocation());
 		if(loc instanceof Propertys){
 			if((((Propertys) loc).getOwner() != player) && (((Propertys)loc).getOwner() != null) && (((Propertys)loc).isMortgaged() != true)) { // checks if the property is owned by another player and if it's not mortgaged
 				return true;
@@ -576,8 +577,8 @@ public class TurnControlExample {
 		return false;
 	}
 
-	public static void payRent(Players player) {
-		Locations loc = locations.get(player.getLocation());
+	public static void payRent(Player player) {
+		Locatable loc = locations.get(player.getLocation());
 		if(loc instanceof Propertys) { //checks that player is on a property
 			player.deductBalance(((Propertys) loc).getRent());
 			((Propertys) loc).getOwner().addBalance(((Propertys) loc).getRent());//give rent to property owner
@@ -591,7 +592,7 @@ public class TurnControlExample {
 		} else Info_Panel.UserInput("ERROR");
 	}
 
-	private static void checkIfDrawCard(Players player) {
+	private static void checkIfDrawCard(Player player) {
 		int locNum = player.getLocation();
 		int cardNum = ThreadLocalRandom.current().nextInt(0, 16);
 		if(locNum==2 || locNum==17 || locNum==33) {
@@ -604,11 +605,11 @@ public class TurnControlExample {
 		}
 	}
 
-	private static void payTax(Players currPlayer, int tax) {
+	private static void payTax(Player currPlayer, int tax) {
 		currPlayer.deductBalance(tax);
 		Info_Panel.UserInput(currPlayer.getName() + " paid $" + tax + " in taxes");
 	}
-	public static void payfine(Players currPlayer){
+	public static void payfine(Player currPlayer){
 		if(currPlayer.getJail()){
 			if(currPlayer.getBalance()>=50){
 				currPlayer.deductBalance(50);

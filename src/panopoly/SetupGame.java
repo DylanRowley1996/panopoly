@@ -55,8 +55,9 @@ public class SetupGame {
 	private static final int noOfPlayers = 6;
 	private ArrayList<ArrayList<String>> charactersAndThemes = new ArrayList<ArrayList<String>>(noOfPlayers);
 	private ArrayList<String> characters = new ArrayList<String>();
-	private ArrayList<NamedLocation> locationList = new ArrayList<NamedLocation>(); // TODO maybe change to ArrayList of ArrayLists for multiple boards
-
+	private static ArrayList<NamedLocation> locationList = new ArrayList<NamedLocation>(); // TODO maybe change to ArrayList of ArrayLists for multiple boards
+	private static ArrayList<Player> players = new ArrayList<Player>();
+	
 	Random rand = new Random();
 	private String[] pathsToIcons = new String[noOfPlayers];
 
@@ -66,7 +67,7 @@ public class SetupGame {
 
 
 	public SetupGame(int noOfPlayers) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException{
-		
+
 		int noBoardRows = rand.nextInt(6) + 10;
 		int noLocations = (noBoardRows-3)*4; //total number of squares on the board
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
@@ -81,7 +82,7 @@ public class SetupGame {
 		resizeAllImages();
 		//createAndLaunchSelectionFrame();
 
-		ArrayList<Player> players = createPlayers();
+		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
 		new GUI(players, noBoardRows, locationList);
 	}
@@ -387,7 +388,7 @@ public class SetupGame {
 		//Other locations are MCQ, Utilities, Cards etc
 		ArrayList<NamedLocation> otherLocationList = createRandomLocationList((noLocations-4) - noLocsAdded);
 		noLocsAdded = noLocations-4;
-		
+
 		worldsListWb.close();
 
 
@@ -418,7 +419,7 @@ public class SetupGame {
 				}
 			}
 		}
-		
+
 		// shuffles if stations are too close to each other
 		boolean stationCheck = false;
 		while(!stationCheck) { 
@@ -446,7 +447,11 @@ public class SetupGame {
 		locationList.get(locationList.size()-1).setRight(locationList.get(locationList.size()-2));
 
 	}
-	
+
+	public static ArrayList<NamedLocation> getLocationList() {
+		return locationList;
+	}
+
 
 	private ArrayList<NamedLocation> createRandomLocationList(int size) {
 		ArrayList<String> taxNames = new ArrayList<>(Arrays.asList("Income Tax", "Property Tax"));
@@ -454,7 +459,7 @@ public class SetupGame {
 		PropertyGroup utilityGroup = new PropertyGroup("Utilities", new int[]{50, 250}, Color.WHITE);
 
 		ArrayList<NamedLocation> locList = new ArrayList<NamedLocation>();
-		
+
 		int attempts = 0;
 		int wealthTaxAdded = 0;
 		int noLocsAdded = 0;
@@ -486,7 +491,7 @@ public class SetupGame {
 				}
 				break;
 			}
-			
+
 			if(loc==null && wealthTaxAdded<2) {
 				if(attempts<3) {
 					attempts++;
@@ -497,7 +502,7 @@ public class SetupGame {
 					attempts = 0;
 				}
 			}
-		
+
 			if(loc!=null) 	{
 				locList.add(loc);
 				noLocsAdded++;
@@ -551,10 +556,9 @@ public class SetupGame {
 		return false;
 	}
 
-	private ArrayList<Player> createPlayers() throws EncryptedDocumentException, InvalidFormatException, IOException{
+	private void createPlayers() throws EncryptedDocumentException, InvalidFormatException, IOException{
 
 		String[] pathsToIcons = getPathsToIcons();
-		ArrayList<Player> players = new ArrayList<Player>();
 
 		//Instantiate all information for players
 		for(int i=0;i<noOfPlayers;i++){
@@ -565,8 +569,9 @@ public class SetupGame {
 			players.add(new Player(characterName,pathsToIcons[i]));
 			System.out.println("Path to icon for player "+players.get(i).getName()+" PATH:"+players.get(i).getPathForImageIcon());
 		}
-
-
+	}
+	
+	public static ArrayList<Player> getPlayers() {
 		return players;
 	}
 

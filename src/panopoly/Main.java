@@ -14,13 +14,6 @@ public class Main {
          // Finds images from web using the chosen characters.
         // FindImages findImages = new FindImages(gameSetup.getCharacters());
         // findImages.Search();
-    	String[] properties = {"EMPTY PROP"};
-    	String[] monopolies = {"EMPTY MONOP"};
-    	String[] mortgages = {"EMPTY MORT"};
-    	ArrayList<Player> players = new ArrayList<Player>();
-    	for(int i=0;i<5;i++){
-    		players.add(new Player("Dylan",0,properties,monopolies,mortgages,""));
-    	}
     	
     	//SelectionPanel panel = new SelectionPanel(players);
          int noOfPlayers = 6;

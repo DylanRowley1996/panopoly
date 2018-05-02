@@ -7,7 +7,6 @@ import locations.NamedLocation;
 import locations.PropertyGroup;
 
 
-//Test class used to test features of Overview.java
 public class Player implements Playable {
 
     private String name = "";
