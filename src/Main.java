@@ -16,7 +16,8 @@ public class Main {
 //    		System.out.println(mcq.createSeenWearingQuestion());
  //   		System.out.println(mcq.createPortrayedBy());
 //    		System.out.println(mcq.creatorAndCreation());
-    		System.out.println(mcq.domainCategoryTalkingPointQuestion());
+    		//System.out.println(mcq.domainCategoryTalkingPointQuestion());
+    		mcq.createMCQPanel();
     	}
     	
     	

@@ -31,6 +31,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 public class MCQ {
 	
+	private int noOfQuestions = 10;
+	
 	//Path to NOC List and line count to bound random line selection. 
     private static final String NOC_LIST_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
     private static final int NOC_LIST_LINE_COUNT = 805;
@@ -46,18 +48,15 @@ public class MCQ {
     //By using List, we can take advantage of Collections.shuffle(list);
     private List<String> answers = new ArrayList<String>();// // TODO - Remove 'static' if we're going to create several questions from same object
     private String answer = ""; // TODO - Remove 'static' if we're going to create several questions from same object
-   
-    
-
-    
+    private String question = "";    
     private JFrame mcqFrame = new JFrame("MCQ QUESTION");
 
-	public String createMCQ() throws IOException, InvalidFormatException{
+	public void createGenderWeaponQuestion() throws IOException, InvalidFormatException{
 		
 		ZipSecureFile.setMinInflateRatio(0.005);
 		
 		//Stores potential answers for question.
-		String[] names = new String[4];
+		//String[] names = new String[4];
 		String weapon = "";
 		String gender = "";
 		int rowOfAnswer = 0;
@@ -96,7 +95,8 @@ public class MCQ {
             
             //Column A is canonical name.
             case "A":
-            	names[0] = cellValue;
+            	answer = cellValue.trim();
+            	answers.add(answer);
             	break;
             //Column C is gender of character.
             case "C":
@@ -120,25 +120,27 @@ public class MCQ {
         		row = sheet.getRow(randomRowNumber);
         		cell = row.getCell(1);
         		cellValue = dataFormatter.formatCellValue(cell);
-        		names[i+1] = cellValue;
+        		answers.add(cellValue);
         		i++;
         	}
         }
         	
         
+        Collections.shuffle(answers);
+        
         //Format the question.
-        System.out.println("Question: You see a "+gender+" with a "+weapon+". Is it:");
-        System.out.println("A. "+names[0]+"\n"+
-        				   "B. "+names[1]+"\n"+
-        				   "C. "+names[2]+"\n"+
-        				   "D. "+names[3]+"\n");
+        question = "You see a "+gender+" with a "+weapon+". Is it:";
+       
+       /* System.out.println("Question: You see a "+gender+" with a "+weapon+". Is it:");
+        System.out.println("A. "+answers.get(0)+"\n"+
+        				   "B. "+answers.get(1)+"\n"+
+        				   "C. "+answers.get(2)+"\n"+
+        				   "D. "+answers.get(3)+"\n");*/
 		
-		
-		
-		return "";
+			
 	}
 	
-	public String createVehicleQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
+	public void createVehicleQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
 		
 		answers.clear();
 		
@@ -224,16 +226,17 @@ public class MCQ {
         
         //Shuffle List
         Collections.shuffle(answers);
-                  
-        return "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+" "+gender+" "+affordance+" "+determiner+" "+vehicle+". Is it: \nA. "+answers.get(0)+"\n"+
+          
+       question = potentialQuestions[rand.nextInt(potentialQuestions.length)]+" "+gender+" "+affordance+" "+determiner+" "+vehicle+". Is it:";
+        /*return "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+" "+gender+" "+affordance+" "+determiner+" "+vehicle+". Is it: \nA. "+answers.get(0)+"\n"+
 				  "B. "+answers.get(1)+"\n"+
 				  "C. "+answers.get(2)+"\n"+
-				  "D. "+answers.get(3)+"\n";
+				  "D. "+answers.get(3)+"\n";*/
     	
 	}
 	
 	//Question format: You're at <address> and you see a <positive/negative talking point> <gender>. Who is it?
-	public String createAddressAndTalkingPointQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
+	public void createAddressAndTalkingPointQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
 		
 		answers.clear();
 		
@@ -289,17 +292,17 @@ public class MCQ {
         //Shuffle List of answers
         Collections.shuffle(answers);
         
-        System.out.println("Answer: "+answer);
-        return "You're at "+address+"and you see a "+talkingPoint+" "+gender+".\nIs it: \n"
+        question = "You're at "+address+"and you see a "+talkingPoint+" "+gender+".\nIs it:";
+        /*return "You're at "+address+"and you see a "+talkingPoint+" "+gender+".\nIs it: \n"
         		+ "A: "+answers.get(0) + "\n"
         		+ "B: "+answers.get(1) + "\n"
         		+ "C: "+answers.get(2) + "\n"
-         		+ "D: "+answers.get(3) + "\n";
+         		+ "D: "+answers.get(3) + "\n";*/
 	}
 	
 	//Column j is typical activity
 	//Question format: You see someone <typical activity>
-	public String createTypicalActivityQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
+	public void createTypicalActivityQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
 		
 		answers.clear();
 		
@@ -343,18 +346,18 @@ public class MCQ {
         //Shuffle List of answers
         Collections.shuffle(answers);
     	
-        System.out.println("Answer: "+answer);
-		return "You see someone "+activity+"\nIs it: \n"
+        question = "You see someone "+activity+"\nIs it:";
+		/*return "You see someone "+activity+"\nIs it: \n"
 		+ "A: "+answers.get(0) + "\n"
 		+ "B: "+answers.get(1) + "\n"
 		+ "C: "+answers.get(2) + "\n"
- 		+ "D: "+answers.get(3) + "\n";
+ 		+ "D: "+answers.get(3) + "\n";*/
 	}
 	
 	//Question: You see someone shooting <arch nemesis> with a <weapon>
 	//Question: You see someone <affordance> <arch nemesis> with a <weapon>
 	//Determiner: a	Weapon: .22 caliber Colt	Affordances: shooting with, pistol-whipping with
-	public String createWeaponArchNemesisQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
+	public void createWeaponArchNemesisQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
 		
 		answers.clear();
 		
@@ -450,7 +453,7 @@ public class MCQ {
 	     Collections.shuffle(answers);
 	     
 	     //Begin to form the question
-	     String question = "You see someone ";
+	     question = "You see someone ";
 	     if(affordancesParts.size() == 1){
 	    	 question += affordancesParts.get(0)+" "+archNemesis+" "+determiner+" "+weapon.trim();
 	     }
@@ -467,20 +470,16 @@ public class MCQ {
 	    	 }
 	    	 question += determiner+" "+weapon;
 	     }
-	    	
-	    System.out.println("Answer: "+answer);
-		return question+"\nIs it: \n"
-			+ "A: "+answers.get(0) + "\n"
-			+ "B: "+answers.get(1) + "\n"
-			+ "C: "+answers.get(2) + "\n"
-	 		+ "D: "+answers.get(3) + "\n";
+	    		    
+	    question = question+"\nIs it:";
 				
 	}
 	
 	// Question: You see someone fighting <opponent>. Is it:
 	// Answer = Character (cell 1), Opponent = Opponent (cell 9)
-	public String createOpponentQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException
+	public void createOpponentQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException
 	{
+		
 		answers.clear();
 		
 		//Prevent ZIP BOMB
@@ -542,15 +541,15 @@ public class MCQ {
 		}        
         
 		Collections.shuffle(answers);
+		
+		question = potentialQuestions[rand.nextInt(potentialQuestions.length)]+" "+opponent+". Is it:";
             
-        return "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+" "+opponent+". Is it: \nA. "+answers.get(0)+"\n"+
-	  	  "B. "+answers.get(1)+"\n"+
-	  	  "C. "+answers.get(2)+"\n"+
-	  	  "D. "+answers.get(3)+"\n";
 	}
 	
-	public String createSeenWearingQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException
+	public void createSeenWearingQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException
 	{
+		
+		
 		answers.clear();
 		
 		//Prevent ZIP BOMB
@@ -613,15 +612,14 @@ public class MCQ {
 		}        
         
 		Collections.shuffle(answers);
-        
-        return "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+determiner+" "+seenWearing+". Is it: \nA. "+answers.get(0)+"\n"+
-	  	  "B. "+answers.get(1)+"\n"+
-	  	  "C. "+answers.get(2)+"\n"+
-	  	  "D. "+answers.get(3)+"\n";
+		
+		question = "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+determiner+" "+seenWearing+". Is it:";
+
 	}
 	
-	public String createPortrayedBy() throws EncryptedDocumentException, InvalidFormatException, IOException
+	public void createPortrayedBy() throws EncryptedDocumentException, InvalidFormatException, IOException
 	{
+		
 		answers.clear();
 		
 		//Prevent ZIP BOMB
@@ -683,18 +681,15 @@ public class MCQ {
         
 		Collections.shuffle(answers);
             
-        return "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+character+". Is it: \nA. "+answers.get(0)+"\n"+
-	  	  "B. "+answers.get(1)+"\n"+
-	  	  "C. "+answers.get(2)+"\n"+
-	  	  "D. "+answers.get(3)+"\n";
+		question = "Answer is: "+answer+"\nQuestion: "+potentialQuestions[rand.nextInt(potentialQuestions.length)]+character+". Is it,";
+
 	}
 	
-	public String creatorAndCreation() throws EncryptedDocumentException, InvalidFormatException, IOException{
+	public void creatorAndCreation() throws EncryptedDocumentException, InvalidFormatException, IOException{
 		
 		//Prevent ZIP BOMB
 		ZipSecureFile.setMinInflateRatio(0.005);
 				
-		String question = "";
 		String character = "";
 		
 		answers.clear();
@@ -770,8 +765,6 @@ public class MCQ {
 			
 		}
 		
-		
-		
 		answers.add(answer);
 		
 		//Get 3 more random characters as options for answers
@@ -787,26 +780,17 @@ public class MCQ {
 		
 		Collections.shuffle(answers);
 		
-		System.out.println(answer);
-		question += " Was it, \nA:"+answers.get(0)+"\n"
-							+"B: "+answers.get(1)+"\n"
-							+"C: "+answers.get(2)+"\n"
-							+"D: "+answers.get(3)+"\n";
-		
-	
-		
-		return question;
 	}
 	
 	/*Question: You're transported into the world of <domain>
 	and you see a <negative talking point> but <postive talking point> <category>. Is it.....*/
-	public String domainCategoryTalkingPointQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
+	public void domainCategoryTalkingPointQuestion() throws EncryptedDocumentException, InvalidFormatException, IOException{
 		
 		//Prevent ZIP BOMB
 		ZipSecureFile.setMinInflateRatio(0.005);
 						
 		//Question and it's parts.
-		String question = "You're transported into the world of ";
+		question = "You're transported into the world of ";
 		String character = "";
 		String domain = "";
 		String positiveTalkingPoint = "";
@@ -838,7 +822,6 @@ public class MCQ {
 		}
 		
 		
-		System.out.println("Row of list "+rowOfAnswer+"\n");
 		answer = workbook.getSheetAt(0).getRow(rowOfAnswer).getCell(0).toString().trim();
 		answers.add(answer);
 		
@@ -879,18 +862,47 @@ public class MCQ {
 		question += domain+" and you see a "+negativeTalkingPoint+" but "+positiveTalkingPoint+" "+category;
 				
 		question += ". Is it";
-		
-		/* , \nA:"+answers.get(0)+"\n"
-						+"B: "+answers.get(1)+"\n"
-						+"C: "+answers.get(2)+"\n"
-						+"D: "+answers.get(3)+"\n";*/
-		
-		createMCQPanel(question,answer,answers);
-		
-		return question;
+						
 	}
 	
-	public void createMCQPanel(String question, String answer, List<String> answers){
+	public JPanel createMCQPanel() throws InvalidFormatException, IOException{
+		
+		Random rand = new Random();
+		
+		int questionChoiceNumber = rand.nextInt(10);
+		
+		switch(questionChoiceNumber){
+		case 0:
+			createGenderWeaponQuestion();
+			break;
+		case 1:
+			createVehicleQuestion();
+			break;
+		case 2:
+			createAddressAndTalkingPointQuestion();
+			break;
+		case 3:
+			createTypicalActivityQuestion();
+			break;
+		case 4:
+			createWeaponArchNemesisQuestion();
+			break;
+		case 5:
+			createOpponentQuestion();
+			break;
+		case 6:
+			createSeenWearingQuestion();
+			break;
+		case 7:
+			createPortrayedBy();
+			break;
+		case 8: 
+			creatorAndCreation();
+			break;
+		case 9: 
+			domainCategoryTalkingPointQuestion();
+			break;
+		}
 		
 		JButton confirmation = new JButton("Confirm");
 		JLabel questionLabel = new JLabel(question);
@@ -928,6 +940,7 @@ public class MCQ {
         mcqFrame.setVisible(true);
         mcqFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mcqFrame.pack();
+        return mcqPanel;
         
         
 	}
