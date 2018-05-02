@@ -1,3 +1,4 @@
+package panopoly;
 import java.util.ArrayList;
 
 import interfaces.Locatable;

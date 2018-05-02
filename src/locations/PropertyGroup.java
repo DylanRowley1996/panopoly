@@ -3,11 +3,13 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
-import locations.*;
+import interfaces.Groupable;
+import interfaces.Ownable;
+import panopoly.Player;
 
 public class PropertyGroup {
 
-	private ArrayList<NamedLocation> locs = new ArrayList<NamedLocation>();
+	private ArrayList<Groupable> locs = new ArrayList<Groupable>();
 	private String name;
 	private int min;
 	private int max;
@@ -21,12 +23,12 @@ public class PropertyGroup {
 		return;
 	}
 	
-	public void addMember(NamedLocation site) {
+	public void addMember(Groupable site) {
 		locs.add(site);
 		return;
 	}
 	
-	public ArrayList<NamedLocation> getMembers() {
+	public ArrayList<Groupable> getMembers() {
 		return locs;
 	}
 	
@@ -47,16 +49,29 @@ public class PropertyGroup {
 	}
 	
 	public int[] calculateRentArray() {
-		
-		
-		return null;
-	}
-	
-	public int calculateMortgage() {
-		return 0;
+		int[] rentArray = new int[5];
+		rentArray[0] = min/10;
+		rentArray[1] = rentArray[0] * 5;
+		rentArray[2] = rentArray[1] * 3;
+		rentArray[3] = rentArray[2] * 3;
+		rentArray[4] = (int) (rentArray[3] * 1.8);
+		return rentArray;
 	}
 	
 	public Color getColor() {
 		return color;
+	}
+	
+	public int getNumLocsOwnedByPlayer(Player player) { // TODO change to Playable 
+		int locsOwned = 0;
+		for(Groupable loc : locs) {
+			if(loc instanceof Ownable) {
+				if(((Ownable) loc).getOwner() == player) {
+					locsOwned++;
+				}
+			}
+		}
+		
+		return locsOwned;
 	}
 }

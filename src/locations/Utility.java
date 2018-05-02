@@ -6,12 +6,12 @@ public class Utility extends PrivateProperty {
 		super(name, group);
 	}
 	
-	public int getRentMultiplier () {
+	private int getRentMultiplier() {
 		//return rentTable[super.getOwner().getNumUtilitiesOwned()-1];
 		return rentArray[0];
 	}
 
-	public int getRent (int diceTotal) {
+	public int getRentalAmount(int diceTotal) {
 		return diceTotal * getRentMultiplier();
 	}
 
