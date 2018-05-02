@@ -60,11 +60,6 @@ public class SetupGame {
 	Random rand = new Random();
 	private String[] pathsToIcons = new String[noOfPlayers];
 
-	private FindImages imageRetriever;
-	private GUI gui;
-	private boolean launchGUI = false;
-
-
 	public SetupGame() throws EncryptedDocumentException, InvalidFormatException, IOException{
 
 		int noBoardRows = rand.nextInt(6) + 10;
@@ -83,7 +78,7 @@ public class SetupGame {
 
 		ArrayList<Player> players = createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		gui = new GUI(players, noBoardRows, locationList);
+		new GUI(players, noBoardRows, locationList);
 	}
 
 	//Randomly generate a list of unique themes depending on the number of players.
@@ -304,7 +299,6 @@ public class SetupGame {
 						//							// TODO Auto-generated catch block
 						//							e1.printStackTrace();
 						//						}
-						launchGUI = true;
 						return;
 					}
 				}

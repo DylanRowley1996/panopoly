@@ -61,4 +61,15 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 		return (int) (mortgageAmount + (mortgageAmount*.1));
 	}
 
+	@Override
+	public void mortagage() {
+		isMortgaged = true;
+		
+	}
+
+	@Override
+	public void unmortgage() {
+		isMortgaged = false;
+	}
+
 }
