@@ -76,13 +76,13 @@ public class Overview extends JFrame {
             }
         }
 
-       //Format the data.
+       /*//Format the data.
         playerInformation.setFont(new Font("Rockwell", Font.BOLD,15));
         playerInformation.setText("<html><b><span style=\"font-family:Rockwell;font-size:15px;\">Player</span></b>: "+players.get(i).getName()+ "<br/>" +
                 "<b><span style=\"font-family:Rockwell;font-size:15px;\">Net worth: </span></b>"+players.get(i).getNetWorth()+ "<br/>" +
                 "<b><span style=\"font-family:Rockwell;font-size:15px;\">Properties: </span></b> "+String.join(", ",players.get(i).getProperties())+ "<br/>"+
                 "<b><span style=\"font-family:Rockwell;font-size:15px;\">Monopolies: </span></b> "+String.join(", ",players.get(i).getMonopolies())+ " <br/>"+
-                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Mortgages:  </span></b>"+String.join(", ",players.get(i).getMortgages())+ " <br/></html>");
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Mortgages:  </span></b>"+String.join(", ",players.get(i).getMortgages())+ " <br/></html>");*/
 
 
     }

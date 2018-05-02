@@ -38,6 +38,9 @@ public class GUI {
 	private JPanel characterImagePanel = new JPanel();
 	private JLabel characterImage = new JLabel();
 	private int noOfPlayersInstantiated = 0;
+	
+	//Controls the players actions 
+	private PartyLeader partyLeader = new PartyLeader();
 
 	GUI(ArrayList<Player> players, int squares, ArrayList<NamedLocation> locs) throws IOException {	
 		
@@ -115,9 +118,13 @@ public class GUI {
 		buttonPanel.getCollectRentButton()
 				.addActionListener(e -> history.getTextArea().setText("Collect rent button clicked."));
 
-		buttonPanel.getMortgageButton().addActionListener(e -> history.getTextArea().setText("Mortgage button clicked.")
+		buttonPanel.getMortgageButton().addActionListener(new ActionListener() {
 
-		);
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                        partyLeader.mortgage(players.get(currentPlayer));
+                    }
+        });
 
 		buttonPanel.getRedeemMortgageButton()
 				.addActionListener(e -> history.getTextArea().setText("Redeem mortgage button clicked."));
