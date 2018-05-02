@@ -19,16 +19,12 @@ public class Main {
     	String[] mortgages = {"EMPTY MORT"};
     	ArrayList<Player> players = new ArrayList<Player>();
     	for(int i=0;i<5;i++){
-    		//String name,int netWorth, String[] properties, String[] monopolies, String[] mortgages, String pathToIcon
     		players.add(new Player("Dylan",0,properties,monopolies,mortgages,""));
     	}
     	
     	//SelectionPanel panel = new SelectionPanel(players);
-    	
-
-         
-         
-        SetupGame gameSetup = new SetupGame();
+         int noOfPlayers = 6;
+         SetupGame gameSetup = new SetupGame(noOfPlayers);
         
          
          /*gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));

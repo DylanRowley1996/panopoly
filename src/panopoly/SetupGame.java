@@ -60,8 +60,13 @@ public class SetupGame {
 	Random rand = new Random();
 	private String[] pathsToIcons = new String[noOfPlayers];
 
-	public SetupGame() throws EncryptedDocumentException, InvalidFormatException, IOException{
+	private FindImages imageRetriever;
+	private GUI gui;
+	private boolean launchGUI = false;
 
+
+	public SetupGame(int noOfPlayers) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException{
+		
 		int noBoardRows = rand.nextInt(6) + 10;
 		int noLocations = (noBoardRows-3)*4; //total number of squares on the board
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
@@ -70,9 +75,9 @@ public class SetupGame {
 		findCharactersFromThemes(findThemes(0, 0, 6/*noCharacters*/));
 		compileChoiceOfCharacters();
 		//TODO - Uncomment code below when we need queries working
-		// imageRetriever = new FindImages(characters);
-		//imageRetriever.searchForCharacterImages();
-		//imageRetriever.resizeAllImages();
+		/*imageRetriever = new FindImages(characters);
+		imageRetriever.searchForCharacterImages();
+		imageRetriever.resizeAllImages();*/
 		resizeAllImages();
 		//createAndLaunchSelectionFrame();
 
@@ -351,9 +356,9 @@ public class SetupGame {
 			while(locationsSelected<3 && duplicateError<10) {
 				row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
 
-				if(row.getCell(1).getStringCellValue().contains(themes.get(i))) {
-					if(!nestedContains(locationsByTheme, row.getCell(0).getStringCellValue())) {
-						locationsByTheme.get(i).add(row.getCell(0).getStringCellValue());
+				if(row.getCell(1).toString().contains(themes.get(i))) {
+					if(!nestedContains(locationsByTheme, row.getCell(0).toString())) {
+						locationsByTheme.get(i).add(row.getCell(0).toString());
 						noLocsAdded++;
 						locationsSelected++;
 					}
