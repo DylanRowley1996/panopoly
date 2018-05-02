@@ -6,7 +6,7 @@ public class TaxableLocation extends NamedLocation implements Taxable {
 	private double incomePercentage;
 	private int flatAmount;
 	
-	public TaxableLocation(String name, int loc, double iP, int fA) {
+	public TaxableLocation(String name, double iP, int fA) {
 		super(name);
 		incomePercentage = iP;
 		flatAmount = fA;

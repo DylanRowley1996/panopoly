@@ -14,8 +14,9 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 		super(name);
 		owner = null;
 		this.group = group;
+		group.addMember(this);
 		price = group.calculatePrice();
-		mortgageAmount = group.calculateMortgage();
+		mortgageAmount = price/2;
 		rentArray = group.calculateRentArray();
 		isMortgaged = false;
 	}
@@ -53,6 +54,11 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	@Override
 	public PropertyGroup getGroup() {
 		return group;
+	}
+
+	@Override
+	public int getRedeemAmount() {
+		return (int) (mortgageAmount + (mortgageAmount*.1));
 	}
 
 }
