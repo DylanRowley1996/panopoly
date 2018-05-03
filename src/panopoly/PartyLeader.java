@@ -19,6 +19,7 @@ import javax.swing.JRadioButton;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
+import interfaces.Improvable;
 import interfaces.Mortgageable;
 import locations.*;
 
@@ -95,21 +96,56 @@ public class PartyLeader {
 	                    try {	               
 	                		double totalMortgageValue = 0;
 	                    	int j=0;
+	                    	//This list is used to create a string that will be appended to text area on the GUI
+		            		ArrayList<String> mortgageableIdentifiers = new ArrayList<String>();
+		            		ArrayList<String> unmortgagableIdentifiers = new ArrayList<String>();
+		            		
 	                    	while(j < mortgageableRadioButtons.size()){
+	                    		
 	                    		if(mortgageableRadioButtons.get(j).isSelected()){
 	                    			
-	                    			//Start totalling value of mortgages.
-	                    			totalMortgageValue += mortgageableProperties.get(j).getMortgageAmount();
-	                    			
-	                    			//Find index of property to mortgage then mortgage this property in players list.
-	                    			int indexToMortgage = player.getProperties().indexOf(mortgageableProperties.get(j));
-	                    			player.getProperties().get(indexToMortgage).mortagage();
+	                    			//Check that the user can mortgage the property
+	                    			if(mortgageableProperties.get(j) instanceof ImprovableProperty){
+	                    				if(((ImprovableProperty)mortgageableProperties.get(j)).getNumHouses()==0){
+	                    					totalMortgageValue += mortgageableProperties.get(j).getMortgageAmount();
+	                    					mortgageableIdentifiers.add(mortgageableProperties.get(j).getIdentifier());
+	                    				}
+	                    				
+	                    				//Can't be mortgaged. Add to list.
+	                    				else{
+		                    				unmortgagableIdentifiers.add(mortgageableProperties.get(j).getIdentifier());
+	                    				}
+	                    			}
+
 	                    		}
 	                    		j++;
 	                    	}
-                    		//Add the total value to the players balance.
-                    		player.addToBalance(totalMortgageValue);
-	                    	mortgageFrame.dispose();//Exit JFrame, player has selected the properties they want to redeem
+	                    	
+	                    	
+	                    	//No unmortgageable properties were selected. Allow them to mortgage.
+	                    	if(unmortgagableIdentifiers.size() == 0){
+	                    		
+	                    		//Mortgage the correct properties.
+	                    		for(int x=0;x<mortgageableIdentifiers.size();x++){
+	                    			for(int y=0; y<player.getProperties().size();y++){
+	                    				if(mortgageableIdentifiers.get(x).equals(player.getProperties().get(y).getIdentifier())){
+	                    					player.getProperties().get(y).mortgage();
+	                    				}
+	                    			}
+	                    		}
+
+	                    		//Add the total value to the players balance.
+	                    		player.addToBalance(totalMortgageValue);
+	                    		history.getTextArea().append("Properties Mortgaged: "+buildString(mortgageableIdentifiers)+" for total: "+totalMortgageValue+" \n");
+		                    	mortgageFrame.dispose();//Exit JFrame, player has selected the properties they want to redeem
+		                    	
+	                    	}
+	                    	
+	                    	else{
+	                    		history.getTextArea().append("Can't mortgage the following properties"
+	                    				+ " due to houses on locations: "+buildString(unmortgagableIdentifiers)+"\n");
+	                    	}
+                    		
 						} 
 	                    catch (Exception e1) {
 							// TODO Auto-generated catch block
@@ -179,7 +215,9 @@ public class PartyLeader {
 		 confirmationButton.addActionListener(new ActionListener() {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
-	               
+	            		//This list is used to create a string that will be appended to text area on the GUI
+	            		ArrayList<String> redeemedPropertiesToPrint = new ArrayList<String>();
+	            		boolean mortgagedSelected = false;
 	                    try {	               
 	                    	
 	                		double totalRedemptionValue = 0;
@@ -189,26 +227,33 @@ public class PartyLeader {
 	                    	while(j < redeemableRadioButtons.size()){
 	                    		if(redeemableRadioButtons.get(j).isSelected()){
 	                    			
+	                    			mortgagedSelected = true;
+	                    			
 	                    			//Start totalling value of mortgages.
 	                    			totalRedemptionValue += redeemableProperties.get(j).getRedeemAmount();
 	                    			
 	                    			//Find index of property to unmortgage then unmortgage this property in players list.
 	                    			int indexToRedeem = player.getProperties().indexOf(redeemableProperties.get(j));
 	                    			
-	                    			player.getProperties().get(indexToRedeem).unmortgage();;
+	                    			//Unmortgage the correct properties
+	                    			player.getProperties().get(indexToRedeem).unmortgage();
+	                    			
+	                    			//Add property name to list of Stringst that we'll print
+	                    			redeemedPropertiesToPrint.add(player.getProperties().get(indexToRedeem).getIdentifier());
+	                    			
 	                    		}
 	                    		j++;
 	                    	}
 	                    	
-	                    	//Make sure player has enough funds to redeem mortgages chosen.
-	                    	if(player.getNetWorth() >= totalRedemptionValue){
+	                    	//Make sure player has enough funds to redeem mortgages and has actually chosen one.
+	                    	if(player.getNetWorth() >= totalRedemptionValue && mortgagedSelected){
 	                    		player.deductFromBalance(totalRedemptionValue);
-	                    		history.getTextArea().append("Redeeemed\n");
+	                    		history.getTextArea().append("\nRedeeemed Mortgages: "+buildString(redeemedPropertiesToPrint)+" for total: "+totalRedemptionValue+"\n");
 		                    	redeemFrame.dispose();//Exit JFrame, player has selected the properties they want to redeem	
 	                    	}
-	                    	else{
+	                    	else if(player.getNetWorth() < totalRedemptionValue && mortgagedSelected){
 	                    		userAlert.setForeground(Color.red);
-	                    		userAlert.setText("You do not have enough to redeem these mortgages. Choose Less.");
+	                    		userAlert.setText("Insufficient funds. Choose Less Mortgages.");
 	                    	}
 						} 
 	                    catch (Exception e1) {
@@ -251,5 +296,29 @@ public class PartyLeader {
 	public void finishTurn(Player player){
 		//TODO
 		// check for in jail too long, unpaid rent, etc.
+	}
+	
+	private String buildString(ArrayList<String> properties){
+		String stringToBuild = "";
+		
+		if(properties.size() == 1){
+			stringToBuild = properties.get(0);
+		}
+		
+		else if(properties.size() > 2){
+			for(int i=0;i<properties.size()-2;i++){
+				stringToBuild += properties.get(i)+",";
+			}
+			
+			//Insert 'and' between the last two properties
+			stringToBuild += properties.get(properties.size()-2)+" and "+properties.get(properties.size()-1);
+		}
+		
+		else if(properties.size() == 2){
+			stringToBuild += properties.get(properties.size()-2)+" and "+properties.get(properties.size()-1);
+
+		}
+		
+		return stringToBuild;
 	}
 }
