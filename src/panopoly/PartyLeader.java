@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -15,7 +16,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
 import interfaces.Mortgageable;
 import locations.*;
 
@@ -32,11 +35,11 @@ public class PartyLeader {
 
 	public void roll(Player player) throws InvalidFormatException, IOException {
 		// TODO
-		
-		//after roll
-		MCQ mcq = new MCQ();
-		mcq.createMCQPanel();
-		
+		//After roll
+		if(!(player.getLocation() instanceof MCQLocation)) { // TODO get rid of 
+			MCQ mcq = new MCQ();
+			mcq.createMCQPanel();
+		}
 	}
 	
 	
@@ -59,6 +62,8 @@ public class PartyLeader {
 		JFrame mortgageFrame = new JFrame("Mortgage Choices");
 		JLabel userDirections = new JLabel("Choose which properties to mortgage then hit 'Confirm'");
 
+		
+		
 		for(int i=0;i<player.getProperties().size();i++){
 			//If property is mortgageable and is not already mortgaged
 			if(player.getProperties().get(i) instanceof Mortgageable && player.getProperties().get(i).isMortgaged() == false){
@@ -140,6 +145,7 @@ public class PartyLeader {
 	
 	public void redeem(Player player){
 		//TODO
+
 		ArrayList<PrivateProperty> redeemableProperties = new ArrayList<PrivateProperty>();
 		JFrame redeemFrame = new JFrame("Mortgage Redemption Choices");
 		JLabel userDirections = new JLabel("Choose which mortgages to redeem then hit 'Confirm'");
