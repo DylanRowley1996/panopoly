@@ -49,17 +49,7 @@ public class Player implements Playable {
     public ArrayList<PropertyGroup> getMortgages(){
     	return mortgages;
     }
-
-//    public ArrayList<NamedLocation> getMortgages() {
-//    	mortgages.clear();
-//    	for(NamedLocation currLocation:properties) {
-//    		if(currLocation.isMortgaged) {
-//    			mortgages.add(currLocation);
-//    		}
-//    	}
-//        return mortgages;
-//    }
-//    
+    
     public String getPathForImageIcon(){
     	return this.pathToCharacterIcon;
     }
@@ -90,6 +80,10 @@ public class Player implements Playable {
 	
 	public void addToBalance(double amount){
 		netWorth += amount;
+	}
+	
+	public void deductFromBalance(double amount){
+		netWorth -= amount;
 	}
 }
 

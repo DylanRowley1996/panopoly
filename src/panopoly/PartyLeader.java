@@ -1,13 +1,13 @@
 package panopoly;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -15,9 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
 import interfaces.Mortgageable;
 import locations.*;
 
@@ -53,8 +51,6 @@ public class PartyLeader {
 		JFrame mortgageFrame = new JFrame("Mortgage Choices");
 		JLabel userDirections = new JLabel("Choose which properties to mortgage then hit 'Confirm'");
 
-		
-		
 		for(int i=0;i<player.getProperties().size();i++){
 			//If property is mortgageable and is not already mortgaged
 			if(player.getProperties().get(i) instanceof Mortgageable && player.getProperties().get(i).isMortgaged() == false){
@@ -134,8 +130,104 @@ public class PartyLeader {
 		
 	}
 	
-	public void redeem(Player player){
+	public String redeem(Player player){
 		//TODO
+		ArrayList<PrivateProperty> redeemableProperties = new ArrayList<PrivateProperty>();
+		JFrame redeemFrame = new JFrame("Mortgage Redemption Choices");
+		JLabel userDirections = new JLabel("Choose which mortgages to redeem then hit 'Confirm'");
+		JLabel userAlert = new JLabel("You currently have enough to redeem these mortgages.");
+		
+		for(int i=0;i<player.getProperties().size();i++){
+			//If property is mortgageable and is not already mortgaged
+			if(player.getProperties().get(i) instanceof Mortgageable && player.getProperties().get(i).isMortgaged() == true){
+				redeemableProperties.add(player.getProperties().get(i));	
+			}
+			
+		}
+		
+		/*
+		 * Create an array list of buttons. One for each mortgageable property.
+		 */
+		ArrayList<JRadioButton> redeemableRadioButtons = new ArrayList<JRadioButton>();
+		for(int i=0;i<redeemableProperties.size();i++){
+			redeemableRadioButtons.add(new JRadioButton("Property: "+redeemableProperties.get(i).getIdentifier()
+					+" Redemption Amount: "+redeemableProperties.get(i).getMortgageAmount()));
+		}
+		
+		//Create the button for choice confirmation.
+	    JButton confirmationButton = new JButton("Confirm");
+	    
+	    /* 1. Check which buttons are selected
+	     * 2. Count the total redemption amount of mortgages selected.
+	     * 3. Remove this from players account if player can afford it
+	     * 4. Unmortgage all properties that are selected.
+	    */
+		 confirmationButton.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	               
+	                    try {	               
+	                    	
+	                		double totalRedemptionValue = 0;
+	                		
+	                    	int j=0;
+	                    
+	                    	while(j < redeemableRadioButtons.size()){
+	                    		if(redeemableRadioButtons.get(j).isSelected()){
+	                    			
+	                    			//Start totalling value of mortgages.
+	                    			totalRedemptionValue += redeemableProperties.get(j).getRedeemAmount();
+	                    			
+	                    			//Find index of property to unmortgage then unmortgage this property in players list.
+	                    			int indexToRedeem = player.getProperties().indexOf(redeemableProperties.get(j));
+	                    			
+	                    			player.getProperties().get(indexToRedeem).unmortgage();;
+	                    		}
+	                    		j++;
+	                    	}
+	                    	
+	                    	//Make sure player has enough funds to redeem mortgages chosen.
+	                    	if(player.getNetWorth() >= totalRedemptionValue){
+	                    		player.deductFromBalance(totalRedemptionValue);
+		                    	redeemFrame.dispose();//Exit JFrame, player has selected the properties they want to redeem	
+	                    	}
+	                    	else{
+	                    		userAlert.setForeground(Color.red);
+	                    		userAlert.setText("You do not have enough to redeem these mortgages. Choose Less.");
+	                    	}
+						} 
+	                    catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}	
+	                } 
+	            
+	      });
+		
+		 //Add all choices to JPanel
+		 JPanel radioPanel = new JPanel(new GridLayout(0, 1));
+		 
+		 //Add label that contains directions for user onto panel
+		 radioPanel.add(userDirections);
+		 
+		 for(int i=0;i<redeemableProperties.size();i++){
+		     radioPanel.add(redeemableRadioButtons.get(i));
+		 }
+		 
+		 //Tell user if they have enough money to mortgage the property.
+		 radioPanel.add(userAlert);
+		 
+		 //Add button below choices
+		 radioPanel.add(confirmationButton);
+		 
+		 radioPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+	     redeemFrame.add(radioPanel);
+	     redeemFrame.setVisible(true);
+	     redeemFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	     redeemFrame.pack();
+	     redeemFrame.setLocationRelativeTo(null);
+
+	     return "You .....";
 	}
 	
 	public void auction(Player player){
