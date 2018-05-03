@@ -126,9 +126,14 @@ public class GUI {
                     }
         });
 
-		buttonPanel.getRedeemMortgageButton()
-				.addActionListener(e -> history.getTextArea().setText("Redeem mortgage button clicked."));
+		buttonPanel.getRedeemMortgageButton().addActionListener(new ActionListener() {
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                        history.getTextArea().append(partyLeader.redeem(players.get(currentPlayer)));
+                    }
+        });
+				
 		buttonPanel.getTradeButton().addActionListener(e -> history.getTextArea().setText("Trade button clicked."));
 
 		buttonPanel.getFinishTurnButton().addActionListener(new ActionListener() {
