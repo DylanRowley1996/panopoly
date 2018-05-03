@@ -16,6 +16,7 @@ import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -54,7 +55,6 @@ public class MCQ {
     private String answer = ""; // TODO - Remove 'static' if we're going to create several questions from same object
     private String question = "";    
     private JFrame mcqFrame = new JFrame("MCQ QUESTION");
-    private boolean correctAnswer;
 
 	public void createGenderWeaponQuestion() throws IOException, InvalidFormatException{
 		
@@ -628,8 +628,6 @@ public class MCQ {
 		question += " who looks like they're involved in "+ genre;
 
 		question += ". Is it";
-
-		question = "Answer is: "+ answer + question;
 	}
 
 	public void createPortrayedBy() throws EncryptedDocumentException, InvalidFormatException, IOException
@@ -680,7 +678,7 @@ public class MCQ {
 		
 		Collections.shuffle(answers);
 		
-		question = "Answer is: "+answer+"\nQuestion: "+question + character+". Is it:";
+		question = "\nQuestion: "+question + character+". Is it:";
 	}
 	
 	public void creatorAndCreation() throws EncryptedDocumentException, InvalidFormatException, IOException{
@@ -863,9 +861,11 @@ public class MCQ {
 						
 	}
 	
-	public JPanel createMCQPanel() throws InvalidFormatException, IOException{
+	public void createMCQPanel(Player player, HistoryLog history) throws InvalidFormatException, IOException{
 		
 		Random rand = new Random();
+		int mcqAmount = rand.nextInt(301)+200;
+		history.getTextArea().append("Answer the following question to win or lose $"+mcqAmount+"\n");
 		
 		int questionChoiceNumber = rand.nextInt(noOfQuestions);
 		
@@ -943,22 +943,13 @@ public class MCQ {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	                if (correctButton.isSelected()) {
-	                    correctAnswer = true;
-//	                    try {
-//	                    	question = "";
-//	                    	answers.clear();
-//	                    	mcqFrame = new JFrame("MCQ QUESTION");
-//	                    	
-//	                    
-//	                    			
-//							createMCQPanel();
-//						} catch (InvalidFormatException | IOException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
+	                	history.getTextArea().append("Correct! You won $"+mcqAmount+"\n");
+	        			player.addToBalance(mcqAmount);
 	                } else {
-	                    correctAnswer = false;
+	                	history.getTextArea().append("Incorrect! You lost $"+mcqAmount+"\n");
+	        			player.deductFromBalance(mcqAmount);
 	                }
+	              
 	                mcqFrame.dispose();
 	            }
 	        });
@@ -979,14 +970,11 @@ public class MCQ {
         
         mcqFrame.add(mcqPanel);
         mcqFrame.setVisible(true);
-        mcqFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mcqFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mcqFrame.pack();
         mcqFrame.setLocationRelativeTo(null);
-        return mcqPanel;
-           
+        
+        return;
 	}
-	
-	public boolean correctAnswer() {
-		return correctAnswer;
-	}
+
 }

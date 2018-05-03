@@ -78,11 +78,11 @@ public class Player implements Playable {
 		location = l;
 	}
 	
-	public void addToBalance(double amount){
+	public void addToBalance(int amount){
 		netWorth += amount;
 	}
 	
-	public void deductFromBalance(double amount){
+	public void deductFromBalance(int amount){
 		netWorth -= amount;
 	}
 }

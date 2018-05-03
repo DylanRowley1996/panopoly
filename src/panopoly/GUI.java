@@ -112,13 +112,12 @@ public class GUI {
 		buttonPanel.getRollButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                        try {
-							partyLeader.roll(players.get(currentPlayer));
-						} catch (InvalidFormatException e1) {
-							e1.printStackTrace();
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
+							try {
+								partyLeader.roll(players.get(currentPlayer));
+							} catch (InvalidFormatException | IOException | InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
                     }
 		});
 
@@ -200,6 +199,10 @@ public class GUI {
 	
 	NamedLocation getStartPosition() {
 		return board.getStartLocation();
+	}
+	
+	public void refresh() {
+		this.frame.repaint();
 	}
 
 
