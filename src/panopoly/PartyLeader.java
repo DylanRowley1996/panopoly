@@ -25,8 +25,13 @@ public class PartyLeader {
 	private static ArrayList<NamedLocation> locations = (ArrayList<NamedLocation>) SetupGame.getLocationList();
 	private static ArrayList<Player> players = SetupGame.getPlayers();
 	
-	public void roll(Player player) {
+	public void roll(Player player) throws InvalidFormatException, IOException {
 		// TODO
+		
+		//after roll
+			MCQ mcq = new MCQ();
+			mcq.createMCQPanel();
+		}
 	}
 	
 	public void buy(Player player) {
