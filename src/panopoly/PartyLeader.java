@@ -29,10 +29,16 @@ public class PartyLeader {
 		this.history = history;
 	}
 	
-	
-	public void roll(Player player) {
+
+	public void roll(Player player) throws InvalidFormatException, IOException {
 		// TODO
+		
+		//after roll
+		MCQ mcq = new MCQ();
+		mcq.createMCQPanel();
+		
 	}
+	
 	
 	public void buy(Player player) {
 		// TODO

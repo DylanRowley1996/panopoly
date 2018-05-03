@@ -54,6 +54,7 @@ public class MCQ {
     private String answer = ""; // TODO - Remove 'static' if we're going to create several questions from same object
     private String question = "";    
     private JFrame mcqFrame = new JFrame("MCQ QUESTION");
+    private boolean correctAnswer;
 
 	public void createGenderWeaponQuestion() throws IOException, InvalidFormatException{
 		
@@ -334,7 +335,7 @@ public class MCQ {
         //Shuffle List of answers
         Collections.shuffle(answers);
     	
-        question = "You see someone "+activity+"\nIs it:";
+        question = "You see someone "+activity+". Is it:";
 
 	}
 	
@@ -942,22 +943,23 @@ public class MCQ {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	                if (correctButton.isSelected()) {
-	                    System.out.println("CORRECT");
-	                    try {
-	                    	question = "";
-	                    	answers.clear();
-	                    	mcqFrame = new JFrame("MCQ QUESTION");
-	                    	
-	                    
-	                    			
-							createMCQPanel();
-						} catch (InvalidFormatException | IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+	                    correctAnswer = true;
+//	                    try {
+//	                    	question = "";
+//	                    	answers.clear();
+//	                    	mcqFrame = new JFrame("MCQ QUESTION");
+//	                    	
+//	                    
+//	                    			
+//							createMCQPanel();
+//						} catch (InvalidFormatException | IOException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
 	                } else {
-	                    System.out.println("FALSE");
+	                    correctAnswer = false;
 	                }
+	                mcqFrame.dispose();
 	            }
 	        });
 	    
@@ -981,9 +983,10 @@ public class MCQ {
         mcqFrame.pack();
         mcqFrame.setLocationRelativeTo(null);
         return mcqPanel;
-        
-        
+           
 	}
 	
-	
+	public boolean correctAnswer() {
+		return correctAnswer;
+	}
 }

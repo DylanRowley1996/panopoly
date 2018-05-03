@@ -17,6 +17,8 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
 import locations.NamedLocation;
 
 public class GUI {
@@ -107,7 +109,18 @@ public class GUI {
 			board.paintCharacterIcons(p , myImage);
 		}
 
-		buttonPanel.getRollButton().addActionListener(e -> history.getTextArea().setText("Roll button clicked."));
+		buttonPanel.getRollButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                        try {
+							partyLeader.roll(players.get(currentPlayer));
+						} catch (InvalidFormatException e1) {
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+                    }
+		});
 
 		buttonPanel.getSellButton().addActionListener(e -> history.getTextArea().setText("Sell button clicked."));
 
@@ -119,7 +132,6 @@ public class GUI {
 				.addActionListener(e -> history.getTextArea().setText("Collect rent button clicked."));
 
 		buttonPanel.getMortgageButton().addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                         partyLeader.mortgage(players.get(currentPlayer));
