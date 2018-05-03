@@ -888,7 +888,7 @@ public class MCQ {
 			createOpponentQuestion();
 			break;
 		case 6:
-			createSeenWearingQuestion();
+			createSeenWearingGenreQuestion();
 			break;
 		case 7:
 			createPortrayedBy();

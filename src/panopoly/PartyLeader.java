@@ -20,8 +20,15 @@ import interfaces.Mortgageable;
 import locations.*;
 
 public class PartyLeader {
+	
+	private static HistoryLog history = null;
 	private static ArrayList<NamedLocation> locations = (ArrayList<NamedLocation>) SetupGame.getLocationList();
 	private static ArrayList<Player> players = SetupGame.getPlayers();
+	
+	public PartyLeader(HistoryLog history){
+		this.history = history;
+	}
+	
 	
 	public void roll(Player player) {
 		// TODO
@@ -125,7 +132,7 @@ public class PartyLeader {
 		
 	}
 	
-	public String redeem(Player player){
+	public void redeem(Player player){
 		//TODO
 		ArrayList<PrivateProperty> redeemableProperties = new ArrayList<PrivateProperty>();
 		JFrame redeemFrame = new JFrame("Mortgage Redemption Choices");
@@ -184,6 +191,7 @@ public class PartyLeader {
 	                    	//Make sure player has enough funds to redeem mortgages chosen.
 	                    	if(player.getNetWorth() >= totalRedemptionValue){
 	                    		player.deductFromBalance(totalRedemptionValue);
+	                    		history.getTextArea().append("Redeeemed\n");
 		                    	redeemFrame.dispose();//Exit JFrame, player has selected the properties they want to redeem	
 	                    	}
 	                    	else{
@@ -222,7 +230,6 @@ public class PartyLeader {
 	     redeemFrame.pack();
 	     redeemFrame.setLocationRelativeTo(null);
 
-	     return "You .....";
 	}
 	
 	public void auction(Player player){

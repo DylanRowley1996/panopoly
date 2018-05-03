@@ -40,7 +40,7 @@ public class GUI {
 	private int noOfPlayersInstantiated = 0;
 	
 	//Controls the players actions 
-	private PartyLeader partyLeader = new PartyLeader();
+	private PartyLeader partyLeader = new PartyLeader(history);
 
 	GUI(ArrayList<Player> players, int squares, ArrayList<NamedLocation> locs) throws IOException {	
 		
@@ -130,7 +130,7 @@ public class GUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                        history.getTextArea().append(partyLeader.redeem(players.get(currentPlayer)));
+                        partyLeader.redeem(players.get(currentPlayer));
                     }
         });
 				
