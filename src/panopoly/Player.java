@@ -2,8 +2,10 @@ package panopoly;
 import java.util.ArrayList;
 
 import interfaces.Locatable;
+import interfaces.Ownable;
 import interfaces.Playable;
 import locations.NamedLocation;
+import locations.PrivateProperty;
 import locations.PropertyGroup;
 
 
@@ -11,7 +13,7 @@ public class Player implements Playable {
 
     private String name = "";
     private int netWorth = 0;
-    private ArrayList<NamedLocation> properties = new ArrayList<NamedLocation>();
+    private ArrayList<PrivateProperty> properties = new ArrayList<PrivateProperty>();
     private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
     private ArrayList<PropertyGroup> mortgages = new ArrayList<PropertyGroup>();
     
@@ -30,26 +32,24 @@ public class Player implements Playable {
     public int getNetWorth() {
         return netWorth;
     }
-    public void buyProperty(NamedLocation target) {
+    public void buyProperty(PrivateProperty target) {
     	if(!properties.contains(target)) {
         	properties.add(target);
     	}  	
     }
 
-    public ArrayList<NamedLocation> getProperties() {
+    public ArrayList<PrivateProperty> getProperties() {
         return properties;
     }
-
-//    public ArrayList<NamedLocation> getMortgages() {
-//    	mortgages.clear();
-//    	for(NamedLocation currLocation:properties) {
-//    		if(currLocation.isMortgaged) {
-//    			mortgages.add(currLocation);
-//    		}
-//    	}
-//        return mortgages;
-//    }
-//    
+    
+    public ArrayList<PropertyGroup> getMonopolies(){
+    	return monopolies;
+    }
+    
+    public ArrayList<PropertyGroup> getMortgages(){
+    	return mortgages;
+    }
+    
     public String getPathForImageIcon(){
     	return this.pathToCharacterIcon;
     }
@@ -76,6 +76,14 @@ public class Player implements Playable {
 	}
 	public void setLocation(NamedLocation l) {
 		location = l;
+	}
+	
+	public void addToBalance(double amount){
+		netWorth += amount;
+	}
+	
+	public void deductFromBalance(double amount){
+		netWorth -= amount;
 	}
 }
 

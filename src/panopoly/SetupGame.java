@@ -84,6 +84,8 @@ public class SetupGame {
 
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
+		addRandomPropertiesToEachPlayer();
+
 		new GUI(players, noBoardRows, locationList);
 	}
 
@@ -188,7 +190,7 @@ public class SetupGame {
 
 					/*
 					 * If one of the current rows domains equals one of the current domains we've chosen,
-					 * add the character to the given .xlsx file
+					 * add the character to the given list
 					 */
 					if(domainsOfCurrentRow.contains(themes.get(i))){
 						charactersAndThemes.get(i).add(row.getCell(0).getStringCellValue());
@@ -609,4 +611,19 @@ public class SetupGame {
 
 	}
 
+	//TODO - Remove when testing of Mortgaging is complete.
+	//This just adds a random amount of properties to each player
+	//so checking if Mortgaging/Redeeming etc is working correctly.
+	public void addRandomPropertiesToEachPlayer(){
+		int j=0;
+		for(int i =0;i<players.size();i++){
+			while(j < 10){
+				if(locationList.get(j) instanceof PrivateProperty){
+					players.get(i).buyProperty((PrivateProperty)locationList.get(j));
+				}
+				j++;
+			}
+			j=0;
+		}
+	}
 }

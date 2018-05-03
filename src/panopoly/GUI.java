@@ -17,6 +17,8 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
 import locations.NamedLocation;
 
 public class GUI {
@@ -38,6 +40,9 @@ public class GUI {
 	private JPanel characterImagePanel = new JPanel();
 	private JLabel characterImage = new JLabel();
 	private int noOfPlayersInstantiated = 0;
+	
+	//Controls the players actions 
+	private PartyLeader partyLeader = new PartyLeader();
 
 	GUI(ArrayList<Player> players, int squares, ArrayList<NamedLocation> locs) throws IOException {	
 		
@@ -104,7 +109,18 @@ public class GUI {
 			board.paintCharacterIcons(p , myImage);
 		}
 
-		buttonPanel.getRollButton().addActionListener(e -> history.getTextArea().setText("Roll button clicked."));
+		buttonPanel.getRollButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                        try {
+							partyLeader.roll(players.get(currentPlayer));
+						} catch (InvalidFormatException e1) {
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+                    }
+		});
 
 		buttonPanel.getSellButton().addActionListener(e -> history.getTextArea().setText("Sell button clicked."));
 
@@ -115,13 +131,21 @@ public class GUI {
 		buttonPanel.getCollectRentButton()
 				.addActionListener(e -> history.getTextArea().setText("Collect rent button clicked."));
 
-		buttonPanel.getMortgageButton().addActionListener(e -> history.getTextArea().setText("Mortgage button clicked.")
+		buttonPanel.getMortgageButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                        partyLeader.mortgage(players.get(currentPlayer));
+                    }
+        });
 
-		);
+		buttonPanel.getRedeemMortgageButton().addActionListener(new ActionListener() {
 
-		buttonPanel.getRedeemMortgageButton()
-				.addActionListener(e -> history.getTextArea().setText("Redeem mortgage button clicked."));
-
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                        history.getTextArea().append(partyLeader.redeem(players.get(currentPlayer)));
+                    }
+        });
+				
 		buttonPanel.getTradeButton().addActionListener(e -> history.getTextArea().setText("Trade button clicked."));
 
 		buttonPanel.getFinishTurnButton().addActionListener(new ActionListener() {
