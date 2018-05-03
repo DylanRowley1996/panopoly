@@ -16,6 +16,7 @@ public class Player implements Playable {
     private ArrayList<PrivateProperty> properties = new ArrayList<PrivateProperty>();
     private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
     private ArrayList<PropertyGroup> mortgages = new ArrayList<PropertyGroup>();
+    private int numImprovements = 0;
     
     private String pathToCharacterIcon = "";
     private NamedLocation location = null;
@@ -84,6 +85,18 @@ public class Player implements Playable {
 	
 	public void deductFromBalance(int amount){
 		netWorth -= amount;
+	}
+	
+	public void addImprovements(int amount) {
+		numImprovements += amount;
+	}
+	
+	public void removeImprovements(int amount) {
+		numImprovements -= amount;
+	}
+	
+	public int getNumImprovements() {
+		return numImprovements;
 	}
 }
 

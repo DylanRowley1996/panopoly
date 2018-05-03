@@ -42,9 +42,12 @@ public class PartyLeader {
 		// TODO
 
 		//After roll
-		if(!(player.getLocation() instanceof MCQLocation)) { // TODO get rid of !
+		if(player.getLocation() instanceof MCQLocation) { // TODO get rid of !
 			MCQ mcq = new MCQ();
 			mcq.createMCQPanel(player,  history);
+		}
+		if(!(player.getLocation() instanceof CardLocation)) {
+			CardGenerator.createCard(player, history);
 		}
 	}
 
@@ -108,7 +111,7 @@ public class PartyLeader {
 
 							//Find index of property to mortgage then mortgage this property in players list.
 							int indexToMortgage = player.getProperties().indexOf(mortgageableProperties.get(j));
-							player.getProperties().get(indexToMortgage).mortagage();
+							player.getProperties().get(indexToMortgage).mortgage();
 						}
 						j++;
 					}
