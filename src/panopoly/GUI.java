@@ -112,6 +112,7 @@ public class GUI {
 			p.setLocation(this.getStartPosition());
 			p.setIcon();
 			board.paintCharacterIcons(p , p.getIcon());
+			board.revalidate();
 		}
 
 		propertyInformationPanel.getPropNamePane().setText(locations.get(0).getIdentifier());
