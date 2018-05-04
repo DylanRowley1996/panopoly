@@ -41,17 +41,17 @@ public class GUI {
 	private JLabel characterImage = new JLabel();
 	private int noOfPlayersInstantiated = 0;
 	
-	//Controls the players actions 
-	private PartyLeader partyLeader = new PartyLeader(history);
 
 	GUI(ArrayList<Player> players, int squares, ArrayList<NamedLocation> locs) throws IOException {	
 		
 		//Set the frame icon to an image loaded from a file.
-		BufferedImage myPhoto = ImageIO.read(new File("savedImages/Monopoly (1).png"));
+		BufferedImage myPhoto = ImageIO.read(new File("gameImages/rickMortyCommie.png"));
 		Image myGameIcon = myPhoto.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
     	frame.setIconImage(myGameIcon);
 		
 		board = new Board(squares, locs);
+		PartyLeader partyLeader = new PartyLeader(history, board);
+
 		
 		SelectionPanel selectionPanel = new SelectionPanel(players);
 
@@ -106,24 +106,32 @@ public class GUI {
 		for(Player p:players) {
 			BufferedImage myImage = ImageIO.read(new File(p.getPathForImageIcon()));
 			p.setLocation(this.getStartPosition());
-			board.paintCharacterIcons(p , myImage);
+			p.setIcon();
+			board.paintCharacterIcons(p , p.getIcon());
 		}
 
 		buttonPanel.getRollButton().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-							try {
+            public void actionPerformed(ActionEvent e) {						try {
+							if(!players.get(currentPlayer).hasRolled) {
 								partyLeader.roll(players.get(currentPlayer));
-							} catch (InvalidFormatException | IOException | InterruptedException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
+							}else {
+								history.getTextArea().setText("You have already rolled.\n");				
 							}
-                    }
+						} catch (InvalidFormatException | IOException e1) {
+							e1.printStackTrace();
+						}
+						}
 		});
 
 		buttonPanel.getSellButton().addActionListener(e -> history.getTextArea().setText("Sell button clicked."));
 
-		buttonPanel.getBuyButton().addActionListener(e -> history.getTextArea().setText("Buy Button Clicked"));
+		buttonPanel.getBuyButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 partyLeader.buy(players.get(currentPlayer));
+            }
+		});
 
 		buttonPanel.getAuctionButton().addActionListener(e -> history.getTextArea().setText("Auction Button Clicked"));
 

@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -31,15 +34,33 @@ public class PartyLeader {
 	private HistoryLog history = null;
 	private static ArrayList<NamedLocation> locations = (ArrayList<NamedLocation>) SetupGame.getLocationList();
 	private static ArrayList<Player> players = SetupGame.getPlayers();
+	private Board board;
+	private static Dice normalDice = new Dice();
 	private static Random rand = new Random();
 
-	public PartyLeader(HistoryLog history){
+	public PartyLeader(HistoryLog history, Board board){
 		this.history = history;
+		this.board = board;
 	}
 
+	public void roll(Player player) throws InvalidFormatException, IOException {
+		int moveCount;
+		String str = "";
 
-	public void roll(Player player) throws InvalidFormatException, IOException, InterruptedException {
-		// TODO
+		moveCount = normalDice.rollDice(2, 6);
+		str += moveCount;
+		history.getTextArea().setText("You have rolled a "+str+".\n");	
+		player.rolled();
+		BufferedImage myImage = ImageIO.read(new File("savedImages/Borat.jpg"));
+
+		for(int i=0;i<moveCount;i++) {
+			player.setLocation((NamedLocation)player.getLeft());
+			//BufferedImage myImage = ImageIO.read(new File("savedImages/Borat.jpg"));
+			history.getTextArea().append("You have rolled onto "+player.getLocation().getIdentifier()+".\n");
+			//board.paintCharacterIcons(player , player.getIcon());
+			board.updateIcons(player);
+		}
+		history.getTextArea().append("Roll Over.\n");
 
 		//After roll
 		if(player.getLocation() instanceof MCQLocation) { // TODO get rid of !
@@ -50,9 +71,25 @@ public class PartyLeader {
 			CardGenerator.createCard(player, history);
 		}
 	}
-
 	public void buy(Player player) {
-		// TODO
+		if(player.getLocation() instanceof PrivateProperty) {
+			if(((PrivateProperty)player.getLocation()).getOwner()==null) {
+				if(player.getNetWorth()>=(((PrivateProperty)player.getLocation()).getPrice())) {
+					player.buyProperty((PrivateProperty)player.getLocation());
+					((PrivateProperty)player.getLocation()).setOwner(player);
+					history.getTextArea().append("You have bought "+player.getLocation().getIdentifier()+".\n");
+
+				}else {
+					history.getTextArea().append("This property is too expensive.\n");	
+				}
+			}
+			else {
+				history.getTextArea().append("This property is already purchased.\n");
+			}
+			
+		}else {
+			history.getTextArea().append("You cannot purchase this property.\n");
+		}
 	}
 
 	public void sell(Player player) {
