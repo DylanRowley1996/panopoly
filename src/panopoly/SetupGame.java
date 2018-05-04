@@ -245,6 +245,10 @@ public class SetupGame {
 		//https://stackoverflow.com/questions/3360255/how-to-get-a-single-file-from-a-folder-in-java
 		File dir = new File("savedImages");
 		File[] children = dir.listFiles();
+		
+		for(int i=0;i<children.length;i++){
+			System.out.println("Child "+children[i].toString());
+		}
 
 		//Ensures all images are resized evenly.
 		c.weightx = .5;
@@ -286,7 +290,7 @@ public class SetupGame {
 			imageButtons[i].addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-
+					
 					setPathToIcon(children[innerI].toString(), currentPlayerNumber);
 					currentPlayerNumber++;
 
@@ -296,7 +300,6 @@ public class SetupGame {
 					selectionPanel.repaint();
 
 					informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
-
 					//When all characters are chosen, close JFrame and create players
 					if(currentPlayerNumber == 6){
 						selectionPanel.dispose();

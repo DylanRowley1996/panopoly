@@ -62,7 +62,7 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	}
 
 	@Override
-	public void mortagage() {
+	public void mortgage() {
 		isMortgaged = true;
 		
 	}
