@@ -5,13 +5,17 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,34 +27,38 @@ import interfaces.Mortgageable;
 import locations.*;
 
 public class PartyLeader {
-	
-	private static HistoryLog history = null;
+
+	private HistoryLog history = null;
 	private static ArrayList<NamedLocation> locations = (ArrayList<NamedLocation>) SetupGame.getLocationList();
 	private static ArrayList<Player> players = SetupGame.getPlayers();
-	
+	private static Random rand = new Random();
+
 	public PartyLeader(HistoryLog history){
 		this.history = history;
 	}
-	
 
-	public void roll(Player player) throws InvalidFormatException, IOException {
+
+	public void roll(Player player) throws InvalidFormatException, IOException, InterruptedException {
 		// TODO
+
 		//After roll
-		if(!(player.getLocation() instanceof MCQLocation)) { // TODO get rid of 
+		if(player.getLocation() instanceof MCQLocation) { // TODO get rid of !
 			MCQ mcq = new MCQ();
-			mcq.createMCQPanel();
+			mcq.createMCQPanel(player,  history);
+		}
+		if(!(player.getLocation() instanceof CardLocation)) {
+			CardGenerator.createCard(player, history);
 		}
 	}
-	
-	
+
 	public void buy(Player player) {
 		// TODO
 	}
-	
+
 	public void sell(Player player) {
 		// TODO
 	}
-	
+
 	public void mortgage(Player player){
 		//TODO
 		//Get list of players properties.
@@ -62,15 +70,15 @@ public class PartyLeader {
 		JFrame mortgageFrame = new JFrame("Mortgage Choices");
 		JLabel userDirections = new JLabel("Choose which properties to mortgage then hit 'Confirm'");
 
-		
-		
+
+
 		for(int i=0;i<player.getProperties().size();i++){
 			//If property is mortgageable and is not already mortgaged
 			if(player.getProperties().get(i) instanceof Mortgageable && player.getProperties().get(i).isMortgaged() == false){
 				mortgageableProperties.add(player.getProperties().get(i));
 			}
 		}
-			
+
 		/*
 		 * Create an array list of buttons. One for each mortgageable property.
 		 */
@@ -79,7 +87,7 @@ public class PartyLeader {
 			mortgageableRadioButtons.add(new JRadioButton("Property: "+mortgageableProperties.get(i).getIdentifier()
 					+" Mortgage Amount: "+mortgageableProperties.get(i).getMortgageAmount()));
 		}
-		
+
 		//Create the button for choice confirmation.
 	    JButton confirmationButton = new JButton("Confirm");
 	    
@@ -93,7 +101,7 @@ public class PartyLeader {
 	            public void actionPerformed(ActionEvent e) {
 	               
 	                    try {	               
-	                		double totalMortgageValue = 0;
+	                		int totalMortgageValue = 0;
 	                    	int j=0;
 	                    	//This list is used to create a string that will be appended to text area on the GUI
 		            		ArrayList<String> mortgageableIdentifiers = new ArrayList<String>();
@@ -175,9 +183,8 @@ public class PartyLeader {
 	     mortgageFrame.pack();
 	     mortgageFrame.setLocationRelativeTo(null);
 	     
-		
 	}
-	
+
 	public void redeem(Player player){
 		//TODO
 
@@ -185,15 +192,15 @@ public class PartyLeader {
 		JFrame redeemFrame = new JFrame("Mortgage Redemption Choices");
 		JLabel userDirections = new JLabel("Choose which mortgages to redeem then hit 'Confirm'");
 		JLabel userAlert = new JLabel("You currently have enough to redeem these mortgages.");
-		
+
 		for(int i=0;i<player.getProperties().size();i++){
 			//If property is mortgageable and is not already mortgaged
 			if(player.getProperties().get(i) instanceof Mortgageable && player.getProperties().get(i).isMortgaged() == true){
 				redeemableProperties.add(player.getProperties().get(i));	
 			}
-			
+
 		}
-		
+
 		/*
 		 * Create an array list of buttons. One for each mortgageable property.
 		 */
@@ -202,7 +209,7 @@ public class PartyLeader {
 			redeemableRadioButtons.add(new JRadioButton("Property: "+redeemableProperties.get(i).getIdentifier()
 					+" Redemption Amount: "+redeemableProperties.get(i).getMortgageAmount()));
 		}
-		
+
 		//Create the button for choice confirmation.
 	    JButton confirmationButton = new JButton("Confirm");
 	    
@@ -219,7 +226,7 @@ public class PartyLeader {
 	            		boolean mortgagedSelected = false;
 	                    try {	               
 	                    	
-	                		double totalRedemptionValue = 0;
+	                		int totalRedemptionValue = 0;
 	                		
 	                    	int j=0;
 	                    
@@ -285,13 +292,14 @@ public class PartyLeader {
 	     redeemFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	     redeemFrame.pack();
 	     redeemFrame.setLocationRelativeTo(null);
+		
 
 	}
-	
+
 	public void auction(Player player){
 		//TODO
 	}
-	
+
 	public void finishTurn(Player player){
 		//TODO
 		// check for in jail too long, unpaid rent, etc.

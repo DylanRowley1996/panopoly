@@ -71,5 +71,9 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	public void unmortgage() {
 		isMortgaged = false;
 	}
+	
+	public int getNumHouses(){
+		return 1;
+	}
 
 }
