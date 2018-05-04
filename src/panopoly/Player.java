@@ -24,7 +24,7 @@ public class Player implements Playable {
     private int numImprovements = 0;
     
     private String pathToCharacterIcon = "";
-    private NamedLocation location = null;
+    private Locatable location = null;
     public boolean hasRolled = false;
     private BufferedImage characterIcon;
     
@@ -75,7 +75,7 @@ public class Player implements Playable {
     	this.pathToCharacterIcon = pathToIcon;
     }
     
-    public NamedLocation getLocation() {
+    public Locatable getLocation() {
     	return location;
     }
 
@@ -91,8 +91,8 @@ public class Player implements Playable {
 	public Locatable getRight() {
 		 return location.getRight();
 	}
-	public void setLocation(NamedLocation l) {
-		location = l;
+	public void setLocation(Locatable locatable) {
+		location = locatable;
 	}
 	
 	public void addToBalance(int amount){
