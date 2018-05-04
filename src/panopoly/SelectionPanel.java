@@ -80,8 +80,9 @@ public class SelectionPanel extends JPanel{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                 	
+                	System.out.println("Child "+children[innerI].toString());
                 	players.get(currentPlayerNumber).setPathForImageIcon(children[innerI].toString());
-                //	System.out.println(players.get(currentPlayerNumber).getPathForImageIcon());
+                	players.get(currentPlayerNumber).setName(children[innerI].toString());
                 	currentPlayerNumber++;
                 
                 	characterPanel.remove(imageButtons[innerI]);

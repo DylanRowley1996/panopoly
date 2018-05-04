@@ -1,6 +1,8 @@
 package panopoly;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FilenameUtils;
+
 import interfaces.Locatable;
 import interfaces.Ownable;
 import interfaces.Playable;
@@ -97,6 +99,10 @@ public class Player implements Playable {
 	
 	public int getNumImprovements() {
 		return numImprovements;
+	}
+	
+	public void setName(String filepath){
+		name = FilenameUtils.getBaseName(filepath);	
 	}
 }
 

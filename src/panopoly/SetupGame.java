@@ -75,13 +75,13 @@ public class SetupGame {
 
 		findCharactersFromThemes(findThemes(0, 0, 6/*noCharacters*/));
 		compileChoiceOfCharacters();
+		
 		//TODO - Uncomment code below when we need queries working
 		/*imageRetriever = new FindImages(characters);
 		imageRetriever.searchForCharacterImages();
 		imageRetriever.resizeAllImages();*/
+		
 		resizeAllImages();
-		//createAndLaunchSelectionFrame();
-
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
 		addRandomPropertiesToEachPlayer();
@@ -232,99 +232,6 @@ public class SetupGame {
 		}
 	}
 
-	public void createAndLaunchSelectionFrame() throws IOException{
-
-		JPanel characterPanel = new JPanel(new GridBagLayout());
-		JButton[] imageButtons = new JButton[noOfPlayers];
-		JFrame selectionPanel = new JFrame();
-		JLabel informationArea = new JLabel("The label",SwingConstants.CENTER);
-
-		selectionPanel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-
-		//https://stackoverflow.com/questions/3360255/how-to-get-a-single-file-from-a-folder-in-java
-		File dir = new File("savedImages");
-		File[] children = dir.listFiles();
-		
-		for(int i=0;i<children.length;i++){
-			System.out.println("Child "+children[i].toString());
-		}
-
-		//Ensures all images are resized evenly.
-		c.weightx = .5;
-		c.weighty = .5;
-
-		/*
-		 * Images are obtained from /savedImages.
-		 * These are then resized and added to the buttons.
-		 * Each button added to the JPanel.
-		 */
-		for(int i=0;i<noOfPlayers;i++){
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.gridx = i;
-			c.gridy = 0;
-			imageButtons[i] = new JButton();
-			BufferedImage myPicture = ImageIO.read(new File(children[i].toString()));
-			Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-			//ImageIO.write((BufferedImage)myResizedPicture, "jpg", new File(children[i].toString()));
-			imageButtons[i].setIcon(new ImageIcon(myResizedPicture));
-			characterPanel.add(imageButtons[i],c);
-		}
-
-		//Constraints for JLabel that presents character selection info.
-		c.fill = GridBagConstraints.BOTH;
-		c.gridx = 0;
-		c.gridy = 1;
-
-		//Ensures the JLabel spans all columns when beneath the images.
-		c.gridwidth = noOfPlayers;
-
-		informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
-
-		//Add action listeners to all images.
-		for(int i=0;i<noOfPlayers;i++){
-
-			//https://stackoverflow.com/questions/33799800/java-local-variable-mi-defined-in-an-enclosing-scope-must-be-final-or-effective
-			final Integer innerI = new Integer(i);
-
-			imageButtons[i].addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					
-					setPathToIcon(children[innerI].toString(), currentPlayerNumber);
-					currentPlayerNumber++;
-
-					characterPanel.remove(imageButtons[innerI]);
-
-					//Repaint JFrame so removed button is present to user.
-					selectionPanel.repaint();
-
-					informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
-					//When all characters are chosen, close JFrame and create players
-					if(currentPlayerNumber == 6){
-						selectionPanel.dispose();
-						//createPlayers();
-						//						try {
-						//							gui = new GUI(createPlayers());
-						//						} catch (EncryptedDocumentException | InvalidFormatException | IOException e1) {
-						//							// TODO Auto-generated catch block
-						//							e1.printStackTrace();
-						//						}
-						return;
-					}
-				}
-			});
-		}
-
-		characterPanel.add(informationArea,c);//Add information about selecting characters under buttons with images
-		selectionPanel.add(characterPanel);//Add this to JFrame.
-		selectionPanel.setPreferredSize(new Dimension(1125,150));
-		selectionPanel.pack();
-		selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
-		selectionPanel.setVisible(true);
-		selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
 
 	public ArrayList<String> getCharacters(){
 		return characters;
@@ -395,7 +302,7 @@ public class SetupGame {
 		noLocsAdded = noLocations-4;
 
 		worldsListWb.close();
-
+		
 
 		/* 
 		 * All property names have been gathered.
