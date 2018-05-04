@@ -9,6 +9,7 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	protected int[] rentArray;
 	private boolean isMortgaged;
 	private PropertyGroup group;
+	private int numOfHouses = 0;
 	
 	public PrivateProperty(String name, PropertyGroup group) {
 		super(name);
@@ -43,7 +44,7 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 
 	@Override
 	public int getRentalAmount() {
-		return rentArray[0];
+		return rentArray[numOfHouses];
 	}
 
 	@Override
@@ -88,4 +89,14 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 		
 		return str;
 	}
+	
+	@Override
+	public int[] getAllRents(){
+		return rentArray;
+	}
+	
+	public int getNumHouses(){
+		return numOfHouses;
+	}
+	
 }
