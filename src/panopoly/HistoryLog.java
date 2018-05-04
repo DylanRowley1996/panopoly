@@ -39,7 +39,10 @@ public class HistoryLog extends JPanel {
 		return this.textArea;
 	}
 	
-	
+	public void refresh() {
+		this.repaint();
+		textArea.repaint();
+	}
 	
 }
 

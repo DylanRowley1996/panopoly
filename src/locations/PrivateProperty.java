@@ -62,7 +62,7 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	}
 
 	@Override
-	public void mortagage() {
+	public void mortgage() {
 		isMortgaged = true;
 		
 	}
@@ -70,6 +70,10 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	@Override
 	public void unmortgage() {
 		isMortgaged = false;
+	}
+	
+	public int getNumHouses(){
+		return 1;
 	}
 
 }

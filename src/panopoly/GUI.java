@@ -112,8 +112,7 @@ public class GUI {
 
 		buttonPanel.getRollButton().addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-						try {
+            public void actionPerformed(ActionEvent e) {						try {
 							if(!players.get(currentPlayer).hasRolled) {
 								partyLeader.roll(players.get(currentPlayer));
 							}else {
@@ -208,6 +207,10 @@ public class GUI {
 	
 	NamedLocation getStartPosition() {
 		return board.getStartLocation();
+	}
+	
+	public void refresh() {
+		this.frame.repaint();
 	}
 
 
