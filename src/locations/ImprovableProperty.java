@@ -49,4 +49,21 @@ public class ImprovableProperty extends PrivateProperty implements Improvable {
 		return buildCost;
 	}
 
+	public String toString() {
+		String str = "";
+		if(super.owner!=null) {
+			str += "Build cost per house: $" + buildCost + "\n";
+			if(numHouses<5) str += "Houses: " + numHouses + "\n";
+			else			str += "Hotel";
+		}
+		else {
+			str += "Rents:\n";
+			str += "Base rent: $" + rentArray[0] + "\n";
+			for(int i=1; i<4; i++){
+				str += "Rent with "+i+" houses: $" +rentArray[i]+"\n";
+			}
+			str += "Rent with a hotel: $" + rentArray[4] + "\n";
+		}
+		return super.toString()+str;
+	}
 }

@@ -1,4 +1,5 @@
 package panopoly;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -19,6 +20,9 @@ import javax.swing.Timer;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
+import interfaces.Groupable;
+import interfaces.Locatable;
+import interfaces.Ownable;
 import locations.NamedLocation;
 
 public class GUI {
@@ -34,25 +38,25 @@ public class GUI {
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private ButtonPanel buttonPanel = new ButtonPanel();
 	private Board board;
-//	ArrayList<NamedLocation> locations;
+	//	ArrayList<NamedLocation> locations;
 	private int currentPlayer = 0;
 
 	private JPanel characterImagePanel = new JPanel();
 	private JLabel characterImage = new JLabel();
 	private int noOfPlayersInstantiated = 0;
-	
 
-	GUI(ArrayList<Player> players, int squares, ArrayList<NamedLocation> locs) throws IOException {	
-		
+
+	GUI(ArrayList<Player> players, int squares, ArrayList<NamedLocation> locations) throws IOException {	
+
 		//Set the frame icon to an image loaded from a file.
 		BufferedImage myPhoto = ImageIO.read(new File("gameImages/rickMortyCommie.png"));
 		Image myGameIcon = myPhoto.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
-    	frame.setIconImage(myGameIcon);
-		
-		board = new Board(squares, locs);
-		PartyLeader partyLeader = new PartyLeader(history, board, frame);
+		frame.setIconImage(myGameIcon);
 
-		
+		board = new Board(squares, locations);
+		PartyLeader partyLeader = new PartyLeader(history, board);
+
+
 		SelectionPanel selectionPanel = new SelectionPanel(players);
 
 		while(noOfPlayersInstantiated < players.size()){
@@ -65,7 +69,7 @@ public class GUI {
 			noOfPlayersInstantiated = selectionPanel.getCurrentPlayerNumber();
 		}
 
-		detailsAndHistoryLog.setDividerLocation(.2);
+		detailsAndHistoryLog.setDividerLocation(.5);
 		detailsAndHistoryLog.setTopComponent(propertyInformationPanel);
 		detailsAndHistoryLog.setBottomComponent(history);
 
@@ -101,7 +105,7 @@ public class GUI {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		
+
 		//add player icons to board
 		for(Player p:players) {
 			BufferedImage myImage = ImageIO.read(new File(p.getPathForImageIcon()));
@@ -110,66 +114,73 @@ public class GUI {
 			board.paintCharacterIcons(p , p.getIcon());
 		}
 
+		propertyInformationPanel.getPropNamePane().setText(locations.get(0).getIdentifier());
+		propertyInformationPanel.getPropNamePane().setBackground(Color.WHITE);
+
 		buttonPanel.getRollButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {						try {
-							if(!players.get(currentPlayer).hasRolled) {
-								partyLeader.roll(players.get(currentPlayer));
-							}else {
-								history.getTextArea().setText("You have already rolled.\n");				
-							}
-						} catch (InvalidFormatException | IOException e1) {
-							e1.printStackTrace();
-						}
-						}
+			@Override
+			public void actionPerformed(ActionEvent e) {						
+				try {
+					if(!players.get(currentPlayer).hasRolled) {
+						partyLeader.roll(players.get(currentPlayer));
+						updatePropCard(players.get(currentPlayer));
+					}else {
+						history.getTextArea().append("You have already rolled.\n");				
+					}
+				} catch (InvalidFormatException | IOException e1) {
+					e1.printStackTrace();
+				}
+			}
 		});
 
 		buttonPanel.getSellButton().addActionListener(e -> history.getTextArea().setText("Sell button clicked."));
 
 		buttonPanel.getBuyButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                 partyLeader.buy(players.get(currentPlayer));
-            }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.buy(players.get(currentPlayer));
+				updatePropCard(players.get(currentPlayer));
+			}
 		});
 
 		buttonPanel.getAuctionButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                        partyLeader.auction(players.get(currentPlayer));
-                    }
-        });
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.auction(players.get(currentPlayer));
+			}
+		});
 
 		buttonPanel.getCollectRentButton()
-				.addActionListener(e -> history.getTextArea().setText("Collect rent button clicked."));
+		.addActionListener(e -> history.getTextArea().setText("Collect rent button clicked."));
 
 		buttonPanel.getMortgageButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                        partyLeader.mortgage(players.get(currentPlayer));
-                    }
-        });
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.mortgage(players.get(currentPlayer));
+			}
+		});
 
 		buttonPanel.getRedeemMortgageButton().addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                        partyLeader.redeem(players.get(currentPlayer));
-                    }
-        });
-				
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.redeem(players.get(currentPlayer));
+			}
+		});
+
 		buttonPanel.getTradeButton().addActionListener(e -> history.getTextArea().setText("Trade button clicked."));
 
 		buttonPanel.getFinishTurnButton().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					currentPlayer = partyLeader.finishTurn(players.get(currentPlayer),currentPlayer,characterImage);
+				currentPlayer = partyLeader.finishTurn(players.get(currentPlayer),currentPlayer,characterImage);
+				updatePropCard(players.get(currentPlayer));
 			}
-			
+
 		});
-		
-		
+
+
 
 		buttonPanel.getOverviewButton().addActionListener(new ActionListener() {
 
@@ -188,15 +199,25 @@ public class GUI {
 		// test();
 
 	}
+	
+	public void updatePropCard(Player player) {
+		Locatable currLoc = player.getLocation();
+		propertyInformationPanel.getPropNamePane().setText(currLoc.getIdentifier());
+		if(currLoc instanceof Groupable) {
+			propertyInformationPanel.getPropNamePane().setBackground(((Groupable) currLoc).getGroup().getColor());
+		}
+		else	propertyInformationPanel.getPropNamePane().setBackground(Color.WHITE);
+		propertyInformationPanel.getPropInfo().setText(currLoc.toString());
+	}
 
 	public void makeGuiVisible() {
 		this.frame.setVisible(true);
 	}
-	
+
 	NamedLocation getStartPosition() {
 		return board.getStartLocation();
 	}
-	
+
 	public void refresh() {
 		this.frame.repaint();
 	}

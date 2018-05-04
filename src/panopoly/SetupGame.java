@@ -350,13 +350,13 @@ public class SetupGame {
 		//set left and right locations
 		for(int i=1; i<locationList.size()-1; i++) {
 			NamedLocation loc = locationList.get(i);
-			loc.setLeft(locationList.get(i+1));
-			loc.setRight(locationList.get(i-1));
+			loc.setNextLoc(locationList.get(i+1));
+			loc.setPrevLoc(locationList.get(i-1));
 		}
-		locationList.get(0).setLeft(locationList.get(1));
-		locationList.get(0).setRight(locationList.get(locationList.size()-1));
-		locationList.get(locationList.size()-1).setLeft(locationList.get(0));
-		locationList.get(locationList.size()-1).setRight(locationList.get(locationList.size()-2));
+		locationList.get(0).setNextLoc(locationList.get(1));
+		locationList.get(0).setPrevLoc(locationList.get(locationList.size()-1));
+		locationList.get(locationList.size()-1).setNextLoc(locationList.get(0));
+		locationList.get(locationList.size()-1).setPrevLoc(locationList.get(locationList.size()-2));
 
 	}
 

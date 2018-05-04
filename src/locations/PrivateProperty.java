@@ -3,7 +3,7 @@ import interfaces.*;
 
 public class PrivateProperty extends NamedLocation implements Ownable, Rentable, Mortgageable, Groupable  {
 	
-	private Playable owner;
+	protected Playable owner;
 	private int price;
 	private int mortgageAmount;
 	protected int[] rentArray;
@@ -71,9 +71,21 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	public void unmortgage() {
 		isMortgaged = false;
 	}
-	
-	public int getNumHouses(){
-		return 1;
-	}
 
+	public String toString() {
+		String str = "";
+		
+		if(owner!=null)	str += "Owner: " + owner.getIdentifier() + "\n";
+		else			str += "This Property is unowned!\n";
+		str += "Group: " + group.getName() + "\n";
+		str += "Price: " + price + "\n";
+		if(owner!=null) {
+			str += "Rent: $" + getRentalAmount() + "\n";
+			str += "Mortgaged? " + isMortgaged + "\n";
+			if(isMortgaged) str += "Redeem cost: $" + getRedeemAmount() + "\n";
+			else			str += "Mortgage value: $" + mortgageAmount + "\n";
+		}
+		
+		return str;
+	}
 }

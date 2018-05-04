@@ -33,12 +33,10 @@ public class PartyLeader {
 	private Board board;
 	private static Dice normalDice = new Dice();
 	private static Random rand = new Random();
-	private JFrame mainFrame;
 
-	public PartyLeader(HistoryLog history, Board board, JFrame frame){
+	public PartyLeader(HistoryLog history, Board board){
 		this.history = history;
 		this.board = board;
-		this.mainFrame = frame;
 	}
 
 	public void roll(Player player) throws InvalidFormatException, IOException {
@@ -48,15 +46,14 @@ public class PartyLeader {
 		moveCount = normalDice.rollDice(2, 6);
 		str += moveCount;
 		history.getTextArea().setText("You have rolled a "+str+".\n");	
-		player.rolled();
-		BufferedImage myImage = ImageIO.read(new File("savedImages/Borat.jpg"));
+		player.setRolled(true);
 
 		for(int i=0;i<moveCount;i++) {
-			player.setLocation((NamedLocation)player.getLeft());
+			player.setLocation((NamedLocation)player.getNextLoc());
 			history.getTextArea().append("You have rolled onto "+player.getLocation().getIdentifier()+".\n");
 			board.updateIcons(player);
 			board.repaint();
-			mainFrame.revalidate();
+			board.revalidate();
 		}
 		history.getTextArea().append("Roll Over.\n");
 
@@ -65,7 +62,7 @@ public class PartyLeader {
 			MCQ mcq = new MCQ();
 			mcq.createMCQPanel(player,  history);
 		}
-		if(!(player.getLocation() instanceof CardLocation)) {
+		if(player.getLocation() instanceof CardLocation) {
 			CardGenerator.createCard(player, history);
 		}
 	}
@@ -348,6 +345,7 @@ public class PartyLeader {
 		
 		else{
 				boughtProperty = false;
+				player.setRolled(false);
 				
 				if (currentPlayerNumber == players.size()-1) {
 					currentPlayerNumber = 0;

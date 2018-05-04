@@ -189,7 +189,7 @@ public class Board extends JPanel {
 				JLabel currentLabel = new JLabel(new ImageIcon(myResizedPicture));
 				JLabel oldLabel = labelMapping.get(p);
 				locationMap.get(locations.get(i)).setLayout(myGrid);
-				locationMap.get(locations.get(i).getRight()).remove(oldLabel);//Remove old icon from previous square
+				locationMap.get(locations.get(i).getPrevLoc()).remove(oldLabel);//Remove old icon from previous square
 				locationMap.get(locations.get(i)).add(currentLabel);//Add it to the new square
 				labelMapping.put(p, currentLabel);
 			}

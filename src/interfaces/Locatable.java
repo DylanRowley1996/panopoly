@@ -2,8 +2,8 @@ package interfaces;
 
 public interface Locatable extends Identifiable {
 	
-	public Locatable getLeft();
-	public Locatable getRight();
-	public void setLeft(Locatable l);
-	public void setRight(Locatable r);
+	public Locatable getNextLoc();
+	public Locatable getPrevLoc();
+	public void setNextLoc(Locatable loc);
+	public void setPrevLoc(Locatable loc);
 }
