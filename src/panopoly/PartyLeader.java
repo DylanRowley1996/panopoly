@@ -333,7 +333,9 @@ public class PartyLeader {
 
 	public void auction(Player player){
 		//TODO
-		Auction auction = new Auction(player.getLocation().getIdentifier());
+		if(player.getLocation() instanceof Ownable && ((Ownable)player.getLocation()).getOwner() == null){
+			Auction auction = new Auction((Ownable)player.getLocation());
+		}
 	}
 
 	public int finishTurn(Player player, int currentPlayerNumber, JLabel characterImage){
