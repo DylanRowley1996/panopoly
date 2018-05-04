@@ -1,35 +1,31 @@
 package panopoly;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
 import interfaces.Mortgageable;
+import interfaces.Ownable;
 import locations.*;
 
 public class PartyLeader {
+	
+	//Booleans for game control
+	private boolean boughtProperty = false;
 
 	private HistoryLog history = null;
 	private static ArrayList<NamedLocation> locations = (ArrayList<NamedLocation>) SetupGame.getLocationList();
@@ -37,10 +33,12 @@ public class PartyLeader {
 	private Board board;
 	private static Dice normalDice = new Dice();
 	private static Random rand = new Random();
+	private JFrame mainFrame;
 
-	public PartyLeader(HistoryLog history, Board board){
+	public PartyLeader(HistoryLog history, Board board, JFrame frame){
 		this.history = history;
 		this.board = board;
+		this.mainFrame = frame;
 	}
 
 	public void roll(Player player) throws InvalidFormatException, IOException {
@@ -55,10 +53,10 @@ public class PartyLeader {
 
 		for(int i=0;i<moveCount;i++) {
 			player.setLocation((NamedLocation)player.getLeft());
-			//BufferedImage myImage = ImageIO.read(new File("savedImages/Borat.jpg"));
 			history.getTextArea().append("You have rolled onto "+player.getLocation().getIdentifier()+".\n");
-			//board.paintCharacterIcons(player , player.getIcon());
 			board.updateIcons(player);
+			board.repaint();
+			mainFrame.revalidate();
 		}
 		history.getTextArea().append("Roll Over.\n");
 
@@ -78,7 +76,7 @@ public class PartyLeader {
 					player.buyProperty((PrivateProperty)player.getLocation());
 					((PrivateProperty)player.getLocation()).setOwner(player);
 					history.getTextArea().append("You have bought "+player.getLocation().getIdentifier()+".\n");
-
+					boughtProperty = true;
 				}else {
 					history.getTextArea().append("This property is too expensive.\n");	
 				}
@@ -335,11 +333,41 @@ public class PartyLeader {
 
 	public void auction(Player player){
 		//TODO
+		Auction auction = new Auction(player.getLocation().getIdentifier());
 	}
 
-	public void finishTurn(Player player){
+	public int finishTurn(Player player, int currentPlayerNumber, JLabel characterImage){
 		//TODO
 		// check for in jail too long, unpaid rent, etc.
+		
+		//If player is on an ownable property that is unowned and hasn't bought it
+		//Force them to auction.
+		if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
+			history.getTextArea().append("Either 'Buy' or 'Auction' this property before finishing your turn.\n");
+		}
+		
+		else{
+				boughtProperty = false;
+				
+				if (currentPlayerNumber == players.size()-1) {
+					currentPlayerNumber = 0;
+				} else {
+					currentPlayerNumber++;
+				}
+				try {
+					BufferedImage myPicture = ImageIO
+							.read(new File(players.get(currentPlayerNumber).getPathForImageIcon()));
+					characterImage.setIcon(new ImageIcon(myPicture));
+					history.getTextArea()
+							.append("Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		
+		return currentPlayerNumber;
+		
 	}
 	
 	private String buildString(ArrayList<String> properties){

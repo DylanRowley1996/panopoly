@@ -50,7 +50,7 @@ public class GUI {
     	frame.setIconImage(myGameIcon);
 		
 		board = new Board(squares, locs);
-		PartyLeader partyLeader = new PartyLeader(history, board);
+		PartyLeader partyLeader = new PartyLeader(history, board, frame);
 
 		
 		SelectionPanel selectionPanel = new SelectionPanel(players);
@@ -133,7 +133,12 @@ public class GUI {
             }
 		});
 
-		buttonPanel.getAuctionButton().addActionListener(e -> history.getTextArea().setText("Auction Button Clicked"));
+		buttonPanel.getAuctionButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                        partyLeader.auction(players.get(currentPlayer));
+                    }
+        });
 
 		buttonPanel.getCollectRentButton()
 				.addActionListener(e -> history.getTextArea().setText("Collect rent button clicked."));
@@ -159,29 +164,12 @@ public class GUI {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						if (currentPlayer == players.size()-1) {
-							currentPlayer = 0;
-						} else {
-							currentPlayer++;
-						}
-						try {
-							BufferedImage myPicture = ImageIO
-									.read(new File(players.get(currentPlayer).getPathForImageIcon()));
-							characterImage.setIcon(new ImageIcon(myPicture));
-							history.getTextArea()
-									.append("Current Player is now: " + players.get(currentPlayer).getName() + "\n");
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				});
-
+					currentPlayer = partyLeader.finishTurn(players.get(currentPlayer),currentPlayer,characterImage);
 			}
+			
 		});
+		
+		
 
 		buttonPanel.getOverviewButton().addActionListener(new ActionListener() {
 

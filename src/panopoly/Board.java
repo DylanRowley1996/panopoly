@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -36,8 +37,8 @@ public class Board extends JPanel {
 	private final int boardHeight = (int) (screenSize.getHeight()*0.9);
 	private final int boardRows;
 	private static  Map<Player,JLabel> labelMapping = new HashMap<Player,JLabel>();
-	static ArrayList<NamedLocation> locations;
-	static HashMap<NamedLocation, JPanel> locationMap = new HashMap<NamedLocation, JPanel>();
+	private static ArrayList<NamedLocation> locations;
+	private static HashMap<NamedLocation, JPanel> locationMap = new HashMap<NamedLocation, JPanel>();
 	
 	public Board(int rows, ArrayList<NamedLocation> locList) {
 		
@@ -182,15 +183,17 @@ public class Board extends JPanel {
 	void updateIcons(Player p) {
 		for(int i=0;i<locations.size();i++) {
 			if(locations.get(i) == p.getLocation()) {
-
 				Dimension panelSize = locationMap.get(locations.get(i)).getSize();
 				Image myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
 				GridLayout myGrid = new GridLayout(3,3,0,0);
 				JLabel currentLabel = new JLabel(new ImageIcon(myResizedPicture));
+				JLabel oldLabel = labelMapping.get(p);
 				locationMap.get(locations.get(i)).setLayout(myGrid);
-				locationMap.get(locations.get(i)).add(currentLabel);
+				locationMap.get(locations.get(i).getRight()).remove(oldLabel);//Remove old icon from previous square
+				locationMap.get(locations.get(i)).add(currentLabel);//Add it to the new square
+				labelMapping.put(p, currentLabel);
 			}
-			//this.repaint();
+			this.revalidate();
 		}
 	}
 	NamedLocation getStartLocation() {
@@ -199,5 +202,15 @@ public class Board extends JPanel {
 //		int  n = rand.nextInt(20) + 1;
 //		return locations.get(n);
 		return locations.get(0);
+	}
+	
+	public void refresh(){
+		this.repaint();
+		Iterator<Entry<NamedLocation, JPanel>> it = locationMap.entrySet().iterator();
+		
+		while(it.hasNext()){
+			Entry<NamedLocation, JPanel> square = it.next();
+			square.getValue().repaint();
+		}
 	}
 }
