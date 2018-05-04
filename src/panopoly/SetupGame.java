@@ -115,7 +115,7 @@ public class SetupGame {
 			Cell cell = row.getCell(c);
 
 			//Get the specific domain as a string.
-			List<String> themes = Arrays.asList(cell.getStringCellValue().split(", "));
+			List<String> themes = Arrays.asList(cell.toString().split(", "));
 
 			for(int k=0;k<themes.size();k++){
 				themes.set(k, themes.get(k).trim());
@@ -380,8 +380,8 @@ public class SetupGame {
 		while(stationsSelected<4) {
 			row = worldsListSheet.getRow(rand.nextInt(WORLDS_LINE_TOTAL));
 			//Make sure other themes don't contain the name chosen for the station.
-			if(!nestedContains(locationsByTheme, row.getCell(0).getStringCellValue())) {
-				locationsByTheme.get(themes.size()).add(row.getCell(0).getStringCellValue());
+			if(!nestedContains(locationsByTheme, row.getCell(0).toString())) {
+				locationsByTheme.get(themes.size()).add(row.getCell(0).toString());
 				noLocsAdded++;
 				stationsSelected++;
 			}

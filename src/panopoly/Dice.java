@@ -1,32 +1,25 @@
 package panopoly;
 
-public class Dice {
-	
-	private static int NUM_DICE = 2;
-	
-	private int[] dice = new int [NUM_DICE];
-	
-	
-	public void roll () {
-		for (int i=0; i<NUM_DICE; i++) {
-			dice[i] = 1 + (int)(Math.random() * 6);   
-		}
-		return;
-	}
+import java.util.Random;
 
-	public int[] getDice () {
-		return dice;
-	}
-	
-	public int getTotal () {
-		return (dice[0] + dice[1]);
-	}
+import interfaces.Rollable;
+
+public class Dice implements Rollable{	
+	private int[] faces;
 	
 	public boolean isDouble () {
-		return dice[0] == dice[1];
+		return faces[0] == faces[1];
 	}
-	
-	public String toString () {
-		return dice[0] + " " + dice[1];
+
+	@Override
+	public int rollDice(int numDice, int numSides) {
+		int sum	=	0;
+		for (int i	=	0;	i	<	numDice;	i++) {
+			Random rand = new Random();
+			int x = rand.nextInt(numSides)+1;
+			sum	+=	x;
+			//faces[i] = x;
+		}
+		return sum;
 	}
 }

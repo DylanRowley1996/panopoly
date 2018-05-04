@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -34,8 +35,9 @@ public class Board extends JPanel {
 	private final int boardWidth = (int) (screenSize.getWidth()*0.66);
 	private final int boardHeight = (int) (screenSize.getHeight()*0.9);
 	private final int boardRows;
-	ArrayList<NamedLocation> locations;
-	HashMap<NamedLocation, JPanel> locationMap = new HashMap<NamedLocation, JPanel>();
+	private static  Map<Player,JLabel> labelMapping = new HashMap<Player,JLabel>();
+	static ArrayList<NamedLocation> locations;
+	static HashMap<NamedLocation, JPanel> locationMap = new HashMap<NamedLocation, JPanel>();
 	
 	public Board(int rows, ArrayList<NamedLocation> locList) {
 		
@@ -150,7 +152,7 @@ public class Board extends JPanel {
 
 	}
 	
-	void paintCharacterIcons(Player p, BufferedImage x) {
+	  void paintCharacterIcons(Player p, BufferedImage x) {
 		//for all locations
 		for(int i=0;i<locations.size();i++) {
 			//find location that current player is at
@@ -158,44 +160,44 @@ public class Board extends JPanel {
 				//get current jPanel dimensions so icons can be fitted correctly
 				Dimension panelSize = locationMap.get(locations.get(i)).getSize();
 				//resize image to a very small icon
-				int locationIndex = 0;
-				for(int j=0;j<locations.size();j++) {
-					if(p.getLocation().equals(locations.get(j))) {
-						locationIndex = j;
-					}
-				}
+				int locationIndex = i;
 				Image myResizedPicture;
 				if((locationIndex>0 && locationIndex<10) ||(locationIndex>20 && locationIndex<30)) {
 					myResizedPicture = x.getScaledInstance(panelSize.width/2, panelSize.height/4, Image.SCALE_SMOOTH);
-					
 				}else if((locationIndex>10 && locationIndex<20) ||(locationIndex>30 && locationIndex<40)) {
 					myResizedPicture = x.getScaledInstance(panelSize.width/4, panelSize.height/2, Image.SCALE_SMOOTH);
-
 				}else {
 					myResizedPicture = x.getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
 					}
-				//set up the label and allign it , probably can get rid of this
-		//		JLabel myLabel = new JLabel(new ImageIcon(myResizedPicture));
-//				
-//				myLabel.setHorizontalAlignment(SwingConstants.LEFT);
-//				myLabel.setVerticalAlignment(SwingConstants.CENTER);
-				
-
 				//create a label of the players image icon 
 				GridLayout myGrid = new GridLayout(3,3,0,0);
 				locationMap.get(locations.get(i)).setLayout(myGrid);
-				
+				JLabel currentLabel = new JLabel(new ImageIcon(myResizedPicture));
 				//add that label to the Jpanel the player is at
-			
-				locationMap.get(locations.get(i)).add(new JLabel(new ImageIcon(myResizedPicture)));
+				locationMap.get(locations.get(i)).add(currentLabel);
+				labelMapping.put(p, currentLabel);
 			}
 		}
 	}
+	void updateIcons(Player p) {
+		for(int i=0;i<locations.size();i++) {
+			if(locations.get(i) == p.getLocation()) {
 
+				Dimension panelSize = locationMap.get(locations.get(i)).getSize();
+				Image myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
+				GridLayout myGrid = new GridLayout(3,3,0,0);
+				JLabel currentLabel = new JLabel(new ImageIcon(myResizedPicture));
+				locationMap.get(locations.get(i)).setLayout(myGrid);
+				locationMap.get(locations.get(i)).add(currentLabel);
+			}
+			//this.repaint();
+		}
+	}
 	NamedLocation getStartLocation() {
-		Random rand = new Random();
-
-		int  n = rand.nextInt(20) + 1;
-		return locations.get(n);
+//		Random rand = new Random();
+//
+//		int  n = rand.nextInt(20) + 1;
+//		return locations.get(n);
+		return locations.get(0);
 	}
 }

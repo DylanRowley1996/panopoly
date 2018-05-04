@@ -1,5 +1,11 @@
 package panopoly;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import interfaces.Locatable;
 import interfaces.Ownable;
@@ -19,8 +25,10 @@ public class Player implements Playable {
     
     private String pathToCharacterIcon = "";
     private NamedLocation location = null;
+    public boolean hasRolled = false;
+    private BufferedImage characterIcon;
     
-    public Player(String name,String pathToCharacterIcon){
+    public Player(String name,String pathToCharacterIcon) throws IOException,NullPointerException{
     	this.name = name;
         this.pathToCharacterIcon = pathToCharacterIcon;
     }
@@ -28,14 +36,23 @@ public class Player implements Playable {
     public String getName(){
         return name;
     }
-
+    public BufferedImage getIcon() {
+    	return characterIcon;
+    }
+    public void setIcon() throws IOException {
+        characterIcon = ImageIO.read(new File(this.pathToCharacterIcon));
+    }
+    public void rolled() {
+    	hasRolled = true;
+    }
     public int getNetWorth() {
         return netWorth;
     }
+    
+    //Property Actions
     public void buyProperty(PrivateProperty target) {
-    	if(!properties.contains(target)) {
-        	properties.add(target);
-    	}  	
+     	this.addToBalance(target.getPrice());
+    	properties.add(target);
     }
 
     public ArrayList<PrivateProperty> getProperties() {
