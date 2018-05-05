@@ -41,31 +41,57 @@ public class PartyLeader {
 		this.mainFrame = frame;
 	}
 
-	public void roll(Player player) throws InvalidFormatException, IOException {
+	public void roll(Player player,  int currentPlayerNumber, JLabel characterImage) throws InvalidFormatException, IOException {
 		int moveCount;
 		String str = "";
+		ArrayList<Integer> diceFaces;
 
 		moveCount = normalDice.rollDice(2, 6);
+		diceFaces = normalDice.getFaces();
 		str += moveCount;
-		history.getTextArea().setText("You have rolled a "+str+".\n");	
-		player.rolled();
+		
+		
+		history.getTextArea().append("You have rolled a "+str+"  "+diceFaces+".\n");	
+		if(!normalDice.isDouble()) {
+			player.rolled(true);
+		}else {
+			history.getTextArea().append("You rolled Doubles!\n");	
+			if(normalDice.getNumberOfRolls()>=3) {
+				history.getTextArea().append("You have rolled 3 Doubles. \n");
+				player.goToJail();
+				player.setLocation(locations.get(locations.size()/4));
+				history.getTextArea().append("You are thrown into a filthy cell for the night.\n");
+				finishTurn(player, currentPlayerNumber, characterImage);
+			}
+
+		}
+		normalDice.refreshDice();
 		BufferedImage myImage = ImageIO.read(new File("savedImages/Borat.jpg"));
 
 		for(int i=0;i<moveCount;i++) {
 			player.setLocation((NamedLocation)player.getLeft());
-			history.getTextArea().append("You have rolled onto "+player.getLocation().getIdentifier()+".\n");
+			if(i==moveCount-1) {
+				history.getTextArea().append("You have rolled onto "+player.getLocation().getIdentifier()+".\n");
+			}
 			board.updateIcons(player);
 			board.repaint();
 			mainFrame.revalidate();
 		}
 		history.getTextArea().append("Roll Over.\n");
+		//pay the owner 
+		if(player.getLocation() instanceof PrivateProperty) {
+			if(((PrivateProperty)player.getLocation()).getOwner()!=null){
+				player.payPlayer(((PrivateProperty)player.getLocation()).getOwner(),((PrivateProperty)player.getLocation()).getRentalAmount());
+				history.getTextArea().append("You paid "+((PrivateProperty)player.getLocation()).getRentalAmount()+ " in rent to "+((PrivateProperty)player.getLocation()).getOwner().getIdentifier()+".\n");
+			}
+		}
 
 		//After roll
 		if(player.getLocation() instanceof MCQLocation) { // TODO get rid of !
 			MCQ mcq = new MCQ();
 			mcq.createMCQPanel(player,  history);
 		}
-		if(!(player.getLocation() instanceof CardLocation)) {
+		if((player.getLocation() instanceof CardLocation)) {
 			CardGenerator.createCard(player, history);
 		}
 	}
@@ -342,11 +368,15 @@ public class PartyLeader {
 		
 		//If player is on an ownable property that is unowned and hasn't bought it
 		//Force them to auction.
-		if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
-			history.getTextArea().append("Either 'Buy' or 'Auction' this property before finishing your turn.\n");
+		if(player.getNetWorth()<0) {
+			history.getTextArea().append("You are in debt! Sell houses and cards or mortgage properties to pay your debt!\n");
 		}
-		
-		else{
+		else if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
+			history.getTextArea().append("Either 'Buy' or 'Auction' this property before finishing your turn.\n");
+		}else if(!player.hasRolled) {
+			history.getTextArea().append("You must roll the Dice before ending your turn.\n");
+		}else{
+				player.rolled(false);
 				boughtProperty = false;
 				
 				if (currentPlayerNumber == players.size()-1) {
@@ -361,7 +391,6 @@ public class PartyLeader {
 					history.getTextArea()
 							.append("Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+
 import org.apache.commons.io.FilenameUtils;
 import javax.imageio.ImageIO;
 import interfaces.Locatable;
@@ -27,6 +29,8 @@ public class Player implements Playable {
     private Locatable location = null;
     public boolean hasRolled = false;
     private BufferedImage characterIcon;
+    private boolean isInJail = false;
+    private int turnsInJail = 0;
     
     public Player(String name,String pathToCharacterIcon) throws IOException,NullPointerException{
     	this.name = name;
@@ -42,8 +46,8 @@ public class Player implements Playable {
     public void setIcon() throws IOException {
         characterIcon = ImageIO.read(new File(this.pathToCharacterIcon));
     }
-    public void rolled() {
-    	hasRolled = true;
+    public void rolled(boolean trueOrFalse) {
+    	hasRolled = trueOrFalse;
     }
     public int getNetWorth() {
         return netWorth;
@@ -117,6 +121,28 @@ public class Player implements Playable {
 	
 	public void setName(String filepath){
 		name = FilenameUtils.getBaseName(filepath);	
+	}
+	public void payPlayer(Playable p, int amount) {
+		addToBalance(-amount);
+		((Player)p).addToBalance(amount);
+	}
+	public void goToJail() {
+		isInJail = true;
+	}
+	public void spendTurnInJail() {
+		turnsInJail++;
+		if(turnsInJail>=3) {
+			isInJail = false;
+			turnsInJail = 0;
+		}
+	}
+	public boolean getJailStatus() {
+		return isInJail;
+	}
+	public String textInJail() {
+		String output = "";
+		output += "you spend a quiet night in jail.\n";
+		return output;
 	}
 }
 

@@ -1,14 +1,17 @@
 package panopoly;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import interfaces.Rollable;
 
 public class Dice implements Rollable{	
-	private int[] faces;
+	private static ArrayList<Integer> faces = new ArrayList<Integer>();
+	private static int timesRolled = 0; //three rolls go to jail
+	
 	
 	public boolean isDouble () {
-		return faces[0] == faces[1];
+		return faces.get(0) == faces.get(1);
 	}
 
 	@Override
@@ -17,9 +20,20 @@ public class Dice implements Rollable{
 		for (int i	=	0;	i	<	numDice;	i++) {
 			Random rand = new Random();
 			int x = rand.nextInt(numSides)+1;
+			faces.add(x);
 			sum	+=	x;
-			//faces[i] = x;
 		}
+		timesRolled++;
 		return sum;
+	}
+	public ArrayList<Integer> getFaces() {
+		return faces;
+	}
+	public int getNumberOfRolls() {
+		return timesRolled;
+	}
+	public void refreshDice() {
+		faces.clear();
+		timesRolled = 0;
 	}
 }

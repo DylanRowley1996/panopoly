@@ -108,13 +108,20 @@ public class GUI {
 			p.setLocation(this.getStartPosition());
 			p.setIcon();
 			board.paintCharacterIcons(p , p.getIcon());
+			board.revalidate();
 		}
 
 		buttonPanel.getRollButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {						try {
 							if(!players.get(currentPlayer).hasRolled) {
-								partyLeader.roll(players.get(currentPlayer));
+								if(players.get(currentPlayer).getJailStatus()) {
+									players.get(currentPlayer).spendTurnInJail();
+									players.get(currentPlayer).rolled(true);
+									history.getTextArea().append(players.get(currentPlayer).textInJail());
+								}else {
+									partyLeader.roll(players.get(currentPlayer),currentPlayer,characterImage);
+								}
 							}else {
 								history.getTextArea().setText("You have already rolled.\n");				
 							}
