@@ -5,8 +5,8 @@ import interfaces.Mortgageable;
 public class NamedLocation implements Locatable {
 	
 	private String name;
-	private Locatable left;
-	private Locatable right;
+	private Locatable next;
+	private Locatable prev;
 	
 	public NamedLocation(String name) {
 		this.name = name;
@@ -18,23 +18,27 @@ public class NamedLocation implements Locatable {
 	}
 
 	@Override
-	public Locatable getLeft() {
-		return left;
+	public Locatable getNextLoc() {
+		return next;
 	}
 
 	@Override
-	public Locatable getRight() {
-		return right;
+	public Locatable getPrevLoc() {
+		return prev;
 	}
 
 	@Override
-	public void setLeft(Locatable l) {
-		left = l;
+	public void setNextLoc(Locatable loc) {
+		next = loc;
 	}
 
 	@Override
-	public void setRight(Locatable r) {
-		right = r;
+	public void setPrevLoc(Locatable loc) {
+		prev = loc;
+	}
+	
+	public String toString() {
+		return "";
 	}
 	
 }

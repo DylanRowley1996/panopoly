@@ -1,13 +1,7 @@
 package panopoly;
+
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,18 +9,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -43,8 +30,6 @@ import locations.*;
 
 public class SetupGame {
 
-	private static int currentPlayerNumber = 0;
-
 	private static final String NOC_LIST_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
 	private static final String DOMAIN_FILE_PATH = "Veale's NOC List/Veale's domains.xlsx";
 	private static final String WORLDS_FILE_PATH = "Veale's NOC List/Veale's Fictional Worlds.xlsx";
@@ -60,11 +45,6 @@ public class SetupGame {
 	
 	Random rand = new Random();
 	private String[] pathsToIcons = new String[noOfPlayers];
-
-	private FindImages imageRetriever;
-	private GUI gui;
-	private boolean launchGUI = false;
-
 
 	public SetupGame(int noOfPlayers) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException{
 
@@ -84,7 +64,7 @@ public class SetupGame {
 		resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		addRandomPropertiesToEachPlayer();
+		//addRandomPropertiesToEachPlayer();
 
 		new GUI(players, noBoardRows, locationList);
 	}
@@ -342,21 +322,47 @@ public class SetupGame {
 		//Add Properties that need to be present every time to the corners.
 		locationList.add(0, new NamedLocation("Go"));
 		locationList.add(noBoardRows-3, new NamedLocation("Jail"));
-		locationList.add((noLocations-1)-(noBoardRows-3), new NamedLocation("Go to Jail"));
+		locationList.add((noLocations-1)-(noBoardRows-3), new GoToJail("Go to Jail"));
 		locationList.add(noLocations-1, new Shop("Marketplace", noLocations-1));
 
-
-
-		//set left and right locations
-		for(int i=1; i<locationList.size()-1; i++) {
+		// set next and prev locations
+		for(int i=1; i<noBoardRows-3; i++) { // top row (without corner squares)
 			NamedLocation loc = locationList.get(i);
-			loc.setLeft(locationList.get(i+1));
-			loc.setRight(locationList.get(i-1));
+			loc.setNextLoc(locationList.get(i+1));
+			loc.setPrevLoc(locationList.get(i-1));
 		}
-		locationList.get(0).setLeft(locationList.get(1));
-		locationList.get(0).setRight(locationList.get(locationList.size()-1));
-		locationList.get(locationList.size()-1).setLeft(locationList.get(0));
-		locationList.get(locationList.size()-1).setRight(locationList.get(locationList.size()-2));
+		locationList.get(0).setNextLoc(locationList.get(1)); // top left corner
+		locationList.get(0).setPrevLoc(locationList.get(noBoardRows-2)); 
+		locationList.get(noBoardRows-3).setNextLoc(locationList.get(noBoardRows-1)); // top right corner
+		locationList.get(noBoardRows-3).setPrevLoc(locationList.get(noBoardRows-4));
+		
+		int boardSide = 0;
+		for(int i=noBoardRows-1; i<noLocations-(noBoardRows-1); i++) { // board sides
+			boardSide++;
+			NamedLocation loc = locationList.get(i);
+			if(boardSide%2==0) {
+				loc.setNextLoc(locationList.get(i-2));
+				loc.setPrevLoc(locationList.get(i+2));
+			}
+			else {
+				loc.setNextLoc(locationList.get(i+2));
+				loc.setPrevLoc(locationList.get(i-2));
+			}
+		}
+		locationList.get(noBoardRows-2).setNextLoc(locationList.get(0)); // under top left corner
+		locationList.get(noBoardRows-2).setPrevLoc(locationList.get(noBoardRows));
+		locationList.get(noLocations-(noBoardRows-1)).setNextLoc(locationList.get(noLocations-1)); // above bottom right corner
+		locationList.get(noLocations-(noBoardRows-1)).setPrevLoc(locationList.get(noLocations-(noBoardRows+1)));
+		
+		for(int i=noLocations-(noBoardRows-3); i<noLocations-1; i++) { // bottom row
+			NamedLocation loc = locationList.get(i);
+			loc.setNextLoc(locationList.get(i-1));
+			loc.setPrevLoc(locationList.get(i+1));
+		}
+		locationList.get(noLocations-1).setNextLoc(locationList.get(noLocations-2)); // bottom right corner
+		locationList.get(noLocations-1).setPrevLoc(locationList.get(noLocations-(noBoardRows-1)));
+		locationList.get(noLocations-(noBoardRows-2)).setNextLoc(locationList.get(noLocations-(noBoardRows))); // bottom left corner
+		locationList.get(noLocations-(noBoardRows-2)).setPrevLoc(locationList.get(noLocations-(noBoardRows-3)));
 
 	}
 
@@ -521,7 +527,7 @@ public class SetupGame {
 
 	}
 
-	//TODO - Remove when testing of Mortgaging is complete.
+	/*//TODO - Remove when testing of Mortgaging is complete.
 	//This just adds a random amount of properties to each player
 	//so checking if Mortgaging/Redeeming etc is working correctly.
 	public void addRandomPropertiesToEachPlayer(){
@@ -535,5 +541,5 @@ public class SetupGame {
 			}
 			j=0;
 		}
-	}
+	}*/
 }

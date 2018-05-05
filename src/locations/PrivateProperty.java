@@ -3,12 +3,13 @@ import interfaces.*;
 
 public class PrivateProperty extends NamedLocation implements Ownable, Rentable, Mortgageable, Groupable  {
 	
-	private Playable owner;
+	protected Playable owner;
 	private int price;
 	private int mortgageAmount;
 	protected int[] rentArray;
 	private boolean isMortgaged;
 	private PropertyGroup group;
+	private int numOfHouses = 0;
 	
 	public PrivateProperty(String name, PropertyGroup group) {
 		super(name);
@@ -43,7 +44,7 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 
 	@Override
 	public int getRentalAmount() {
-		return rentArray[0];
+		return rentArray[numOfHouses];
 	}
 
 	@Override
@@ -71,9 +72,31 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	public void unmortgage() {
 		isMortgaged = false;
 	}
+
+	public String toString() {
+		String str = "";
+		
+		if(owner!=null)	str += "Owner: " + owner.getIdentifier() + "\n";
+		else			str += "This Property is unowned!\n";
+		str += "Group: " + group.getName() + "\n";
+		str += "Price: " + price + "\n";
+		if(owner!=null) {
+			str += "Rent: $" + getRentalAmount() + "\n";
+			str += "Mortgaged? " + isMortgaged + "\n";
+			if(isMortgaged) str += "Redeem cost: $" + getRedeemAmount() + "\n";
+			else			str += "Mortgage value: $" + mortgageAmount + "\n";
+		}
+		
+		return str;
+	}
+	
+	@Override
+	public int[] getAllRents(){
+		return rentArray;
+	}
 	
 	public int getNumHouses(){
-		return 1;
+		return numOfHouses;
 	}
-
+	
 }

@@ -16,7 +16,6 @@ import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -787,7 +786,6 @@ public class MCQ {
 						
 		//Question and it's parts.
 		question = "You're transported into the world of ";
-		String character = "";
 		String domain = "";
 		String positiveTalkingPoint = "";
 		String negativeTalkingPoint = "";
@@ -861,11 +859,13 @@ public class MCQ {
 						
 	}
 	
-	public void createMCQPanel(Player player, HistoryLog history) throws InvalidFormatException, IOException{
+	public void createMCQPanel(Player player, HistoryLog history, Jail jail) throws InvalidFormatException, IOException{
 		
 		Random rand = new Random();
 		int mcqAmount = rand.nextInt(301)+200;
-		history.getTextArea().append("Answer the following question to win or lose $"+mcqAmount+"\n");
+		if(jail==null) {
+			history.getTextArea().append("-> Answer the following question to win or lose $"+mcqAmount+"\n\n");
+		}
 		
 		int questionChoiceNumber = rand.nextInt(noOfQuestions);
 		
@@ -942,15 +942,44 @@ public class MCQ {
 		 confirmationButton.addActionListener(new ActionListener() {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
+	            	boolean jailCorrect = false;
 	                if (correctButton.isSelected()) {
-	                	history.getTextArea().append("Correct! You won $"+mcqAmount+"\n");
-	        			player.addToBalance(mcqAmount);
+	                	history.getTextArea().append("-> Correct!\n");
+	                	if(jail==null) {
+	                		history.getTextArea().append("-> You won $"+mcqAmount+"\n\n");
+		        			player.addToBalance(mcqAmount);
+	                	}
+	                	else {
+	                		jail.correctAnswer();
+	                		if(jail.getQsToAnswer()==0) {
+	                			history.getTextArea().append("-> All questions answered! You're free to go!\n\n");
+	                			player.setInJail(false);
+	                			player.setRolled(false);
+	                		}
+	                		else {
+		                		try {
+		                			jailCorrect = true;
+		                			mcqFrame.dispose();
+		                			Thread.sleep(10);
+		                			MCQ mcq = new MCQ();
+									mcq.createMCQPanel(player, history, jail);
+								} catch (InvalidFormatException | IOException | InterruptedException e1) {
+									e1.printStackTrace();
+								}
+	                		}
+	                	}
 	                } else {
-	                	history.getTextArea().append("Incorrect! You lost $"+mcqAmount+"\n");
-	        			player.deductFromBalance(mcqAmount);
+	                	history.getTextArea().append("-> Incorrect!\n");
+	                	if(jail==null) {
+	                		history.getTextArea().append("-> You lost $"+mcqAmount+"\n\n");
+		        			player.deductFromBalance(mcqAmount);
+	                	}
+	                	else {
+	                		jail.turnInJail();
+	                	}
 	                }
 	              
-	                mcqFrame.dispose();
+	                if(!jailCorrect) mcqFrame.dispose();
 	            }
 	        });
 	    

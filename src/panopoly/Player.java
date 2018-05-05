@@ -1,5 +1,5 @@
 package panopoly;
-import java.awt.Image;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,9 +9,7 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import javax.imageio.ImageIO;
 import interfaces.Locatable;
-import interfaces.Ownable;
 import interfaces.Playable;
-import locations.NamedLocation;
 import locations.PrivateProperty;
 import locations.PropertyGroup;
 
@@ -24,10 +22,15 @@ public class Player implements Playable {
     private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
     private ArrayList<PropertyGroup> mortgages = new ArrayList<PropertyGroup>();
     private int numImprovements = 0;
+    private int getOutOfJailCard = 0;
     
     private String pathToCharacterIcon = "";
     private Locatable location = null;
-    public boolean hasRolled = false;
+    private boolean hasRolled = false;
+    private boolean mustDeclareBankruptcy = false;
+    private boolean isInJail;
+    private Jail jail;
+    
     private BufferedImage characterIcon;
     private boolean isInJail = false;
     private int turnsInJail = 0;
@@ -35,20 +38,43 @@ public class Player implements Playable {
     public Player(String name,String pathToCharacterIcon) throws IOException,NullPointerException{
     	this.name = name;
         this.pathToCharacterIcon = pathToCharacterIcon;
+        isInJail = false;
+        jail = null;
     }
 
     public String getName(){
         return name;
     }
+    
     public BufferedImage getIcon() {
     	return characterIcon;
     }
+    
     public void setIcon() throws IOException {
         characterIcon = ImageIO.read(new File(this.pathToCharacterIcon));
     }
+<<<<<<< HEAD
     public void rolled(boolean trueOrFalse) {
     	hasRolled = trueOrFalse;
+=======
+    
+    public boolean mustDeclareBankruptcy(){
+    	return mustDeclareBankruptcy;
     }
+    
+    public boolean hasRolled() {
+    	return hasRolled;
+    }
+    
+    public void setRolled(boolean roll) {
+    	hasRolled = roll;
+    }
+    
+    public void setDeclareBankruptcy(boolean bankruptyStatus){
+    	mustDeclareBankruptcy = bankruptyStatus;
+>>>>>>> master
+    }
+    
     public int getNetWorth() {
         return netWorth;
     }
@@ -56,8 +82,15 @@ public class Player implements Playable {
     //Property Actions
     public void buyProperty(PrivateProperty target) {
      	this.addToBalance(target.getPrice());
+     	target.setOwner(this);
     	properties.add(target);
     }
+    
+    //Used for Auctioning
+  	public void addProperty(PrivateProperty property){
+     	property.setOwner(this);
+  		properties.add(property);
+  	}
 
     public ArrayList<PrivateProperty> getProperties() {
         return properties;
@@ -88,15 +121,15 @@ public class Player implements Playable {
 		return name;
 	}
 
-	public Locatable getLeft() {
-		return location.getLeft();
+	public Locatable getNextLoc() {
+		return location.getNextLoc();
 	}
 
-	public Locatable getRight() {
-		 return location.getRight();
+	public Locatable getPrev() {
+		 return location.getPrevLoc();
 	}
-	public void setLocation(Locatable locatable) {
-		location = locatable;
+	public void setLocation(Locatable loc) {
+		location = loc;
 	}
 	
 	public void addToBalance(int amount){
@@ -122,6 +155,7 @@ public class Player implements Playable {
 	public void setName(String filepath){
 		name = FilenameUtils.getBaseName(filepath);	
 	}
+<<<<<<< HEAD
 	public void payPlayer(Playable p, int amount) {
 		addToBalance(-amount);
 		((Player)p).addToBalance(amount);
@@ -143,6 +177,35 @@ public class Player implements Playable {
 		String output = "";
 		output += "you spend a quiet night in jail.\n";
 		return output;
+=======
+	
+	public boolean hasJailCard() {
+		return getOutOfJailCard>0;
+	}
+	
+	public void addJailCard() {
+		getOutOfJailCard++;
+	}
+	
+	public void useJailCard() {
+		getOutOfJailCard--;
+	}
+
+	public void setInJail(boolean b) {
+		isInJail = b;
+	}
+	
+	public boolean isInJail() {
+		return isInJail;
+	}
+	
+	public void setJail(Jail j) {
+		jail = j;
+	}
+	
+	public Jail getJail() {
+		return jail;
+>>>>>>> master
 	}
 }
 

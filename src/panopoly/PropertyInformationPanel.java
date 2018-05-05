@@ -14,7 +14,7 @@ public class PropertyInformationPanel extends JPanel{
 	private JPanel propertyInformation = new JPanel();
     private JSplitPane propertyCard = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
     private JTextPane propertyName = new JTextPane();
-    private JTextArea propertyPrices = new JTextArea("Prices will go here.\n\n\n\n\n\n\n");
+    private JTextArea propertyInfo = new JTextArea();
  
     //Change parameter to Property property when class is created and implemented
     public PropertyInformationPanel(){
@@ -27,22 +27,37 @@ public class PropertyInformationPanel extends JPanel{
         propertyName.setBackground(Color.decode("#E53C00"));
         propertyName.setText("Property Name");
         propertyName.setEditable(false);
+        propertyName.setMaximumSize(new Dimension(130, 40));
+        propertyName.setPreferredSize(new Dimension(130,40));
+        propertyName.setStyledDocument(doc);
 
         //Set properties of JTextArea displaying properties price info then add to JPanel.
-        propertyPrices.setLineWrap(true);
-        propertyPrices.setEditable(false);
+        propertyInfo.setLineWrap(true);
+        propertyInfo.setWrapStyleWord(true);
+        propertyInfo.setEditable(false);
+        propertyInfo.setPreferredSize(new Dimension(150,200));
         propertyInformation.setLayout(new BorderLayout());
-        propertyInformation.add(propertyPrices);
+        propertyInformation.add(propertyInfo);
 
         //Top compononent is name of Property.
         propertyCard.setTopComponent(propertyName);
-        propertyInformation.setMaximumSize(new Dimension(10,10));
+        //propertyInformation.setPreferredSize(new Dimension(20,20));
         //Bottom component is the properties pricing.
         propertyCard.setBottomComponent(propertyInformation);
+        //propertyCard.setPreferredSize(new Dimension(150, 200));
 
         //Add fully completed property card and buttons to JFrame
         add(propertyCard);
-     
+        setPreferredSize(new Dimension(150,250));
+
         setVisible(true);
+    }
+    
+    public JTextPane getPropNamePane() {
+    	return propertyName;
+    }
+    
+    public JTextArea getPropInfo() {
+    	return propertyInfo;
     }
 }

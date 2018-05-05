@@ -2,9 +2,12 @@ package panopoly;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+<<<<<<< HEAD
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+=======
+>>>>>>> master
 
 public class ButtonPanel extends JPanel
 {
@@ -18,29 +21,78 @@ public class ButtonPanel extends JPanel
 	private JButton buyButton = new JButton("BUY");
     private JButton auctionButton = new JButton("AUCTION");
     private JButton sellButton = new JButton("SELL");
-    private JButton collectRentButton = new JButton("COLLECT RENT");
+    private JButton bankruptyButton = new JButton("BANKRUPT");
     private JButton mortgageButton = new JButton("MORTGAGE");
     private JButton redeemMortgageButton = new JButton("REDEEM MORTGAGE");
     private JButton tradeButton = new JButton("TRADE");
     private JButton overviewButton = new JButton("OVERVIEW");
-    private JButton assetsButton = new JButton("ASSETS");
+    private JButton quitGameButton = new JButton("QUIT GAME");
     private JButton finishTurnButton = new JButton("FINISH TURN");
     
     public ButtonPanel()
     {
-    	 setLayout(new GridLayout(5,2));
-    	 setMaximumSize(new Dimension(5,5));
-         add(rollButton);
-         add(sellButton);
-         add(buyButton);
-         add(auctionButton);
-         add(collectRentButton);
-         add(mortgageButton);
-         add(redeemMortgageButton);         
-         add(tradeButton);
-         add(overviewButton);
-         //add(assetsButton);
-         add(finishTurnButton);
+    	
+    	setLayout(new GridBagLayout());
+    	setMaximumSize(new Dimension(5,5));
+    	GridBagConstraints c = new GridBagConstraints();
+    	c.weightx = .5;
+        c.weighty = .5;
+    	c.fill = GridBagConstraints.BOTH;
+    	
+    	//First Row
+    	c.gridwidth = 1;
+    	c.gridx = 0;
+    	c.gridy = 0;
+    	add(buyButton, c);
+    	
+    	c.gridx = 1;
+    	c.gridy = 0;
+    	add(sellButton, c);
+    	
+    	c.gridx = 2;
+    	c.gridy = 0;
+    	add(auctionButton, c);
+    	
+    	c.gridx = 3;
+    	c.gridy = 0;
+    	add(tradeButton, c);
+    	
+    	//Second row
+    	c.gridwidth = 2;
+		c.gridx = 0;
+    	c.gridy = 1;
+    	add(mortgageButton, c);
+    	
+    	c.gridx = 2;
+    	c.gridy = 1;
+    	add(redeemMortgageButton, c);
+    	
+    	c.gridwidth = 2;
+    	c.gridx = 2;
+    	c.gridy = 1;
+    	add(bankruptyButton, c);
+    	
+    	//Third Row
+    	c.gridwidth = 2;
+     	c.gridx = 0;
+    	c.gridy = 2;
+    	add(quitGameButton, c);
+    	
+    	c.gridx = 2;
+    	c.gridy = 2;
+    	add(finishTurnButton, c);
+    	
+    	//Fourth Row
+    	c.gridwidth = 4;
+     	c.gridx = 0;
+    	c.gridy = 3;
+    	add(overviewButton, c);
+    	
+    	//Fifth row
+    	c.gridx = 0;
+    	c.gridy = 4;
+    	add(rollButton, c);
+    	
     }
 
 	public static long getSerialversionuid() {
@@ -63,8 +115,8 @@ public class ButtonPanel extends JPanel
 		return sellButton;
 	}
 
-	public JButton getCollectRentButton() {
-		return collectRentButton;
+	public JButton getBankruptyButton() {
+		return bankruptyButton;
 	}
 
 	public JButton getMortgageButton() {
@@ -83,8 +135,8 @@ public class ButtonPanel extends JPanel
 		return overviewButton;
 	}
 
-	public JButton getAssetsButton() {
-		return assetsButton;
+	public JButton getQuitGameButton() {
+		return quitGameButton;
 	}
 	
 	public JButton getFinishTurnButton(){

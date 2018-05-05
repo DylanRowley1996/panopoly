@@ -11,12 +11,11 @@ public class Overview extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@SuppressWarnings("rawtypes")
-	private JComboBox playerList;
+	private JComboBox<?> playerList;
     private ArrayList<Player> players;
     private JLabel playerInformation = new JLabel("");
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Overview(ArrayList<Player> players){
         super("Overview");
 
@@ -62,7 +61,7 @@ public class Overview extends JFrame {
 
     //Organises the currently selected players information and places it in the JLabel.
     public void organiseInformation(String playerToFind){
-
+    	
         boolean playerFound = false;
         int i = 0;
 
@@ -75,16 +74,74 @@ public class Overview extends JFrame {
                 i++;
             }
         }
+        
+    	String balance = buildBalanceString(players.get(i));
+    	String properties = buildPropertiesString(players.get(i));;
+    	String mortgages = buildMortgagesString(players.get(i));
+    	String monopolies = "";
+        
+        
 
-       /*//Format the data.
+       //Format the data.
         playerInformation.setFont(new Font("Rockwell", Font.BOLD,15));
-        playerInformation.setText("<html><b><span style=\"font-family:Rockwell;font-size:15px;\">Player</span></b>: "+players.get(i).getName()+ "<br/>" +
-                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Net worth: </span></b>"+players.get(i).getNetWorth()+ "<br/>" +
-                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Properties: </span></b> "+String.join(", ",players.get(i).getProperties())+ "<br/>"+
-                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Monopolies: </span></b> "+String.join(", ",players.get(i).getMonopolies())+ " <br/>"+
-                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Mortgages:  </span></b>"+String.join(", ",players.get(i).getMortgages())+ " <br/></html>");*/
+        playerInformation.setText("<html><b><span style=\"font-family:Rockwell;font-size:15px;\">Player</span></b>: "+players.get(i).getIdentifier()+ "<br/>" +
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Net worth: </span></b>"+balance+ "<br/>" +
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Properties: </span></b> "+properties+ "<br/>"+
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Mortgages: </span></b> "+mortgages+" <br/>"+
+                "<b><span style=\"font-family:Rockwell;font-size:15px;\">Monopolies:  </span></b>"+monopolies+ " <br/></html>");
 
 
     }
-
+  
+    
+    
+    private String buildBalanceString(Player player){
+    	return Integer.toString(player.getNetWorth());
+    }
+    
+    private String buildPropertiesString(Player player){
+    	String properties = "";
+    	
+    	if(player.getProperties().size() == 0){
+    		properties += "No Properties Owned.";
+    	}
+    	else{
+    		for(int i=0;i<player.getProperties().size();i++){
+    			properties += player.getProperties().get(i).getIdentifier()+" ";
+    		}
+    	}
+    	
+    	
+    	return properties;
+    }
+    
+    private String buildMortgagesString(Player player){
+    	String mortgages = "";
+    	
+    	if(player.getMortgages().size() == 0){
+    		mortgages += "None.";
+    	}
+    	else{
+    		for(int i=0;i<player.getProperties().size();i++){
+    			if(player.getProperties().get(i).isMortgaged()){
+    				mortgages += player.getProperties().get(i).getIdentifier()+" ";
+    			}
+    		}
+    	}
+    	
+    	
+    	return mortgages;
+    }
+    
+   /* private String buildMonopoliesString(Player player){
+    	String monopolies = "MONOPOLIES: ";
+	    	if(player.getMonopolies().size() == 0){
+	    		monopolies += "None.";
+	    	}
+	    	else{
+	    		player.getMonopolies().
+	    	}
+	    	return monopolies;
+    }
+*/
 }
