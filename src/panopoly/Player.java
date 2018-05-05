@@ -17,7 +17,7 @@ import locations.PropertyGroup;
 public class Player implements Playable {
 
     private String name = "";
-    private int netWorth = 0;
+    private int netWorth = 100000;//test amount
     private ArrayList<PrivateProperty> properties = new ArrayList<PrivateProperty>();
     private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
     private ArrayList<PropertyGroup> mortgages = new ArrayList<PropertyGroup>();
@@ -28,12 +28,9 @@ public class Player implements Playable {
     private Locatable location = null;
     private boolean hasRolled = false;
     private boolean mustDeclareBankruptcy = false;
-    private boolean isInJail;
-    private Jail jail;
-    
-    private BufferedImage characterIcon;
     private boolean isInJail = false;
-    private int turnsInJail = 0;
+    private Jail jail;
+    private BufferedImage characterIcon;
     
     public Player(String name,String pathToCharacterIcon) throws IOException,NullPointerException{
     	this.name = name;
@@ -53,10 +50,9 @@ public class Player implements Playable {
     public void setIcon() throws IOException {
         characterIcon = ImageIO.read(new File(this.pathToCharacterIcon));
     }
-<<<<<<< HEAD
     public void rolled(boolean trueOrFalse) {
     	hasRolled = trueOrFalse;
-=======
+    }
     
     public boolean mustDeclareBankruptcy(){
     	return mustDeclareBankruptcy;
@@ -72,7 +68,6 @@ public class Player implements Playable {
     
     public void setDeclareBankruptcy(boolean bankruptyStatus){
     	mustDeclareBankruptcy = bankruptyStatus;
->>>>>>> master
     }
     
     public int getNetWorth() {
@@ -155,29 +150,10 @@ public class Player implements Playable {
 	public void setName(String filepath){
 		name = FilenameUtils.getBaseName(filepath);	
 	}
-<<<<<<< HEAD
 	public void payPlayer(Playable p, int amount) {
 		addToBalance(-amount);
 		((Player)p).addToBalance(amount);
 	}
-	public void goToJail() {
-		isInJail = true;
-	}
-	public void spendTurnInJail() {
-		turnsInJail++;
-		if(turnsInJail>=3) {
-			isInJail = false;
-			turnsInJail = 0;
-		}
-	}
-	public boolean getJailStatus() {
-		return isInJail;
-	}
-	public String textInJail() {
-		String output = "";
-		output += "you spend a quiet night in jail.\n";
-		return output;
-=======
 	
 	public boolean hasJailCard() {
 		return getOutOfJailCard>0;
@@ -205,7 +181,6 @@ public class Player implements Playable {
 	
 	public Jail getJail() {
 		return jail;
->>>>>>> master
 	}
 }
 

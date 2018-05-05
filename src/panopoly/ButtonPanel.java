@@ -2,12 +2,9 @@ package panopoly;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-<<<<<<< HEAD
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-=======
->>>>>>> master
 
 public class ButtonPanel extends JPanel
 {
@@ -15,7 +12,7 @@ public class ButtonPanel extends JPanel
 	private static final long serialVersionUID = 1L;
 	ImageIcon imageIcon = new ImageIcon("gameImages/diceImage.png"); // load the image to a imageIcon
 	Image image1 = imageIcon.getImage();
-	Image newimg = image1.getScaledInstance(128, 128, Image.SCALE_SMOOTH);
+	Image newimg = image1.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
 	ImageIcon imageIcon1 = new ImageIcon(newimg); 
 	private JButton rollButton = new JButton(imageIcon1);
 	private JButton buyButton = new JButton("BUY");

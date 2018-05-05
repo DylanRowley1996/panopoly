@@ -6,8 +6,8 @@ import java.util.Random;
 import interfaces.Rollable;
 
 public class Dice implements Rollable{	
-	private static ArrayList<Integer> faces = new ArrayList<Integer>();
-	private static int timesRolled = 0; //three rolls go to jail
+	private ArrayList<Integer> faces = new ArrayList<Integer>();
+	private int timesRolled = 0; //three rolls go to jail
 	
 	
 	public boolean isDouble () {

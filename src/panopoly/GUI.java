@@ -115,25 +115,6 @@ public class GUI {
 		propertyInformationPanel.getPropNamePane().setBackground(Color.WHITE);
 
 		buttonPanel.getRollButton().addActionListener(new ActionListener() {
-<<<<<<< HEAD
-            @Override
-            public void actionPerformed(ActionEvent e) {						try {
-							if(!players.get(currentPlayer).hasRolled) {
-								if(players.get(currentPlayer).getJailStatus()) {
-									players.get(currentPlayer).spendTurnInJail();
-									players.get(currentPlayer).rolled(true);
-									history.getTextArea().append(players.get(currentPlayer).textInJail());
-								}else {
-									partyLeader.roll(players.get(currentPlayer),currentPlayer,characterImage);
-								}
-							}else {
-								history.getTextArea().setText("You have already rolled.\n");				
-							}
-						} catch (InvalidFormatException | IOException e1) {
-							e1.printStackTrace();
-						}
-						}
-=======
 			@Override
 			public void actionPerformed(ActionEvent e) {						
 				try {
@@ -141,7 +122,7 @@ public class GUI {
 						history.getTextArea().append("-> You cannot roll while in Jail.\n\n");
 					}
 					else if(!players.get(currentPlayer).hasRolled()) {
-						partyLeader.roll(players.get(currentPlayer));
+						partyLeader.roll(players.get(currentPlayer),currentPlayer,characterImage);
 						updatePropCard(players.get(currentPlayer));
 					}else {
 						history.getTextArea().append("-> You have already rolled.\n\n");				
@@ -150,9 +131,7 @@ public class GUI {
 					e1.printStackTrace();
 				}
 			}
->>>>>>> master
 		});
-
 		buttonPanel.getSellButton().addActionListener(e -> history.getTextArea().setText("Sell button clicked."));
 
 		buttonPanel.getBuyButton().addActionListener(new ActionListener() {

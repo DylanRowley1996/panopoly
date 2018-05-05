@@ -186,17 +186,15 @@ public class Board extends JPanel {
 				JLabel oldLabel = labelMapping.get(p);
 				locationMap.get(locations.get(i)).setLayout(myGrid);
 				locationMap.get(locations.get(i).getPrevLoc()).remove(oldLabel);//Remove old icon from previous square
+				labelMapping.remove(p, oldLabel);
 				locationMap.get(locations.get(i)).add(currentLabel);//Add it to the new square
 				labelMapping.put(p, currentLabel);
 			}
 			this.revalidate();
+			
 		}
 	}
 	NamedLocation getStartLocation() {
-//		Random rand = new Random();
-//
-//		int  n = rand.nextInt(20) + 1;
-//		return locations.get(n);
 		return locations.get(0);
 	}
 	
