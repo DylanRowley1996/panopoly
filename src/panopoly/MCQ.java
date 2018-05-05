@@ -16,7 +16,6 @@ import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -787,7 +786,6 @@ public class MCQ {
 						
 		//Question and it's parts.
 		question = "You're transported into the world of ";
-		String character = "";
 		String domain = "";
 		String positiveTalkingPoint = "";
 		String negativeTalkingPoint = "";

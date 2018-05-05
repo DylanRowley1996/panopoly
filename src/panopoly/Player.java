@@ -1,5 +1,5 @@
 package panopoly;
-import java.awt.Image;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import org.apache.commons.io.FilenameUtils;
 import javax.imageio.ImageIO;
 import interfaces.Locatable;
-import interfaces.Ownable;
 import interfaces.Playable;
-import locations.NamedLocation;
 import locations.PrivateProperty;
 import locations.PropertyGroup;
 
@@ -22,6 +20,7 @@ public class Player implements Playable {
     private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
     private ArrayList<PropertyGroup> mortgages = new ArrayList<PropertyGroup>();
     private int numImprovements = 0;
+    private int getOutOfJailCard = 0;
     
     private String pathToCharacterIcon = "";
     private Locatable location = null;
@@ -127,6 +126,18 @@ public class Player implements Playable {
 	
 	public void setName(String filepath){
 		name = FilenameUtils.getBaseName(filepath);	
+	}
+	
+	public boolean hasJailCard() {
+		return getOutOfJailCard>0;
+	}
+	
+	public void addJailCard() {
+		getOutOfJailCard++;
+	}
+	
+	public void useJailCard() {
+		getOutOfJailCard--;
 	}
 	
 }
