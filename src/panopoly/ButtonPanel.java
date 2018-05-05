@@ -29,6 +29,7 @@ public class ButtonPanel extends JPanel
     	c.fill = GridBagConstraints.BOTH;
     	
     	//First Row
+    	c.gridwidth = 1;
     	c.gridx = 0;
     	c.gridy = 0;
     	add(buyButton, c);
@@ -46,11 +47,12 @@ public class ButtonPanel extends JPanel
     	add(tradeButton, c);
     	
     	//Second row
+    	c.gridwidth = 2;
 		c.gridx = 0;
     	c.gridy = 1;
     	add(mortgageButton, c);
     	
-    	c.gridx = 1;
+    	c.gridx = 2;
     	c.gridy = 1;
     	add(redeemMortgageButton, c);
     	
