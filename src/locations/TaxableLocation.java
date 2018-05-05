@@ -22,4 +22,5 @@ public class TaxableLocation extends NamedLocation implements Taxable {
 		return flatAmount;
 	}
 
+	
 }

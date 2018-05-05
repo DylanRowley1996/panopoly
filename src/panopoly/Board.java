@@ -31,7 +31,7 @@ public class Board extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 7490346528321340119L;
-	ArrayList<JPanel> squares = new ArrayList<JPanel>();
+	private ArrayList<JPanel> squares = new ArrayList<JPanel>();
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private final int boardWidth = (int) (screenSize.getWidth()*0.66);
 	private final int boardHeight = (int) (screenSize.getHeight()*0.9);
@@ -189,7 +189,7 @@ public class Board extends JPanel {
 				JLabel currentLabel = new JLabel(new ImageIcon(myResizedPicture));
 				JLabel oldLabel = labelMapping.get(p);
 				locationMap.get(locations.get(i)).setLayout(myGrid);
-				locationMap.get(locations.get(i).getRight()).remove(oldLabel);//Remove old icon from previous square
+				locationMap.get(locations.get(i).getPrevLoc()).remove(oldLabel);//Remove old icon from previous square
 				locationMap.get(locations.get(i)).add(currentLabel);//Add it to the new square
 				labelMapping.put(p, currentLabel);
 			}

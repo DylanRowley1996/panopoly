@@ -42,8 +42,11 @@ public class Player implements Playable {
     public void setIcon() throws IOException {
         characterIcon = ImageIO.read(new File(this.pathToCharacterIcon));
     }
-    public void rolled() {
-    	hasRolled = true;
+    public boolean hasRolled() {
+    	return hasRolled;
+    }
+    public void setRolled(boolean roll) {
+    	hasRolled = roll;
     }
     public int getNetWorth() {
         return netWorth;
@@ -84,15 +87,15 @@ public class Player implements Playable {
 		return name;
 	}
 
-	public Locatable getLeft() {
-		return location.getLeft();
+	public Locatable getNextLoc() {
+		return location.getNextLoc();
 	}
 
-	public Locatable getRight() {
-		 return location.getRight();
+	public Locatable getPrev() {
+		 return location.getPrevLoc();
 	}
-	public void setLocation(Locatable locatable) {
-		location = locatable;
+	public void setLocation(Locatable loc) {
+		location = loc;
 	}
 	
 	public void addToBalance(int amount){
