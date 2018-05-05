@@ -118,7 +118,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {						
 				try {
-					if(!players.get(currentPlayer).hasRolled) {
+					if(!players.get(currentPlayer).hasRolled()) {
 						partyLeader.roll(players.get(currentPlayer));
 						updatePropCard(players.get(currentPlayer));
 					}else {

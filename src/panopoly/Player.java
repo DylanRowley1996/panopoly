@@ -25,7 +25,9 @@ public class Player implements Playable {
     
     private String pathToCharacterIcon = "";
     private Locatable location = null;
-    public boolean hasRolled = false;
+    private boolean hasRolled = false;
+    private boolean mustDeclareBankruptcy = false;
+    
     private BufferedImage characterIcon;
     
     public Player(String name,String pathToCharacterIcon) throws IOException,NullPointerException{
@@ -36,18 +38,31 @@ public class Player implements Playable {
     public String getName(){
         return name;
     }
+    
     public BufferedImage getIcon() {
     	return characterIcon;
     }
+    
     public void setIcon() throws IOException {
         characterIcon = ImageIO.read(new File(this.pathToCharacterIcon));
     }
+    
+    public boolean mustDeclareBankruptcy(){
+    	return mustDeclareBankruptcy;
+    }
+    
     public boolean hasRolled() {
     	return hasRolled;
     }
+    
     public void setRolled(boolean roll) {
     	hasRolled = roll;
     }
+    
+    public void setDeclareBankruptcy(boolean bankruptyStatus){
+    	mustDeclareBankruptcy = bankruptyStatus;
+    }
+    
     public int getNetWorth() {
         return netWorth;
     }

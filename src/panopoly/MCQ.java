@@ -865,7 +865,7 @@ public class MCQ {
 		
 		Random rand = new Random();
 		int mcqAmount = rand.nextInt(301)+200;
-		history.getTextArea().append("Answer the following question to win or lose $"+mcqAmount+"\n");
+		history.getTextArea().append("-> Answer the following question to win or lose $"+mcqAmount+"\n\n");
 		
 		int questionChoiceNumber = rand.nextInt(noOfQuestions);
 		
@@ -943,10 +943,10 @@ public class MCQ {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	                if (correctButton.isSelected()) {
-	                	history.getTextArea().append("Correct! You won $"+mcqAmount+"\n");
+	                	history.getTextArea().append("-> Correct! You won $"+mcqAmount+"\n\n");
 	        			player.addToBalance(mcqAmount);
 	                } else {
-	                	history.getTextArea().append("Incorrect! You lost $"+mcqAmount+"\n");
+	                	history.getTextArea().append("-> Incorrect! You lost $"+mcqAmount+"\n\n");
 	        			player.deductFromBalance(mcqAmount);
 	                }
 	              
