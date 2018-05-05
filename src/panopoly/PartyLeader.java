@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import interfaces.Locatable;
 import interfaces.Mortgageable;
 import interfaces.Ownable;
 import locations.*;
@@ -58,18 +60,34 @@ public class PartyLeader {
 		history.getTextArea().append("-> You have rolled onto "+player.getLocation().getIdentifier()+".\n\n");
 
 		//After roll
-		if(player.getLocation() instanceof MCQLocation) { // TODO get rid of !
+		Locatable location = player.getLocation();
+		if(location instanceof MCQLocation) { // TODO get rid of !
 			MCQ mcq = new MCQ();
 			mcq.createMCQPanel(player, history, null);
 		}
-		if(player.getLocation() instanceof CardLocation) {
+		if(location instanceof CardLocation) {
 			CardGenerator.createCard(player, history);
 		}
-		if(player.getLocation() instanceof GoToJail) {
+		if(location instanceof GoToJail) {
 			player.setJail(new Jail(player, history));
 			history.getTextArea().append("-> Go to Jail!\n\n");
 			player.setLocation(locations.get(locations.size()/4));
 			board.revalidate();
+		}
+		if(location instanceof TaxableLocation) {
+			history.getTextArea().append("-> " + location.getIdentifier() + "\n");
+			int tax=0;
+			if(rand.nextInt(2)==0) {
+				history.getTextArea().append("-> Pay " + ((TaxableLocation) location).getIncomePercentage() + "% of your total net worth in taxes\n");
+				tax = (int) (player.getNetWorth()*((TaxableLocation) location).getIncomePercentage());
+				history.getTextArea().append("-> "+player.getName()+" paid $"+tax+" in taxes\n\n");
+				player.deductFromBalance(tax);
+			}
+			else {
+				tax = ((TaxableLocation) location).getFlatAmount();
+				history.getTextArea().append("-> "+player.getName()+" paid $"+tax+" in taxes\n\n");
+			}
+			player.deductFromBalance(tax);
 		}
 				
 	}
