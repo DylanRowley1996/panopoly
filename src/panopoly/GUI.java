@@ -146,7 +146,7 @@ public class GUI {
 		buttonPanel.getAuctionButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                        partyLeader.auction(players.get(currentPlayer), players);
+                        partyLeader.auction(players.get(currentPlayer), players, history);
                     }
             
         });

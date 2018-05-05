@@ -328,10 +328,10 @@ public class PartyLeader {
 
 	}
 
-	public void auction(Player player, ArrayList<Player> players){
+	public void auction(Player player, ArrayList<Player> players, HistoryLog history){
 		//TODO
 		if(player.getLocation() instanceof Ownable && ((Ownable)player.getLocation()).getOwner() == null){
-			Auction auction = new Auction((Ownable)player.getLocation(),players );
+			Auction auction = new Auction((Ownable)player.getLocation(),players,history);
 		}
 	}
 

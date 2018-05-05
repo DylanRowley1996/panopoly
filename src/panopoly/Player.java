@@ -57,6 +57,11 @@ public class Player implements Playable {
      	this.addToBalance(target.getPrice());
     	properties.add(target);
     }
+    
+    //Used for Auctioning
+  	public void addProperty(PrivateProperty property){
+  		properties.add(property);
+  	}
 
     public ArrayList<PrivateProperty> getProperties() {
         return properties;
@@ -121,5 +126,6 @@ public class Player implements Playable {
 	public void setName(String filepath){
 		name = FilenameUtils.getBaseName(filepath);	
 	}
+	
 }
 
