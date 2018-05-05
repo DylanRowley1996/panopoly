@@ -315,7 +315,7 @@ public class Auction extends JFrame{
             		
             	}
             	
-            	biddingHistoryArea.append("It is now: "+players.get(currentPlayerNumber).getIdentifier()+" turn.\n\n");
+            	biddingHistoryArea.append("-> It is now: "+players.get(currentPlayerNumber).getIdentifier()+" turn.\n\n");
 
             }
 		});

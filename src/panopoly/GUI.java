@@ -118,7 +118,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {						
 				try {
-					if(!players.get(currentPlayer).hasRolled) {
+					if(!players.get(currentPlayer).hasRolled()) {
 						partyLeader.roll(players.get(currentPlayer));
 						updatePropCard(players.get(currentPlayer));
 					}else {
@@ -147,9 +147,13 @@ public class GUI {
                     }
             
         });
+		
+		buttonPanel.getQuitGameButton()
+		.addActionListener(e -> history.getTextArea().setText("Quit Game button clicked."));
+		
 
-		buttonPanel.getCollectRentButton()
-		.addActionListener(e -> history.getTextArea().setText("Collect rent button clicked."));
+		buttonPanel.getBankruptyButton()
+		.addActionListener(e -> history.getTextArea().setText("Bankruptcy button clicked."));
 
 		buttonPanel.getMortgageButton().addActionListener(new ActionListener() {
 			@Override
@@ -193,9 +197,6 @@ public class GUI {
 
 			}
 		});
-
-		// test();
-
 	}
 	
 	public void updatePropCard(Player player) {
