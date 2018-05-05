@@ -16,13 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import interfaces.Groupable;
 import interfaces.Locatable;
-import interfaces.Ownable;
 import locations.NamedLocation;
 
 public class GUI {
@@ -62,7 +60,6 @@ public class GUI {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			noOfPlayersInstantiated = selectionPanel.getCurrentPlayerNumber();
@@ -99,15 +96,15 @@ public class GUI {
 		frame.add(boardAndGameInformationPane);
 
 		frame.setTitle("Interdimensional Panopoly");
-		//frame.setSize(screenSize.width, screenSize.height);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frame.setSize(screenSize.width, screenSize.height);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-
+		frame.setResizable(false);
+		
 		//add player icons to board
 		for(Player p:players) {
-			BufferedImage myImage = ImageIO.read(new File(p.getPathForImageIcon()));
 			p.setLocation(this.getStartPosition());
 			p.setIcon();
 			board.paintCharacterIcons(p , p.getIcon());
