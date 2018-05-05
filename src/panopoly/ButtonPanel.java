@@ -1,7 +1,6 @@
 package panopoly;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class ButtonPanel extends JPanel
 {

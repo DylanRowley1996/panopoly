@@ -27,6 +27,8 @@ public class PropertyInformationPanel extends JPanel{
         propertyName.setBackground(Color.decode("#E53C00"));
         propertyName.setText("Property Name");
         propertyName.setEditable(false);
+        propertyName.setMaximumSize(new Dimension(130, 40));
+        propertyName.setPreferredSize(new Dimension(130,40));
         propertyName.setStyledDocument(doc);
 
         //Set properties of JTextArea displaying properties price info then add to JPanel.
@@ -42,10 +44,11 @@ public class PropertyInformationPanel extends JPanel{
         //propertyInformation.setPreferredSize(new Dimension(20,20));
         //Bottom component is the properties pricing.
         propertyCard.setBottomComponent(propertyInformation);
+        //propertyCard.setPreferredSize(new Dimension(150, 200));
 
         //Add fully completed property card and buttons to JFrame
         add(propertyCard);
-        setPreferredSize(new Dimension(150,200));
+        setPreferredSize(new Dimension(150,250));
 
         setVisible(true);
     }
