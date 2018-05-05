@@ -292,7 +292,8 @@ public class Auction extends JFrame{
             		
             		//Add the property to the players properties and deduct thier bid from their balance
             		players.get(currentPlayerNumber).addProperty((PrivateProperty)propertyToAuction);
-            		players.get(currentPlayerNumber).deductFromBalance(playersAndBids.get(players.get(currentPlayerNumber).getIdentifier()));  
+            		players.get(currentPlayerNumber).deductFromBalance(playersAndBids.get(players.get(currentPlayerNumber).getIdentifier())); 
+            		propertyToAuction.setOwner(players.get(currentPlayerNumber));
             		
             		//Tell users who has won the auction on the property and dispose of JFrame.
             		history.getTextArea().append("-> "+players.get(currentPlayerNumber).getIdentifier()+" has won the auction for "

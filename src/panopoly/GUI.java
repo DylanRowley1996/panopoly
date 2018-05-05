@@ -147,6 +147,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                         partyLeader.auction(players.get(currentPlayer), players, history);
+                        updatePropCard(players.get(currentPlayer));
                     }
             
         });
