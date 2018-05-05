@@ -8,6 +8,7 @@ import interfaces.Groupable;
 import interfaces.Mortgageable;
 import interfaces.Ownable;
 import locations.NamedLocation;
+import locations.PrivateProperty;
 import interfaces.Rentable;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,6 +26,10 @@ public class Auction extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private HistoryLog history;
+	private Ownable propertyToAuction;
+	
+	//Information needed for players.
 	private int currentPlayerNumber = 0;
 	private ArrayList<Player> players;
 	private ArrayList<Integer> indicesOfWithdrawnPlayers = new ArrayList<Integer>();
@@ -56,9 +61,11 @@ public class Auction extends JFrame{
     private JSplitPane splitBiddingPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
 
-    public Auction(Ownable propertyToAuction, ArrayList<Player> players){
+    public Auction(Ownable propertyToAuction, ArrayList<Player> players, HistoryLog history){
     	
     	this.players = players;
+    	this.history = history;
+    	this.propertyToAuction = propertyToAuction;
     	
     	//Add all players to hash map with default bids of 0.
     	populatePlayersAndBids();
@@ -72,7 +79,7 @@ public class Auction extends JFrame{
 
         biddingHistoryArea.setEditable(false);
 
-        addActionListeners();
+        addActionListeners(this);
         buttonPanel.setOpaque(true);
         buttonPanel.setBackground(Color.BLACK);
         buttonPanel.setLayout(new FlowLayout(CENTER));
@@ -85,7 +92,7 @@ public class Auction extends JFrame{
         inputBidPanel.add(bidInputArea);
 
         //Create bidding history panel
-        biddingHistoryArea.setText("Player: "+players.get(currentPlayerNumber).getIdentifier()+". Enter Bid or Withdraw from Auction.\n");
+        biddingHistoryArea.setText("-> Player: "+players.get(currentPlayerNumber).getIdentifier()+".\n\n-> Enter Bid or Withdraw from Auction.\n");
         biddingHistoryPanel.setLayout(new BorderLayout());
         biddingHistoryArea.setLineWrap(true);
         biddingHistoryTitle.setHorizontalAlignment(JLabel.CENTER);
@@ -124,7 +131,7 @@ public class Auction extends JFrame{
         getContentPane().add(propertyAndBiddingPanel);
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
         setTitle("Auction House");
         pack();
@@ -189,7 +196,7 @@ public class Auction extends JFrame{
     }
     
     //Add functionality to bidding and withdraw buttons
-    private void addActionListeners(){
+    private void addActionListeners(JFrame auctionHouse){
     	
     	//Add functionality to Bidding Button
     	bidButton.addActionListener(new ActionListener() {
@@ -199,42 +206,61 @@ public class Auction extends JFrame{
             	try{
             		int bid = Integer.parseInt(bidInputArea.getText().trim());
             		
-            		biddingHistoryArea.append("Player: "+players.get(currentPlayerNumber).getIdentifier()+" has bid "
-            		+bid+"\n");
+            		//Make sure player has enough to bid
+            		if(bid > players.get(currentPlayerNumber).getNetWorth()){
+            			biddingHistoryArea.append("-> Player: "+players.get(currentPlayerNumber).getIdentifier()+" does not have "
+            					+ "enough to place this bid.\n-> Your balance is: "+players.get(currentPlayerNumber).getNetWorth()+"\n\n");
+            		}
             		
-            		
-            		//Place players name and their bid in hash map
-            		playersAndBids.put(players.get(currentPlayerNumber).getIdentifier(), bid);
-            		
-            		//Some have withdrawn from the bidding, make sure we don't allow them to bid again.
-            		if(indicesOfWithdrawnPlayers.size() != 0){
-            			while(indicesOfWithdrawnPlayers.contains(currentPlayerNumber)){
-                    		if(currentPlayerNumber == players.size()-1){
+            		else{
+            			
+            			//Tell users what the bid was
+            			biddingHistoryArea.append("-> Player: "+players.get(currentPlayerNumber).getIdentifier()+" has bid "
+                        		+bid+"\n\n");
+                        		
+            			//Place players name and their bid in hash map
+                		playersAndBids.put(players.get(currentPlayerNumber).getIdentifier(), bid);
+                		
+                		//Some have withdrawn from the bidding, make sure we don't allow them to bid again.
+                		//By looping through until we find a currentPlayer number not in withdrawn indices
+                		if(indicesOfWithdrawnPlayers.size() != 0){
+                			
+                			if(currentPlayerNumber == players.size()-1){
                     			currentPlayerNumber = 0;
                     		}
                     		else{
                     			currentPlayerNumber ++;
                     		}
-                    	}
-            		}
-            		
-            		//No one has withdrawn from the bidding yet, loop through players as normal.
-            		else{
-            			if(currentPlayerNumber == players.size()-1){
-                			currentPlayerNumber = 0;
+                			
+                			while(indicesOfWithdrawnPlayers.contains(currentPlayerNumber)){
+                        		if(currentPlayerNumber == players.size()-1){
+                        			currentPlayerNumber = 0;
+                        		}
+                        		else{
+                        			currentPlayerNumber ++;
+                        		}
+                        	}
                 		}
+                		
+                		//No one has withdrawn from the bidding yet, loop through players as normal.
                 		else{
-                			currentPlayerNumber ++;
+                			if(currentPlayerNumber == players.size()-1){
+                    			currentPlayerNumber = 0;
+                    		}
+                    		else{
+                    			currentPlayerNumber ++;
+                    		}
                 		}
+                		
             		}
+            	
             		
             		
-            		
-            		biddingHistoryArea.append("Player: "+players.get(currentPlayerNumber).getIdentifier()+". Enter Bid or Withdraw from Auction.\n");
+            		biddingHistoryArea.append("-> Player: "+players.get(currentPlayerNumber).getIdentifier()+". Enter Bid or Withdraw from Auction.\n\n");
             		
             		}catch(NumberFormatException ex){ // handle your exception
             			
-            		 biddingHistoryArea.append("Not an integer. Enter another bid.\n");
+            		 biddingHistoryArea.append("-> Not an integer. Enter another bid.\n\n");
             		 
             		}
             	
@@ -252,10 +278,28 @@ public class Auction extends JFrame{
             	playersAndBids.remove(players.get(currentPlayerNumber).getIdentifier());
             	
             	//Tell users who has withdrawn
-            	biddingHistoryArea.append(players.get(currentPlayerNumber).getIdentifier()+" has withdrawn from the Auction.\n");
+            	biddingHistoryArea.append("-> "+players.get(currentPlayerNumber).getIdentifier()+" has withdrawn from the Auction.\n\n");
             	
             	if(playersAndBids.size() == 1){
-            		System.out.println("SOMEONE HAS WON THE AUCTION");
+            		while(indicesOfWithdrawnPlayers.contains(currentPlayerNumber)){
+            			if(currentPlayerNumber == players.size()-1){
+                			currentPlayerNumber = 0;
+                		}
+                		else{
+                			currentPlayerNumber ++;
+                		}
+            		}
+            		
+            		//Add the property to the players properties and deduct thier bid from their balance
+            		players.get(currentPlayerNumber).addProperty((PrivateProperty)propertyToAuction);
+            		players.get(currentPlayerNumber).deductFromBalance(playersAndBids.get(players.get(currentPlayerNumber).getIdentifier()));  
+            		
+            		//Tell users who has won the auction on the property and dispose of JFrame.
+            		history.getTextArea().append("-> "+players.get(currentPlayerNumber).getIdentifier()+" has won the auction for "
+            				+ ((PrivateProperty)propertyToAuction).getIdentifier()+" !\n\n");
+            		
+            		         
+            		auctionHouse.dispose();
             	}
             	
             	else{
@@ -271,10 +315,8 @@ public class Auction extends JFrame{
             		
             	}
             	
-            	biddingHistoryArea.append("It is now: "+players.get(currentPlayerNumber).getIdentifier()+" turn.\n");
+            	biddingHistoryArea.append("It is now: "+players.get(currentPlayerNumber).getIdentifier()+" turn.\n\n");
 
-            	
-            	
             }
 		});
     }

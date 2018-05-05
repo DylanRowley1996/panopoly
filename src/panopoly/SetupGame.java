@@ -84,7 +84,7 @@ public class SetupGame {
 		resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		addRandomPropertiesToEachPlayer();
+		//addRandomPropertiesToEachPlayer();
 
 		new GUI(players, noBoardRows, locationList);
 	}
@@ -547,7 +547,7 @@ public class SetupGame {
 
 	}
 
-	//TODO - Remove when testing of Mortgaging is complete.
+	/*//TODO - Remove when testing of Mortgaging is complete.
 	//This just adds a random amount of properties to each player
 	//so checking if Mortgaging/Redeeming etc is working correctly.
 	public void addRandomPropertiesToEachPlayer(){
@@ -561,5 +561,5 @@ public class SetupGame {
 			}
 			j=0;
 		}
-	}
+	}*/
 }
