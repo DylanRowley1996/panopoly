@@ -72,7 +72,7 @@ public class Player implements Playable {
     
     //Property Actions
     public void buyProperty(PrivateProperty target) {
-     	this.addToBalance(target.getPrice());
+     	this.deductFromBalance(target.getPrice());
      	target.setOwner(this);
     	properties.add(target);
     }
