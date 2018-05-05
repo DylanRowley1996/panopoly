@@ -222,7 +222,14 @@ public class CardGenerator {
 			 //new retainableCard object get out of jail
 			 //player.addCard(GetOutOfJailFree);
 			 //history.getTextArea().append("Retainable Card\n");	
-		 }else if(effectDecider<78) {
+		 }else if(effectDecider<82) { // TODO
+		
+			 reward = "Police find you standing over "+genderPossesive+" corpse";			
+			 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward+"\nYou are arrested for murder.\n Go directly to jail";
+			 player.setLocation(locations.get(locations.size()/4));
+			 player.setJail(new Jail(player, history));
+		 }
+		 /*else if(effectDecider<78) {
 
 			 reward = "You looted a RENT AVOID card from "+genderPossesive2+" corpse";			
 			 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward;
@@ -231,22 +238,21 @@ public class CardGenerator {
 			 //rent avoid
 
 		 }else if(effectDecider<82) { // TODO
-			 /*
+			 
 			  * up to 82 leads to boost of rent intake
 			  * up to 85 leads to cheaper prices on properties/buildings??
-			  */
+			  
 			 reward = "You looted a RENT POWER UP from "+genderPossesive+" corpse";			
 			 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward+"\nAll your properties' rents have increased by 15%!";
 			 
 			 // set boolean to true within player class that can be searched for when calculating rent , must have a timer so gets revoked after x turns
-			 //history.getTextArea().append("Power Up\n");
 			 
 		 }else if(effectDecider<85) {
 			 reward = "You looted a PROPERTY COST POWER UP from "+genderPossesive+" corpse";			
 			 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward+"\nAll properties now cost 10% less for you to purchase!";
 			
 
-		 }else if(effectDecider<90) {
+		 }*/else if(effectDecider<90) {
 			 
 			 int amount = rand.nextInt(131) + 20;
 			 penalty = genderDeterminer+" makes you pay $"+amount+" for each of your Properties";

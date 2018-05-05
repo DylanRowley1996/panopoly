@@ -26,12 +26,16 @@ public class Player implements Playable {
     private Locatable location = null;
     private boolean hasRolled = false;
     private boolean mustDeclareBankruptcy = false;
+    private boolean isInJail;
+    private Jail jail;
     
     private BufferedImage characterIcon;
     
     public Player(String name,String pathToCharacterIcon) throws IOException,NullPointerException{
     	this.name = name;
         this.pathToCharacterIcon = pathToCharacterIcon;
+        isInJail = false;
+        jail = null;
     }
 
     public String getName(){
@@ -154,6 +158,21 @@ public class Player implements Playable {
 	public void useJailCard() {
 		getOutOfJailCard--;
 	}
+
+	public void setInJail(boolean b) {
+		isInJail = b;
+	}
 	
+	public boolean isInJail() {
+		return isInJail;
+	}
+	
+	public void setJail(Jail j) {
+		jail = j;
+	}
+	
+	public Jail getJail() {
+		return jail;
+	}
 }
 

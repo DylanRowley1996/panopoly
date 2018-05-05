@@ -51,20 +51,25 @@ public class PartyLeader {
 
 		for(int i=0;i<moveCount;i++) {
 			player.setLocation((NamedLocation)player.getNextLoc());
-			history.getTextArea().append("-> You have rolled onto "+player.getLocation().getIdentifier()+".\n\n");
 			board.updateIcons(player);
 			board.repaint();
 			board.revalidate();
 		}
-		history.getTextArea().append("-> Roll Over.\n\n");
+		history.getTextArea().append("-> You have rolled onto "+player.getLocation().getIdentifier()+".\n\n");
 
 		//After roll
 		if(player.getLocation() instanceof MCQLocation) { // TODO get rid of !
 			MCQ mcq = new MCQ();
-			mcq.createMCQPanel(player,  history);
+			mcq.createMCQPanel(player, history, null);
 		}
 		if(player.getLocation() instanceof CardLocation) {
 			CardGenerator.createCard(player, history);
+		}
+		if(player.getLocation() instanceof GoToJail) {
+			player.setJail(new Jail(player, history));
+			history.getTextArea().append("-> Go to Jail!\n\n");
+			player.setLocation(locations.get(locations.size()/4));
+			board.revalidate();
 		}
 				
 	}
@@ -197,8 +202,7 @@ public class PartyLeader {
 									+ " due to houses on locations: " + buildString(unmortgagableIdentifiers) + "\n\n");
 						}
 
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
+					} catch (Exception e1) {		
 						e1.printStackTrace();
 					}
 				}
@@ -229,9 +233,7 @@ public class PartyLeader {
 	}
 
 	public void redeem(Player player){
-		//TODO
-
-		
+	
 		if(player.getMortgages().size() == 0){
 			history.getTextArea().append("-> You have not mortgaged any properties. Nothing to redeem.\n\n");
 		
@@ -312,7 +314,6 @@ public class PartyLeader {
 		                    	}
 							} 
 		                    catch (Exception e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}	
 		                } 
@@ -358,7 +359,7 @@ public class PartyLeader {
 		//TODO
 		// check for in jail too long, unpaid rent, etc.
 		
-		if(!player.hasRolled()){
+		if(!player.hasRolled() && !player.isInJail()){
 			history.getTextArea().append("-> You must roll at least once before finishing your turn.\n\n");
 		}
 		
@@ -387,7 +388,6 @@ public class PartyLeader {
 					history.getTextArea()
 							.append("-> Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n\n");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

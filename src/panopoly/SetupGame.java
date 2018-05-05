@@ -322,7 +322,7 @@ public class SetupGame {
 		//Add Properties that need to be present every time to the corners.
 		locationList.add(0, new NamedLocation("Go"));
 		locationList.add(noBoardRows-3, new NamedLocation("Jail"));
-		locationList.add((noLocations-1)-(noBoardRows-3), new NamedLocation("Go to Jail"));
+		locationList.add((noLocations-1)-(noBoardRows-3), new GoToJail("Go to Jail"));
 		locationList.add(noLocations-1, new Shop("Marketplace", noLocations-1));
 
 		// set next and prev locations
