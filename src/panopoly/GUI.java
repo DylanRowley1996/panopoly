@@ -34,7 +34,6 @@ public class GUI {
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private ButtonPanel buttonPanel = new ButtonPanel();
 	private Board board;
-//	ArrayList<NamedLocation> locations;
 	private int currentPlayer = 0;
 
 	private JPanel characterImagePanel = new JPanel();
@@ -136,8 +135,9 @@ public class GUI {
 		buttonPanel.getAuctionButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                        partyLeader.auction(players.get(currentPlayer));
+                        partyLeader.auction(players.get(currentPlayer), players);
                     }
+            
         });
 
 		buttonPanel.getCollectRentButton()
