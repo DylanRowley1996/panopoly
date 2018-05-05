@@ -55,11 +55,13 @@ public class Player implements Playable {
     //Property Actions
     public void buyProperty(PrivateProperty target) {
      	this.addToBalance(target.getPrice());
+     	target.setOwner(this);
     	properties.add(target);
     }
     
     //Used for Auctioning
   	public void addProperty(PrivateProperty property){
+     	property.setOwner(this);
   		properties.add(property);
   	}
 

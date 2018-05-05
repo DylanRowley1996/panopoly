@@ -45,17 +45,17 @@ public class PartyLeader {
 
 		moveCount = normalDice.rollDice(2, 6);
 		str += moveCount;
-		history.getTextArea().setText("You have rolled a "+str+".\n");	
+		history.getTextArea().setText("-> You have rolled a "+str+".\n\n");	
 		player.setRolled(true);
 
 		for(int i=0;i<moveCount;i++) {
 			player.setLocation((NamedLocation)player.getNextLoc());
-			history.getTextArea().append("You have rolled onto "+player.getLocation().getIdentifier()+".\n");
+			history.getTextArea().append("-> You have rolled onto "+player.getLocation().getIdentifier()+".\n\n");
 			board.updateIcons(player);
 			board.repaint();
 			board.revalidate();
 		}
-		history.getTextArea().append("Roll Over.\n");
+		history.getTextArea().append("-> Roll Over.\n\n");
 
 		//After roll
 		if(player.getLocation() instanceof MCQLocation) { // TODO get rid of !
@@ -72,18 +72,18 @@ public class PartyLeader {
 				if(player.getNetWorth()>=(((PrivateProperty)player.getLocation()).getPrice())) {
 					player.buyProperty((PrivateProperty)player.getLocation());
 					((PrivateProperty)player.getLocation()).setOwner(player);
-					history.getTextArea().append("You have bought "+player.getLocation().getIdentifier()+".\n");
+					history.getTextArea().append("-> You have bought "+player.getLocation().getIdentifier()+".\n\n");
 					boughtProperty = true;
 				}else {
-					history.getTextArea().append("This property is too expensive.\n");	
+					history.getTextArea().append("-> This property is too expensive.\n\n");	
 				}
 			}
 			else {
-				history.getTextArea().append("This property is already purchased.\n");
+				history.getTextArea().append("-> This property is already purchased.\n\n");
 			}
 			
 		}else {
-			history.getTextArea().append("You cannot purchase this property.\n");
+			history.getTextArea().append("-> You cannot purchase this property.\n\n");
 		}
 	}
 
@@ -91,130 +91,138 @@ public class PartyLeader {
 		// TODO
 	}
 
-	public void mortgage(Player player){
-		//TODO
-		//Get list of players properties.
-		//Check what properties are mortgageable
-		//Pass information to JPanel
-		//Allow them to select which properties to mortgage.
-		//Ensure balance is updated accordingly
-		ArrayList<PrivateProperty> mortgageableProperties = new ArrayList<PrivateProperty>();
-		JFrame mortgageFrame = new JFrame("Mortgage Choices");
-		JLabel userDirections = new JLabel("Choose which properties to mortgage then hit 'Confirm'");
+	public void mortgage(Player player) {
+		// TODO
+		// Get list of players properties.
+		// Check what properties are mortgageable
+		// Pass information to JPanel
+		// Allow them to select which properties to mortgage.
+		// Ensure balance is updated accordingly
+		if (player.getProperties().size() == 0) {
+			history.getTextArea().append("-> You don't own any properties. Nothing to Mortgage.\n");
+		} else {
+			ArrayList<PrivateProperty> mortgageableProperties = new ArrayList<PrivateProperty>();
+			JFrame mortgageFrame = new JFrame("Mortgage Choices");
+			JLabel userDirections = new JLabel("Choose which properties to mortgage then hit 'Confirm'");
 
-
-
-		for(int i=0;i<player.getProperties().size();i++){
-			//If property is mortgageable and is not already mortgaged
-			if(player.getProperties().get(i) instanceof Mortgageable && player.getProperties().get(i).isMortgaged() == false){
-				mortgageableProperties.add(player.getProperties().get(i));
+			for (int i = 0; i < player.getProperties().size(); i++) {
+				// If property is mortgageable and is not already mortgaged
+				if (player.getProperties().get(i) instanceof Mortgageable
+						&& player.getProperties().get(i).isMortgaged() == false) {
+					mortgageableProperties.add(player.getProperties().get(i));
+				}
 			}
+
+			/*
+			 * Create an array list of buttons. One for each mortgageable
+			 * property.
+			 */
+			ArrayList<JRadioButton> mortgageableRadioButtons = new ArrayList<JRadioButton>();
+			for (int i = 0; i < mortgageableProperties.size(); i++) {
+				mortgageableRadioButtons
+						.add(new JRadioButton("Property: " + mortgageableProperties.get(i).getIdentifier()
+								+ " Mortgage Amount: " + mortgageableProperties.get(i).getMortgageAmount()));
+			}
+
+			// Create the button for choice confirmation.
+			JButton confirmationButton = new JButton("Confirm");
+
+			/*
+			 * 1. Check which buttons are selected 2. Count the total amount of
+			 * mortgages selected. 3. Add this to players account 4. Set
+			 * isMortgaged to true for all properties that are mortgaged
+			 */
+			confirmationButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					try {
+						int totalMortgageValue = 0;
+						int j = 0;
+						// This list is used to create a string that will be
+						// appended to text area on the GUI
+						ArrayList<String> mortgageableIdentifiers = new ArrayList<String>();
+						ArrayList<String> unmortgagableIdentifiers = new ArrayList<String>();
+
+						while (j < mortgageableRadioButtons.size()) {
+
+							if (mortgageableRadioButtons.get(j).isSelected()) {
+
+								// Check that the user can mortgage the property
+								if (mortgageableProperties.get(j) instanceof ImprovableProperty) {
+									if (((ImprovableProperty) mortgageableProperties.get(j)).getNumHouses() == 0) {
+										totalMortgageValue += mortgageableProperties.get(j).getMortgageAmount();
+										mortgageableIdentifiers.add(mortgageableProperties.get(j).getIdentifier());
+									}
+
+									// Can't be mortgaged. Add to list.
+									else {
+										unmortgagableIdentifiers.add(mortgageableProperties.get(j).getIdentifier());
+									}
+								}
+
+							}
+							j++;
+						}
+
+						// No unmortgageable properties were selected. Allow
+						// them to mortgage.
+						if (unmortgagableIdentifiers.size() == 0) {
+
+							// Mortgage the correct properties.
+							for (int x = 0; x < mortgageableIdentifiers.size(); x++) {
+								for (int y = 0; y < player.getProperties().size(); y++) {
+									if (mortgageableIdentifiers.get(x)
+											.equals(player.getProperties().get(y).getIdentifier())) {
+										player.getProperties().get(y).mortgage();
+									}
+								}
+							}
+
+							// Add the total value to the players balance.
+							player.addToBalance(totalMortgageValue);
+							history.getTextArea().append("-> Properties Mortgaged: " + buildString(mortgageableIdentifiers)
+									+ " for total: " + totalMortgageValue + " \n\n");
+							mortgageFrame.dispose();// Exit JFrame, player has
+													// selected the properties
+													// they want to redeem
+
+						}
+
+						else {
+							history.getTextArea().append("-> Can't mortgage the following properties"
+									+ " due to houses on locations: " + buildString(unmortgagableIdentifiers) + "\n\n");
+						}
+
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+			});
+
+			// Add all choices to JPanel
+			JPanel radioPanel = new JPanel(new GridLayout(0, 1));
+
+			// Add label that contains directions for user onto panel
+			radioPanel.add(userDirections);
+
+			for (int i = 0; i < mortgageableProperties.size(); i++) {
+				radioPanel.add(mortgageableRadioButtons.get(i));
+			}
+
+			// Add button below choices
+			radioPanel.add(confirmationButton);
+
+			radioPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+			mortgageFrame.add(radioPanel);
+			mortgageFrame.setVisible(true);
+			mortgageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			mortgageFrame.pack();
+			mortgageFrame.setLocationRelativeTo(null);
 		}
 
-		/*
-		 * Create an array list of buttons. One for each mortgageable property.
-		 */
-		ArrayList<JRadioButton> mortgageableRadioButtons = new ArrayList<JRadioButton>();
-		for(int i=0;i<mortgageableProperties.size();i++){
-			mortgageableRadioButtons.add(new JRadioButton("Property: "+mortgageableProperties.get(i).getIdentifier()
-					+" Mortgage Amount: "+mortgageableProperties.get(i).getMortgageAmount()));
-		}
-
-		//Create the button for choice confirmation.
-	    JButton confirmationButton = new JButton("Confirm");
-	    
-	    /* 1. Check which buttons are selected
-	     * 2. Count the total amount of mortgages selected.
-	     * 3. Add this to players account
-	     * 4. Set isMortgaged to true for all properties that are mortgaged
-	    */
-		 confirmationButton.addActionListener(new ActionListener() {
-	            @Override
-	            public void actionPerformed(ActionEvent e) {
-	               
-	                    try {	               
-	                		int totalMortgageValue = 0;
-	                    	int j=0;
-	                    	//This list is used to create a string that will be appended to text area on the GUI
-		            		ArrayList<String> mortgageableIdentifiers = new ArrayList<String>();
-		            		ArrayList<String> unmortgagableIdentifiers = new ArrayList<String>();
-		            		
-	                    	while(j < mortgageableRadioButtons.size()){
-	                    		
-	                    		if(mortgageableRadioButtons.get(j).isSelected()){
-	                    			
-	                    			//Check that the user can mortgage the property
-	                    			if(mortgageableProperties.get(j) instanceof ImprovableProperty){
-	                    				if(((ImprovableProperty)mortgageableProperties.get(j)).getNumHouses()==0){
-	                    					totalMortgageValue += mortgageableProperties.get(j).getMortgageAmount();
-	                    					mortgageableIdentifiers.add(mortgageableProperties.get(j).getIdentifier());
-	                    				}
-	                    				
-	                    				//Can't be mortgaged. Add to list.
-	                    				else{
-		                    				unmortgagableIdentifiers.add(mortgageableProperties.get(j).getIdentifier());
-	                    				}
-	                    			}
-
-	                    		}
-	                    		j++;
-	                    	}
-	                    	
-	                    	
-	                    	//No unmortgageable properties were selected. Allow them to mortgage.
-	                    	if(unmortgagableIdentifiers.size() == 0){
-	                    		
-	                    		//Mortgage the correct properties.
-	                    		for(int x=0;x<mortgageableIdentifiers.size();x++){
-	                    			for(int y=0; y<player.getProperties().size();y++){
-	                    				if(mortgageableIdentifiers.get(x).equals(player.getProperties().get(y).getIdentifier())){
-	                    					player.getProperties().get(y).mortgage();
-	                    				}
-	                    			}
-	                    		}
-
-	                    		//Add the total value to the players balance.
-	                    		player.addToBalance(totalMortgageValue);
-	                    		history.getTextArea().append("Properties Mortgaged: "+buildString(mortgageableIdentifiers)+" for total: "+totalMortgageValue+" \n");
-		                    	mortgageFrame.dispose();//Exit JFrame, player has selected the properties they want to redeem
-		                    	
-	                    	}
-	                    	
-	                    	else{
-	                    		history.getTextArea().append("Can't mortgage the following properties"
-	                    				+ " due to houses on locations: "+buildString(unmortgagableIdentifiers)+"\n");
-	                    	}
-                    		
-						} 
-	                    catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}	
-	                } 
-	            
-	      });
-		 
-		 
-		 //Add all choices to JPanel
-		 JPanel radioPanel = new JPanel(new GridLayout(0, 1));
-		 
-		 //Add label that contains directions for user onto panel
-		 radioPanel.add(userDirections);
-		 
-		 for(int i=0;i<mortgageableProperties.size();i++){
-		     radioPanel.add(mortgageableRadioButtons.get(i));
-		 }
-		 
-		 //Add button below choices
-		 radioPanel.add(confirmationButton);
-		 
-		 radioPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
-	     mortgageFrame.add(radioPanel);
-	     mortgageFrame.setVisible(true);
-	     mortgageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	     mortgageFrame.pack();
-	     mortgageFrame.setLocationRelativeTo(null);
-	     
 	}
 
 	public void redeem(Player player){
@@ -286,7 +294,7 @@ public class PartyLeader {
 	                    	//Make sure player has enough funds to redeem mortgages and has actually chosen one.
 	                    	if(player.getNetWorth() >= totalRedemptionValue && mortgagedSelected){
 	                    		player.deductFromBalance(totalRedemptionValue);
-	                    		history.getTextArea().append("\nRedeeemed Mortgages: "+buildString(redeemedPropertiesToPrint)+" for total: "+totalRedemptionValue+"\n");
+	                    		history.getTextArea().append("-> Redeeemed Mortgages: "+buildString(redeemedPropertiesToPrint)+" for total: "+totalRedemptionValue+"\n\n");
 		                    	redeemFrame.dispose();//Exit JFrame, player has selected the properties they want to redeem	
 	                    	}
 	                    	else if(player.getNetWorth() < totalRedemptionValue && mortgagedSelected){
@@ -342,7 +350,7 @@ public class PartyLeader {
 		//If player is on an ownable property that is unowned and hasn't bought it
 		//Force them to auction.
 		if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
-			history.getTextArea().append("Either 'Buy' or 'Auction' this property before finishing your turn.\n");
+			history.getTextArea().append("-> Either 'Buy' or 'Auction' this property before finishing your turn.\n\n");
 		}
 		
 		else{
@@ -359,7 +367,7 @@ public class PartyLeader {
 							.read(new File(players.get(currentPlayerNumber).getPathForImageIcon()));
 					characterImage.setIcon(new ImageIcon(myPicture));
 					history.getTextArea()
-							.append("Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n");
+							.append("-> Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n\n");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

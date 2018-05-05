@@ -131,7 +131,7 @@ public class Auction extends JFrame{
         getContentPane().add(propertyAndBiddingPanel);
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
         setTitle("Auction House");
         pack();

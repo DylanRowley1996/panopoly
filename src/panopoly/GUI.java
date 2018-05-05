@@ -125,7 +125,7 @@ public class GUI {
 						partyLeader.roll(players.get(currentPlayer));
 						updatePropCard(players.get(currentPlayer));
 					}else {
-						history.getTextArea().append("You have already rolled.\n");				
+						history.getTextArea().append("-> You have already rolled.\n\n");				
 					}
 				} catch (InvalidFormatException | IOException e1) {
 					e1.printStackTrace();
