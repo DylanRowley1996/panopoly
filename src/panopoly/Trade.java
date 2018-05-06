@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 /* 
@@ -53,9 +54,17 @@ public class Trade extends JFrame{
 	private JPanel playerRadioButtonPanel = new JPanel(new GridLayout(0,1));
 	private ArrayList<JRadioButton> playerRadioButtons = new ArrayList<JRadioButton>();
 	private ButtonGroup playerButtonGroup = new ButtonGroup();
+	
+	//Components for fourth panel.
+	private JLabel acceptOrDeclineQuestion = new JLabel();
+	private JPanel playerOfferPanel = new JPanel(new GridLayout(0,1));
+	
+	//Components for fifth panel.
+	private JLabel bidQuestion = new JLabel("How much do you want to offer for these properties?");
+	private JPanel bidPanel = new JPanel(new GridLayout(0,1));
+	private JTextArea bidArea = new JTextArea();
 
 	
-
 	//Button panel is common to all panels.
 	private JPanel buttonPanel = new JPanel(new FlowLayout());
 	private JButton confirmationButton = new JButton("Confirm");
@@ -68,6 +77,9 @@ public class Trade extends JFrame{
 	private boolean playerAccepted = false;
 	private boolean offerGiven = false;
 	private boolean offerAccepted = false;
+	
+	//Information to complete trade.
+	String playerToTradeWith = "";
 	
 
 	public Trade(Player player, ArrayList<Player> players, HistoryLog history){
@@ -163,6 +175,50 @@ public class Trade extends JFrame{
 			
 	}
 	
+	private void createPresentOfferPanel(){
+		
+		String assetWanted = "";
+		
+		if(cashChosen){
+			assetWanted = "cash";
+		}
+		else if(propertyChosen){
+			assetWanted = "property";
+		}
+	
+		
+		acceptOrDeclineQuestion.setText(playerToTradeWith+", "+player.getIdentifier()+" wants to trade the following for "+assetWanted);
+		//Add Question
+		playerOfferPanel.add(acceptOrDeclineQuestion);
+		
+		//Present player with properties the player wants to trade.
+		for(int i=0;i<propertiesWishingToTrade.size();i++){
+			playerOfferPanel.add(new JLabel(propertiesWishingToTrade.get(i)));
+		}
+		
+		//Change button text for clarity
+		confirmationButton.setText("ACCEPT");
+		cancelButton.setText("REJECT");
+		
+		playerOfferPanel.add(buttonPanel);
+		
+	}
+	
+	/*
+	 * If the player accepts the offer they now say
+	 * how much they'll offer the player wanting to trade.
+	 */
+	private void createPlayerBidPanel(){
+		
+		bidPanel.add(bidQuestion);
+		bidPanel.add(bidArea);
+		
+		confirmationButton.setText("Confirm");
+		cancelButton.setText("Cancel");
+		
+		bidPanel.add(buttonPanel);
+	}
+	
 	private void updateFrame(){
 		if(!offerAccepted){
 			if(!offerGiven){
@@ -175,12 +231,14 @@ public class Trade extends JFrame{
 								/*
 								 * Create a list of properties they want to trade.
 								 */
+								System.out.println("In properties");
 								createAssetsPanel();
 								tradingHouse.remove(propertyPanel);
 								tradingHouse.add(assetsPanel);
 								tradingHouse.revalidate();
 								tradingHouse.repaint();
 								tradingHouse.pack();
+								
 								
 							}
 						}else{//Assets chosen, set up player to offer to
@@ -198,8 +256,22 @@ public class Trade extends JFrame{
 						}
 					}else{//Player chosen, ask player to accept
 						
+						createPresentOfferPanel();
+						tradingHouse.remove(playerChoicesPanel);
+						tradingHouse.add(playerOfferPanel);
+						tradingHouse.revalidate();
+						tradingHouse.repaint();
+						tradingHouse.pack();
+						
 					}
 				}else{//Player has accepted or declined, proceed to players offer or return to choosing another
+					
+					createPlayerBidPanel();
+					tradingHouse.remove(playerOfferPanel);
+					tradingHouse.add(bidPanel);
+					tradingHouse.revalidate();
+					tradingHouse.repaint();
+					tradingHouse.pack();
 					
 				}
 			}else{//Chosen player has given offer, proceed to accepting/declining
@@ -217,16 +289,32 @@ public class Trade extends JFrame{
 		confirmationButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				//Check player has chosen properties and update list and JFrame.
-				if(findPropertiesWishingToTrade() && !propertiesChosen) {
-					propertiesChosen = true;
-					updateFrame();
+				if(!propertiesChosen) {
+					if(findPropertiesWishingToTrade()){
+						propertiesChosen = true;
+						updateFrame();
+					}
 				}
+				
 				else if(!assetsChosen){
 					if(assetChoiceSelected()){
 						assetsChosen = true;
 						updateFrame();
 					}
+				}
+				
+				else if(!playerChosen){
+					if(playerButtonSelected()){
+						playerChosen = true;
+						updateFrame();
+					}
+				}
+				
+				else if(!playerAccepted){
+						playerAccepted = true;
+						updateFrame();
 				}
 			}
 		});
@@ -257,6 +345,28 @@ public class Trade extends JFrame{
 		
 		return chosenAnAsset;
 		
+	}
+	
+	private boolean playerButtonSelected(){
+		
+		boolean playerChosen = false;
+		int i=0;
+		
+		/*
+		 * If a player is selected, get their name.
+		 */
+		while(i<playerRadioButtons.size() && !playerChosen){
+			if(playerRadioButtons.get(i).isSelected()){
+				playerChosen  = true;
+				playerToTradeWith = playerRadioButtons.get(i).getText();
+			}
+			else{
+				i++;
+			}
+			
+		}
+		
+		return playerChosen;
 	}
 	
 	
