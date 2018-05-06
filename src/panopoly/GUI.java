@@ -170,7 +170,13 @@ public class GUI {
 			}
 		});
 
-		buttonPanel.getTradeButton().addActionListener(e -> history.getTextArea().setText("Trade button clicked."));
+		buttonPanel.getTradeButton().addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.trade(players.get(currentPlayer), players, history);
+			}
+		});
 
 		buttonPanel.getFinishTurnButton().addActionListener(new ActionListener() {
 

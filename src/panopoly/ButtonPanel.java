@@ -47,14 +47,15 @@ public class ButtonPanel extends JPanel
     	add(tradeButton, c);
     	
     	//Second row
-    	c.gridwidth = 2;
+    	c.gridwidth = 1;
 		c.gridx = 0;
     	c.gridy = 1;
     	add(mortgageButton, c);
     	
-    	c.gridx = 2;
+    	c.gridx = 1;
     	c.gridy = 1;
     	add(redeemMortgageButton, c);
+    	
     	
     	c.gridwidth = 2;
     	c.gridx = 2;

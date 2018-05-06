@@ -353,6 +353,10 @@ public class PartyLeader {
 			Auction auction = new Auction((Ownable)player.getLocation(),players,history);
 		}
 	}
+	
+	public void trade(Player player, ArrayList<Player> players, HistoryLog history){
+		Trade trade = new Trade(player, players, history);
+	}
 
 	public int finishTurn(Player player, int currentPlayerNumber, JLabel characterImage){
 		//TODO
