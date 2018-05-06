@@ -118,7 +118,10 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {						
 				try {
-					if(!players.get(currentPlayer).hasRolled()) {
+					if(players.get(currentPlayer).isInJail()) {
+						history.getTextArea().append("-> You cannot roll while in Jail.\n\n");
+					}
+					else if(!players.get(currentPlayer).hasRolled()) {
 						partyLeader.roll(players.get(currentPlayer));
 						updatePropCard(players.get(currentPlayer));
 					}else {
@@ -144,6 +147,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                         partyLeader.auction(players.get(currentPlayer), players, history);
+                        updatePropCard(players.get(currentPlayer));
                     }
             
         });
@@ -182,8 +186,16 @@ public class GUI {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int oldPlayer = currentPlayer;
 				currentPlayer = partyLeader.finishTurn(players.get(currentPlayer),currentPlayer,characterImage);
 				updatePropCard(players.get(currentPlayer));
+				if(oldPlayer!=currentPlayer && players.get(currentPlayer).isInJail()) {
+					try {
+						players.get(currentPlayer).getJail().jailControl();
+					} catch (InvalidFormatException | IOException | InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
 
 		});

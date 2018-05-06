@@ -1,5 +1,5 @@
 package panopoly;
-import java.awt.Image;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import org.apache.commons.io.FilenameUtils;
 import javax.imageio.ImageIO;
 import interfaces.Locatable;
-import interfaces.Ownable;
 import interfaces.Playable;
-import locations.NamedLocation;
 import locations.PrivateProperty;
 import locations.PropertyGroup;
 
@@ -17,22 +15,27 @@ import locations.PropertyGroup;
 public class Player implements Playable {
 
     private String name = "";
-    private int netWorth = 0;
+    private int netWorth = 2000;
     private ArrayList<PrivateProperty> properties = new ArrayList<PrivateProperty>();
     private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
     private ArrayList<PropertyGroup> mortgages = new ArrayList<PropertyGroup>();
     private int numImprovements = 0;
+    private int getOutOfJailCard = 0;
     
     private String pathToCharacterIcon = "";
     private Locatable location = null;
     private boolean hasRolled = false;
     private boolean mustDeclareBankruptcy = false;
+    private boolean isInJail;
+    private Jail jail;
     
     private BufferedImage characterIcon;
     
     public Player(String name,String pathToCharacterIcon) throws IOException,NullPointerException{
     	this.name = name;
         this.pathToCharacterIcon = pathToCharacterIcon;
+        isInJail = false;
+        jail = null;
     }
 
     public String getName(){
@@ -69,7 +72,7 @@ public class Player implements Playable {
     
     //Property Actions
     public void buyProperty(PrivateProperty target) {
-     	this.addToBalance(target.getPrice());
+     	this.deductFromBalance(target.getPrice());
      	target.setOwner(this);
     	properties.add(target);
     }
@@ -144,5 +147,32 @@ public class Player implements Playable {
 		name = FilenameUtils.getBaseName(filepath);	
 	}
 	
+	public boolean hasJailCard() {
+		return getOutOfJailCard>0;
+	}
+	
+	public void addJailCard() {
+		getOutOfJailCard++;
+	}
+	
+	public void useJailCard() {
+		getOutOfJailCard--;
+	}
+
+	public void setInJail(boolean b) {
+		isInJail = b;
+	}
+	
+	public boolean isInJail() {
+		return isInJail;
+	}
+	
+	public void setJail(Jail j) {
+		jail = j;
+	}
+	
+	public Jail getJail() {
+		return jail;
+	}
 }
 

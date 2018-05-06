@@ -15,6 +15,7 @@ public class Overview extends JFrame {
     private ArrayList<Player> players;
     private JLabel playerInformation = new JLabel("");
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Overview(ArrayList<Player> players){
         super("Overview");
 

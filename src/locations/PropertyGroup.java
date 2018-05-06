@@ -5,7 +5,7 @@ import java.util.Random;
 
 import interfaces.Groupable;
 import interfaces.Ownable;
-import panopoly.Player;
+import interfaces.Playable;
 
 public class PropertyGroup {
 
@@ -49,12 +49,13 @@ public class PropertyGroup {
 	}
 	
 	public int[] calculateRentArray() {
-		int[] rentArray = new int[5];
+		int[] rentArray = new int[6];
 		rentArray[0] = min/10;
 		rentArray[1] = rentArray[0] * 5;
 		rentArray[2] = rentArray[1] * 3;
-		rentArray[3] = rentArray[2] * 3;
-		rentArray[4] = (int) (rentArray[3] * 1.8);
+		rentArray[3] = (int) (rentArray[2] * 1.8);
+		rentArray[4] = (int) (rentArray[3] * 1.5);
+		rentArray[5] = (int) (rentArray[4] * 1.6);
 		return rentArray;
 	}
 	
@@ -62,7 +63,7 @@ public class PropertyGroup {
 		return color;
 	}
 	
-	public int getNumLocsOwnedByPlayer(Player player) { // TODO change to Playable 
+	public int getNumLocsOwned(Playable player) {
 		int locsOwned = 0;
 		for(Groupable loc : locs) {
 			if(loc instanceof Ownable) {
@@ -73,5 +74,9 @@ public class PropertyGroup {
 		}
 		
 		return locsOwned;
+	}
+	
+	public boolean hasMonopoly(Playable player) {
+		return getNumLocsOwned(player)==locs.size();
 	}
 }

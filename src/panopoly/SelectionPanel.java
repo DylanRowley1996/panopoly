@@ -18,10 +18,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public class SelectionPanel extends JPanel{
+
+	private static final long serialVersionUID = 4940008794098536402L;
 	
 	private int currentPlayerNumber = 0;
 	
