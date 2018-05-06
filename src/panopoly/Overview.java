@@ -96,7 +96,7 @@ public class Overview extends JFrame {
     
     
     private String buildBalanceString(Player player){
-    	return Integer.toString(player.getNetWorth());
+    	return "$"+Integer.toString(player.getNetWorth());
     }
     
     private String buildPropertiesString(Player player){
@@ -107,7 +107,7 @@ public class Overview extends JFrame {
     	}
     	else{
     		for(int i=0;i<player.getProperties().size();i++){
-    			properties += player.getProperties().get(i).getIdentifier()+" ";
+    			properties += player.getProperties().get(i).getIdentifier()+", ";
     		}
     	}
     	

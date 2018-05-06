@@ -48,7 +48,7 @@ public class SetupGame {
 
 	public SetupGame(int noOfPlayers) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException{
 
-		int noBoardRows = rand.nextInt(6) + 10;
+		int noBoardRows = rand.nextInt(5) + 11;
 		int noLocations = (noBoardRows-3)*4; //total number of squares on the board
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
 

@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.WindowConstants;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.hssf.usermodel.examples.AddDimensionedImage;
@@ -999,7 +1000,7 @@ public class MCQ {
         
         mcqFrame.add(mcqPanel);
         mcqFrame.setVisible(true);
-        mcqFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        mcqFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         mcqFrame.pack();
         mcqFrame.setLocationRelativeTo(null);
         
