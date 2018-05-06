@@ -151,14 +151,7 @@ public class GUI {
             
         });
 		
-		buttonPanel.getQuitGameButton()
-		.addActionListener(new ActionListener() {        
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				partyLeader.declareBankruptcy(players.get(currentPlayer),currentPlayer,characterImage);
-				
-			}
-		});
+		buttonPanel.getQuitGameButton().addActionListener(e->history.getTextArea().append("-> Quit Game clicked\n"));
 		buttonPanel.getBankruptyButton().addActionListener(new ActionListener() {        
 			@Override
 			public void actionPerformed(ActionEvent e) {
