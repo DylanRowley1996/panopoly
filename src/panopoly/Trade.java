@@ -99,15 +99,15 @@ public class Trade extends JFrame{
 		this.history = history;
 		
 		addConfirmationActionListener();
+		addCancelButtonActionListener();
 		
-		createPropertyPanel(player);
+		updateFrame();
 		
 		/* 
 		 * Add the initial property panel.
 		 * This will be swapped out later
 		 * for the other panels described above.
 		 */
-		tradingHouse.add(propertyPanel);
         tradingHouse.setLocationRelativeTo(null);
         tradingHouse.setVisible(true);
         tradingHouse.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -269,12 +269,18 @@ public class Trade extends JFrame{
 					if(!playerChosen){
 						if(!assetsChosen){
 							if(!propertiesChosen){
+								
+								createPropertyPanel(player);
+								tradingHouse.add(propertyPanel);
+								tradingHouse.revalidate();
+								tradingHouse.repaint();
+								tradingHouse.pack();
+								
 							}else{//Properties chosen, set up assets
 								
 								/*
 								 * Create a list of properties they want to trade.
 								 */
-								System.out.println("In properties");
 								createAssetsPanel();
 								tradingHouse.remove(propertyPanel);
 								tradingHouse.add(assetsPanel);
@@ -290,6 +296,7 @@ public class Trade extends JFrame{
 							 * Create a list of players to choose from
 							 * that a player wants to trade with.
 							 */
+							clearInformationTo(1);
 							createPlayerChoicesPanel();
 							tradingHouse.remove(assetsPanel);
 							tradingHouse.add(playerChoicesPanel);
@@ -399,20 +406,76 @@ public class Trade extends JFrame{
 	
 	private void addCancelButtonActionListener(){
 		
-		if(!offerAccepted){
-			if(!offerGiven){
-				if(!playerAccepted){
-					if(!playerChosen){
-						if(!assetsChosen){
-							if(!propertiesChosen){
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if(!offerAccepted){
+					if(!offerGiven){
+						if(!playerAccepted){
+							if(!playerChosen){
+								if(!assetsChosen){
+									if(!propertiesChosen){
+										tradingHouse.dispose();
+									}
+									else{
+										propertiesChosen = false;
+										clearInformationTo(0);
+										tradingHouse.remove(assetsPanel);
+										updateFrame();
+									}
+								}else{
+		
+									assetsChosen = false;
+									clearInformationTo(1);
+									tradingHouse.remove(playerChoicesPanel);
+									updateFrame();
+									
+								}
+							}else{
+								
+								playerChosen = false;
+								clearInformationTo(2);
+								tradingHouse.remove(playerOfferPanel);
+								updateFrame();
 								
 							}
+						}else{
+							
+							playerAccepted = false;
+							clearInformationTo(3);
+							tradingHouse.remove(tradingPanel);
+							
+							/*tradingHouse.remove(acceptDeclineOpponentsPanel);
+							tradingHouse.add(playerChoicesPanel);
+							tradingHouse.revalidate();
+							tradingHouse.repaint();
+							tradingHouse.pack();
+							playerAccepted = false;*/
+							
 						}
-					}
+					}else{
+						
+						/*tradingHouse.remove(tradingPanel);
+						tradingHouse.add(acceptDeclineOpponentsPanel);
+						tradingHouse.revalidate();
+						tradingHouse.repaint();
+						tradingHouse.pack();
+						offerGiven = false;*/
+						
+					}	
+				}else {
+					
+					/*tradingHouse.remove(acceptDeclineOpponentsPanel);
+					tradingHouse.add(tradingPanel);
+					tradingHouse.revalidate();
+					tradingHouse.repaint();
+					tradingHouse.pack();
+					offerAccepted = false;*/
 				}
-			}
 				
-		}
+			}
+		});
 			
 	}
 	
@@ -593,6 +656,41 @@ public class Trade extends JFrame{
 		
 		return index;
 			
+	}
+	
+	private void clearInformationTo(int stepOfProcess){
+		
+	
+		switch(stepOfProcess){
+		case 0:
+			assetsPanel.removeAll();
+			propertiesWishingToTrade.clear();
+			break;
+		case 1:
+			playerChoicesPanel.removeAll();	
+			playerRadioButtonPanel.removeAll();
+			playerRadioButtons.clear();
+			break;
+		case 2:		
+			if(cashChosen){
+				cashChosen = false;
+			}
+			else if(propertyChosen){
+				propertyChosen = false;
+			}
+		
+			playerOfferPanel.removeAll();
+			
+			break;
+		case 3:
+			tradingPanel.removeAll();
+			propertiesOpponentMayTrade.clear();
+			break;
+		case 4:
+			
+			break;
+		}
+		
 	}
 	
 }
