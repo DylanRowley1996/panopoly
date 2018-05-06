@@ -445,35 +445,18 @@ public class Trade extends JFrame{
 							playerAccepted = false;
 							clearInformationTo(3);
 							tradingHouse.remove(tradingPanel);
-							
-							/*tradingHouse.remove(acceptDeclineOpponentsPanel);
-							tradingHouse.add(playerChoicesPanel);
-							tradingHouse.revalidate();
-							tradingHouse.repaint();
-							tradingHouse.pack();
-							playerAccepted = false;*/
+							updateFrame();
 							
 						}
 					}else{
 						
-						/*tradingHouse.remove(tradingPanel);
-						tradingHouse.add(acceptDeclineOpponentsPanel);
-						tradingHouse.revalidate();
-						tradingHouse.repaint();
-						tradingHouse.pack();
-						offerGiven = false;*/
+						offerGiven = false;
+						clearInformationTo(4);
+						tradingHouse.remove(acceptDeclineOpponentsPanel);
+						updateFrame();
 						
 					}	
-				}else {
-					
-					/*tradingHouse.remove(acceptDeclineOpponentsPanel);
-					tradingHouse.add(tradingPanel);
-					tradingHouse.revalidate();
-					tradingHouse.repaint();
-					tradingHouse.pack();
-					offerAccepted = false;*/
 				}
-				
 			}
 		});
 			
@@ -665,6 +648,8 @@ public class Trade extends JFrame{
 		case 0:
 			assetsPanel.removeAll();
 			propertiesWishingToTrade.clear();
+			propertyChosen = false;
+			cashChosen = false;
 			break;
 		case 1:
 			playerChoicesPanel.removeAll();	
@@ -672,22 +657,20 @@ public class Trade extends JFrame{
 			playerRadioButtons.clear();
 			break;
 		case 2:		
-			if(cashChosen){
-				cashChosen = false;
-			}
-			else if(propertyChosen){
-				propertyChosen = false;
-			}
-		
 			playerOfferPanel.removeAll();
-			
+			playerOfferPanel.remove(acceptOrDeclineQuestion);
+			confirmationButton.setText("Confirm");
+			cancelButton.setText("Cancel");
 			break;
 		case 3:
 			tradingPanel.removeAll();
 			propertiesOpponentMayTrade.clear();
 			break;
 		case 4:
-			
+			acceptDeclineOpponentsPanel.removeAll();
+			propertiesOpponentWantsToTrade.clear();
+			confirmationButton.setText("Confirm");
+			cancelButton.setText("Cancel");
 			break;
 		}
 		
