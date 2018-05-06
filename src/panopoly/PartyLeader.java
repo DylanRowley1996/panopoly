@@ -28,6 +28,7 @@ public class PartyLeader {
 
 	//Booleans for game control
 	private boolean boughtProperty = false;
+	private boolean hasHouses = false;
 
 	private HistoryLog history = null;
 	private static ArrayList<NamedLocation> locations = (ArrayList<NamedLocation>) SetupGame.getLocationList();
@@ -142,8 +143,27 @@ public class PartyLeader {
 		}
 	}
 
-	public void sell(Player player) {
+	public void sell(Player player, HistoryLog history) {
 		// TODO
+		
+		//Check if a player even has houses to sell.
+		for(PrivateProperty property : player.getProperties() ){
+			if(property.getNumHouses() != 0){
+				hasHouses = true;
+			}
+		}
+		
+		//Take corresponding action.
+		if(hasHouses == false){
+			history.getTextArea().append("-> You don't have any houses to sell.\n\n");
+		}
+		else{
+			Sell sell = new Sell(player, history);
+
+		}
+		
+		
+		
 	}
 
 	public void mortgage(Player player) {
