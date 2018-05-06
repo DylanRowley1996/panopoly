@@ -151,12 +151,20 @@ public class GUI {
         });
 		
 		buttonPanel.getQuitGameButton()
-		.addActionListener(e -> history.getTextArea().setText("Quit Game button clicked."));
-		
-
-		buttonPanel.getBankruptyButton()
-		.addActionListener(e -> history.getTextArea().setText("Bankruptcy button clicked."));
-
+		.addActionListener(new ActionListener() {        
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.declareBankruptcy(players.get(currentPlayer),currentPlayer,characterImage);
+				
+			}
+		});
+		buttonPanel.getBankruptyButton().addActionListener(new ActionListener() {        
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.declareBankruptcy(players.get(currentPlayer),currentPlayer,characterImage);
+				
+			}
+		});
 		buttonPanel.getMortgageButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

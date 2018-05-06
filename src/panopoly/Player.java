@@ -182,5 +182,12 @@ public class Player implements Playable {
 	public Jail getJail() {
 		return jail;
 	}
+	public void revokeOwnership() {
+		for(PrivateProperty p:properties) {
+			p.reset();
+		}
+		properties.clear();
+		mortgages.clear();
+	}
 }
 

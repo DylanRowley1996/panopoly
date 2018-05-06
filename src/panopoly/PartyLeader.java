@@ -406,7 +406,7 @@ public void roll(Player player,int currentPlayer,JLabel characterImage) throws I
 			history.getTextArea().append("Either 'Buy' or 'Auction' this property before finishing your turn.\n");
 		}else{
 		if(!player.hasRolled() && !player.isInJail()){
-			history.getTextArea().append("-> You must roll at least once before finishing your turn.\n\n");
+			history.getTextArea().append("-> You must roll before finishing your turn.\n\n");
 		}
 		
 		/*
@@ -462,5 +462,25 @@ public void roll(Player player,int currentPlayer,JLabel characterImage) throws I
 		}
 		
 		return stringToBuild;
+	}
+	public void declareBankruptcy(Player player, int currentPlayerNumber, JLabel characterImage) {
+		history.getTextArea().append(player.getIdentifier()+" has declared bankruptcy and drops out.\n");
+		board.removeCharacter(player);
+		players.remove(player);
+		try {
+			BufferedImage myPicture = ImageIO
+					.read(new File(players.get(currentPlayerNumber).getPathForImageIcon()));
+			characterImage.setIcon(new ImageIcon(myPicture));
+			history.getTextArea()
+					.append("-> Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(players.size()==1) {
+			declareWinner(players.get(0));
+		}
+	}
+	public void declareWinner(Player p)  {
+		history.getTextArea().append("THE WINNER IS "+p.getIdentifier()+"\n");
 	}
 }
