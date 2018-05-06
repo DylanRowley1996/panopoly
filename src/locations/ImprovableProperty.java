@@ -52,6 +52,7 @@ public class ImprovableProperty extends PrivateProperty implements Improvable {
 	public String toString() {
 		String str = "";
 		if(super.owner!=null) {
+			str += "Rent: $" + getRentalAmount() + "\n";
 			str += "Build cost per house: $" + buildCost + "\n";
 			if(numHouses<5) str += "Houses: " + numHouses + "\n";
 			else			str += "Hotel";

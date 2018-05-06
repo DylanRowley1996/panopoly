@@ -122,7 +122,7 @@ public class GUI {
 						history.getTextArea().append("-> You cannot roll while in Jail.\n\n");
 					}
 					else if(!players.get(currentPlayer).hasRolled()) {
-						partyLeader.roll(players.get(currentPlayer));
+						partyLeader.roll(players.get(currentPlayer),currentPlayer,characterImage);
 						updatePropCard(players.get(currentPlayer));
 					}else {
 						history.getTextArea().append("-> You have already rolled.\n\n");				
@@ -132,7 +132,6 @@ public class GUI {
 				}
 			}
 		});
-
 		buttonPanel.getSellButton().addActionListener(e -> history.getTextArea().setText("Sell button clicked."));
 
 		buttonPanel.getBuyButton().addActionListener(new ActionListener() {
@@ -152,13 +151,14 @@ public class GUI {
             
         });
 		
-		buttonPanel.getQuitGameButton()
-		.addActionListener(e -> history.getTextArea().setText("Quit Game button clicked."));
-		
-
-		buttonPanel.getBankruptyButton()
-		.addActionListener(e -> history.getTextArea().setText("Bankruptcy button clicked."));
-
+		buttonPanel.getQuitGameButton().addActionListener(e->history.getTextArea().append("-> Quit Game clicked\n"));
+		buttonPanel.getBankruptyButton().addActionListener(new ActionListener() {        
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.declareBankruptcy(players.get(currentPlayer),currentPlayer,characterImage);
+				
+			}
+		});
 		buttonPanel.getMortgageButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

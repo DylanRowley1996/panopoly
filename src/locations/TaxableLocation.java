@@ -8,7 +8,7 @@ public class TaxableLocation extends NamedLocation implements Taxable {
 	
 	public TaxableLocation(String name, double iP, int fA) {
 		super(name);
-		incomePercentage = iP;
+		incomePercentage = Math.round(incomePercentage);
 		flatAmount = fA;
 	}
 

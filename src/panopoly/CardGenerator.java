@@ -155,8 +155,8 @@ public class CardGenerator {
 	   		If 'They' comes first 'You' comes second and vice versa
 			  */			
 			 randomAmount = (int) (Math.random() * (500 - 100)) + 100;			
-			 reward = "You steal "+randomAmount+"$ from "+genderPossesive+".";
-			 penalty = genderDeterminer+" takes "+randomAmount+ "$ from you";
+			 reward = "You steal $"+randomAmount+" from "+genderPossesive+".";
+			 penalty = genderDeterminer+" takes $"+randomAmount+ " from you";
 
 			 randomNumber = (int) Math.round(Math.random());   		
 			 if(randomNumber == 0){
@@ -175,11 +175,11 @@ public class CardGenerator {
 
 			 randomNumber = (int) Math.round(Math.random());   		
 			 if(randomNumber == 0){
-				 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward;
+				 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward+"\nWallet increased by $"+player.getNetWorth()*randomAmount;
 				 player.addToBalance(player.getNetWorth()*randomAmount);
 			 }
 			 else{
-				 finalOutcome += penaltyPrecondition+" with "+props+".\n" + penalty;
+				 finalOutcome += penaltyPrecondition+" with "+props+".\n" + penalty+"\nYou lost $"+player.getNetWorth()*randomAmount;
 				 player.deductFromBalance(player.getNetWorth()*randomAmount);
 			 }   		
 	
@@ -188,7 +188,6 @@ public class CardGenerator {
 			 reward = " robbed "+genderPossesive+" car";			
 			 finalOutcome += rewardPrecondition+" with "+props+"and "+reward+"\nTravel to "+locations.get(loc).getIdentifier();
 			 player.setLocation(locations.get(loc));
-			 
 
 			 //		}else if(effectDecider<46){
 			 //				//coin toss chance
