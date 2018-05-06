@@ -17,10 +17,15 @@ public class Station extends PrivateProperty {
 	
 	public String toString() {
 		String str = "";
-		str += "Rents:\n";
-		str += "Rent with 1 station: $" + rentArray[0] + "\n";
-		for(int i=1; i<4; i++){
-			str += "Rent with "+(i+1)+" stations: $" +rentArray[i]+"\n";
+		if(super.owner!=null) {
+			str += "Rent: $" + getRentalAmount() + "\n";
+		}
+		else {
+			str += "Rents:\n";
+			str += "Rent with 1 station: $" + rentArray[0] + "\n";
+			for(int i=1; i<4; i++){
+				str += "Rent with "+(i+1)+" stations: $" +rentArray[i]+"\n";
+			}
 		}
 		return super.toString()+str;
 	}
