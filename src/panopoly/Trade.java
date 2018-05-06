@@ -28,6 +28,8 @@ import javax.swing.WindowConstants;
 public class Trade extends JFrame{
 	
 	private JFrame tradingHouse = new JFrame("Trading house");
+	private Player player;
+	private ArrayList<Player> players;
 
 	//Components for first panel
 	private JPanel propertyPanel = new JPanel(new GridLayout(0,1));
@@ -42,6 +44,17 @@ public class Trade extends JFrame{
 	private JRadioButton propertyChoice = new JRadioButton("Property");
 	private JRadioButton cashChoice = new JRadioButton("Cash");
 	private ButtonGroup assetButtonGrouping = new ButtonGroup();
+	private boolean cashChosen = false;
+	private boolean propertyChosen = false;
+	
+	//Components for third panel
+	private JPanel playerChoicesPanel = new JPanel(new GridLayout(0,1));
+	private JLabel playerChoiceDirections = new JLabel("Choose what player you'd like to trade with.");
+	private JPanel playerRadioButtonPanel = new JPanel(new GridLayout(0,1));
+	private ArrayList<JRadioButton> playerRadioButtons = new ArrayList<JRadioButton>();
+	private ButtonGroup playerButtonGroup = new ButtonGroup();
+
+	
 
 	//Button panel is common to all panels.
 	private JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -58,6 +71,9 @@ public class Trade extends JFrame{
 	
 
 	public Trade(Player player, ArrayList<Player> players, HistoryLog history){
+				
+		this.player = player;
+		this.players = players;
 		
 		addActionListeners();
 		
@@ -69,12 +85,11 @@ public class Trade extends JFrame{
 		 * for the other panels described above.
 		 */
 		tradingHouse.add(propertyPanel);
-		
-		tradingHouse.setLayout(new GridBagLayout());    
+		//tradingHouse.setLayout(new GridBagLayout());    
         tradingHouse.setLocationRelativeTo(null);
         tradingHouse.setVisible(true);
         tradingHouse.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        tradingHouse.setResizable(false);
+        tradingHouse.setResizable(true);
         tradingHouse.pack();
 		
 		
@@ -116,9 +131,36 @@ public class Trade extends JFrame{
 		assetsPanel.add(propertyChoice);
 		assetsPanel.add(cashChoice);
 		
+		
 		//Add the final component to the button panel
 		assetsPanel.add(buttonPanel);
 		
+	}
+	
+	private void createPlayerChoicesPanel(){
+		
+		//Add user directions
+		playerChoicesPanel.add(playerChoiceDirections);
+		
+		//Add a players name to each radio button
+		for(int i=0;i<players.size();i++){
+			
+			//Make sure we don't add the player wishing to trade.
+			if(!players.get(i).getIdentifier().equals(player.getIdentifier())){
+				playerRadioButtons.add(new JRadioButton(players.get(i).getIdentifier()));
+			}
+		}
+		
+		//Add radio buttons to their panel and to a group so only one can be chosen.
+		for(int i=0;i<playerRadioButtons.size();i++){
+			playerRadioButtonPanel.add(playerRadioButtons.get(i));
+			playerButtonGroup.add(playerRadioButtons.get(i));
+		}
+		
+		playerChoicesPanel.add(playerRadioButtonPanel);
+		
+		playerChoicesPanel.add(buttonPanel);
+			
 	}
 	
 	private void updateFrame(){
@@ -138,10 +180,21 @@ public class Trade extends JFrame{
 								tradingHouse.add(assetsPanel);
 								tradingHouse.revalidate();
 								tradingHouse.repaint();
+								tradingHouse.pack();
 								
 							}
 						}else{//Assets chosen, set up player to offer to
 							
+							/*
+							 * Create a list of players to choose from
+							 * that a player wants to trade with.
+							 */
+							createPlayerChoicesPanel();
+							tradingHouse.remove(assetsPanel);
+							tradingHouse.add(playerChoicesPanel);
+							tradingHouse.revalidate();
+							tradingHouse.repaint();
+							tradingHouse.pack();
 						}
 					}else{//Player chosen, ask player to accept
 						
@@ -165,9 +218,15 @@ public class Trade extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Check player has chosen properties and update list and JFrame.
-				if(findPropertiesWishingToTrade()) {
+				if(findPropertiesWishingToTrade() && !propertiesChosen) {
 					propertiesChosen = true;
 					updateFrame();
+				}
+				else if(!assetsChosen){
+					if(assetChoiceSelected()){
+						assetsChosen = true;
+						updateFrame();
+					}
 				}
 			}
 		});
@@ -181,6 +240,23 @@ public class Trade extends JFrame{
 		}
 		
 		return propertiesWishingToTrade.size() > 0;
+	}
+	
+	private boolean assetChoiceSelected(){
+		boolean chosenAnAsset = false;
+		
+		if(propertyChoice.isSelected()){
+			propertyChosen = true;
+			chosenAnAsset = true;
+		}
+		
+		else if(cashChoice.isSelected()){
+			cashChosen = true;
+			chosenAnAsset = true;
+		}
+		
+		return chosenAnAsset;
+		
 	}
 	
 	
