@@ -31,6 +31,7 @@ public class Trade extends JFrame{
 	private JFrame tradingHouse = new JFrame("Trading house");
 	private Player player;
 	private ArrayList<Player> players;
+	private HistoryLog history;
 
 	//Components for first panel
 	private JPanel propertyPanel = new JPanel(new GridLayout(0,1));
@@ -55,7 +56,7 @@ public class Trade extends JFrame{
 	private ArrayList<JRadioButton> playerRadioButtons = new ArrayList<JRadioButton>();
 	private ButtonGroup playerButtonGroup = new ButtonGroup();
 	
-	//Components for fourth panel.
+	//Components for fourth panel
 	private JLabel acceptOrDeclineQuestion = new JLabel();
 	private JPanel playerOfferPanel = new JPanel(new GridLayout(0,1));
 	
@@ -63,6 +64,12 @@ public class Trade extends JFrame{
 	private JLabel bidQuestion = new JLabel("How much do you want to offer for these properties?");
 	private JPanel bidPanel = new JPanel(new GridLayout(0,1));
 	private JTextArea bidArea = new JTextArea();
+	private int bid = 0;
+	
+	//Components for sixth panel.
+	private JLabel acceptDeclineOpponentsOffer = new JLabel();
+	private JPanel acceptDeclineOpponentsPanel = new JPanel(new GridLayout(0,1));
+	
 
 	
 	//Button panel is common to all panels.
@@ -86,6 +93,7 @@ public class Trade extends JFrame{
 				
 		this.player = player;
 		this.players = players;
+		this.history = history;
 		
 		addActionListeners();
 		
@@ -219,6 +227,19 @@ public class Trade extends JFrame{
 		bidPanel.add(buttonPanel);
 	}
 	
+	private void createAcceptDeclineOpponentsOfferPanel(){
+		
+		acceptDeclineOpponentsOffer.setText(player.getIdentifier()+", "+playerToTradeWith+" is offering "
+				+bid+". Accept or Reject");
+		acceptDeclineOpponentsPanel.add(acceptDeclineOpponentsOffer);
+		
+		confirmationButton.setText("Accept");
+		cancelButton.setText("Reject");
+		
+		acceptDeclineOpponentsPanel.add(buttonPanel);
+		
+	}
+	
 	private void updateFrame(){
 		if(!offerAccepted){
 			if(!offerGiven){
@@ -275,10 +296,17 @@ public class Trade extends JFrame{
 					
 				}
 			}else{//Chosen player has given offer, proceed to accepting/declining
-				
+				createAcceptDeclineOpponentsOfferPanel();
+				tradingHouse.remove(bidPanel);
+				tradingHouse.add(acceptDeclineOpponentsPanel);
+				tradingHouse.revalidate();
+				tradingHouse.repaint();
+				tradingHouse.pack();
 			}
 		}else{//Offer has been accepted/declined. Accept -> dispose of frame. Decline -> Return to choosing another player
-			
+			System.out.println("Entering the last case");
+			tradingHouse.dispose();
+			history.getTextArea().append("-> "+player.getIdentifier()+" traded "+String.join(",", propertiesWishingToTrade)+" with "+playerToTradeWith+" for "+bid+"\n\n");
 		}
 	}
 	
@@ -316,7 +344,20 @@ public class Trade extends JFrame{
 						playerAccepted = true;
 						updateFrame();
 				}
-			}
+				
+				else if(!offerGiven){
+						if(validBid()){
+							offerGiven = true;
+							updateFrame();
+						}
+				}
+						
+				else if(!offerAccepted){
+							offerAccepted = true;
+							updateFrame();
+					}
+				}
+			
 		});
 	}
 	
@@ -367,6 +408,23 @@ public class Trade extends JFrame{
 		}
 		
 		return playerChosen;
+	}
+	
+	private boolean validBid(){
+		
+		boolean validBid = false;
+		
+		try{
+			
+			 bid = Integer.parseInt(bidArea.getText());
+			 validBid = true;
+			 
+		}catch(Exception e){
+			
+			bidArea.setText("Not a valid bid. Enter an Integer.");
+			
+		}
+		return validBid;
 	}
 	
 	
