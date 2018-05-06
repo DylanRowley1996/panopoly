@@ -17,7 +17,7 @@ import locations.PropertyGroup;
 public class Player implements Playable {
 
     private String name = "";
-    private int netWorth = 100000;//test amount
+    private int netWorth = 2000;
     private ArrayList<PrivateProperty> properties = new ArrayList<PrivateProperty>();
     private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
     private ArrayList<PropertyGroup> mortgages = new ArrayList<PropertyGroup>();
@@ -76,7 +76,7 @@ public class Player implements Playable {
     
     //Property Actions
     public void buyProperty(PrivateProperty target) {
-     	this.addToBalance(target.getPrice());
+     	this.deductFromBalance(target.getPrice());
      	target.setOwner(this);
     	properties.add(target);
     }

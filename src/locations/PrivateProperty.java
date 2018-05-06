@@ -79,7 +79,7 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 		if(owner!=null)	str += "Owner: " + owner.getIdentifier() + "\n";
 		else			str += "This Property is unowned!\n";
 		str += "Group: " + group.getName() + "\n";
-		str += "Price: " + price + "\n";
+		str += "Price: $" + price + "\n";
 		if(owner!=null) {
 			str += "Rent: $" + getRentalAmount() + "\n";
 			str += "Mortgaged? " + isMortgaged + "\n";

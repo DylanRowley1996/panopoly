@@ -75,8 +75,6 @@ public void roll(Player player,int currentPlayer,JLabel characterImage) throws I
 
 		//After roll
 		Locatable location = player.getLocation();
-		
-
 		if(location instanceof PrivateProperty) {
 			if(((PrivateProperty)location).getOwner()!=null){
 				player.payPlayer(((PrivateProperty)location).getOwner(),((PrivateProperty)location).getRentalAmount());
@@ -393,6 +391,10 @@ public void roll(Player player,int currentPlayer,JLabel characterImage) throws I
 		if(player.getLocation() instanceof Ownable && ((Ownable)player.getLocation()).getOwner() == null){
 			Auction auction = new Auction((Ownable)player.getLocation(),players,history);
 		}
+	}
+	
+	public void trade(Player player, ArrayList<Player> players, HistoryLog history){
+		Trade trade = new Trade(player, players, history);
 	}
 
 	public int finishTurn(Player player, int currentPlayerNumber, JLabel characterImage){

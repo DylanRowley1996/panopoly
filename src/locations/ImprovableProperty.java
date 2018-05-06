@@ -59,10 +59,10 @@ public class ImprovableProperty extends PrivateProperty implements Improvable {
 		else {
 			str += "Rents:\n";
 			str += "Base rent: $" + rentArray[0] + "\n";
-			for(int i=1; i<4; i++){
+			for(int i=1; i<5; i++){
 				str += "Rent with "+i+" houses: $" +rentArray[i]+"\n";
 			}
-			str += "Rent with a hotel: $" + rentArray[4] + "\n";
+			str += "Rent with a hotel: $" + rentArray[5] + "\n";
 		}
 		return super.toString()+str;
 	}
