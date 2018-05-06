@@ -1,13 +1,7 @@
 package panopoly;
+
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,18 +9,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -42,8 +29,6 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import locations.*;
 
 public class SetupGame {
-
-	private static int currentPlayerNumber = 0;
 
 	private static final String NOC_LIST_FILE_PATH = "Veale's NOC List/Veale's The NOC List.xlsx";
 	private static final String DOMAIN_FILE_PATH = "Veale's NOC List/Veale's domains.xlsx";
@@ -61,14 +46,9 @@ public class SetupGame {
 	Random rand = new Random();
 	private String[] pathsToIcons = new String[noOfPlayers];
 
-	private FindImages imageRetriever;
-	private GUI gui;
-	private boolean launchGUI = false;
-
-
 	public SetupGame(int noOfPlayers) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException{
 
-		int noBoardRows = rand.nextInt(6) + 10;
+		int noBoardRows = rand.nextInt(5) + 11;
 		int noLocations = (noBoardRows-3)*4; //total number of squares on the board
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
 
@@ -342,7 +322,7 @@ public class SetupGame {
 		//Add Properties that need to be present every time to the corners.
 		locationList.add(0, new NamedLocation("Go"));
 		locationList.add(noBoardRows-3, new NamedLocation("Jail"));
-		locationList.add((noLocations-1)-(noBoardRows-3), new NamedLocation("Go to Jail"));
+		locationList.add((noLocations-1)-(noBoardRows-3), new GoToJail("Go to Jail"));
 		locationList.add(noLocations-1, new Shop("Marketplace", noLocations-1));
 
 		// set next and prev locations

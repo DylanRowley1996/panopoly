@@ -118,8 +118,11 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {						
 				try {
-					if(!players.get(currentPlayer).hasRolled()) {
-						partyLeader.roll(players.get(currentPlayer));
+					if(players.get(currentPlayer).isInJail()) {
+						history.getTextArea().append("-> You cannot roll while in Jail.\n\n");
+					}
+					else if(!players.get(currentPlayer).hasRolled()) {
+						partyLeader.roll(players.get(currentPlayer),currentPlayer,characterImage);
 						updatePropCard(players.get(currentPlayer));
 					}else {
 						history.getTextArea().append("-> You have already rolled.\n\n");				
@@ -129,7 +132,6 @@ public class GUI {
 				}
 			}
 		});
-
 		buttonPanel.getSellButton().addActionListener(e -> history.getTextArea().setText("Sell button clicked."));
 
 		buttonPanel.getBuyButton().addActionListener(new ActionListener() {
@@ -144,17 +146,19 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                         partyLeader.auction(players.get(currentPlayer), players, history);
+                        updatePropCard(players.get(currentPlayer));
                     }
             
         });
 		
-		buttonPanel.getQuitGameButton()
-		.addActionListener(e -> history.getTextArea().setText("Quit Game button clicked."));
-		
-
-		buttonPanel.getBankruptyButton()
-		.addActionListener(e -> history.getTextArea().setText("Bankruptcy button clicked."));
-
+		buttonPanel.getQuitGameButton().addActionListener(e->history.getTextArea().append("-> Quit Game clicked\n"));
+		buttonPanel.getBankruptyButton().addActionListener(new ActionListener() {        
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.declareBankruptcy(players.get(currentPlayer),currentPlayer,characterImage);
+				
+			}
+		});
 		buttonPanel.getMortgageButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -170,14 +174,28 @@ public class GUI {
 			}
 		});
 
-		buttonPanel.getTradeButton().addActionListener(e -> history.getTextArea().setText("Trade button clicked."));
+		buttonPanel.getTradeButton().addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.trade(players.get(currentPlayer), players, history);
+			}
+		});
 
 		buttonPanel.getFinishTurnButton().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int oldPlayer = currentPlayer;
 				currentPlayer = partyLeader.finishTurn(players.get(currentPlayer),currentPlayer,characterImage);
 				updatePropCard(players.get(currentPlayer));
+				if(oldPlayer!=currentPlayer && players.get(currentPlayer).isInJail()) {
+					try {
+						players.get(currentPlayer).getJail().jailControl();
+					} catch (InvalidFormatException | IOException | InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
 
 		});
