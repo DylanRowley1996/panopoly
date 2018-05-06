@@ -40,56 +40,80 @@ public class PartyLeader {
 		this.history = history;
 		this.board = board;
 	}
-
-	public void roll(Player player) throws InvalidFormatException, IOException {
-		
-		int moveCount;
-		String str = "";
-
-		moveCount = normalDice.rollDice(2, 6);
-		str += moveCount;
-		history.getTextArea().setText("-> You have rolled a "+str+".\n\n");	
-		player.setRolled(true);
-
-		for(int i=0;i<moveCount;i++) {
-			player.setLocation((NamedLocation)player.getNextLoc());
-			board.updateIcons(player);
-			board.repaint();
-			board.revalidate();
-		}
-		history.getTextArea().append("-> You have rolled onto "+player.getLocation().getIdentifier()+".\n\n");
-
-		//After roll
-		Locatable location = player.getLocation();
-		if(location instanceof MCQLocation) { // TODO get rid of !
-			MCQ mcq = new MCQ();
-			mcq.createMCQPanel(player, history, null);
-		}
-		if(location instanceof CardLocation) {
-			CardGenerator.createCard(player, history);
-		}
-		if(location instanceof GoToJail) {
-			player.setJail(new Jail(player, history));
-			history.getTextArea().append("-> Go to Jail!\n\n");
-			player.setLocation(locations.get(locations.size()/4));
-			board.revalidate();
-		}
-		if(location instanceof TaxableLocation) {
-			history.getTextArea().append("-> " + location.getIdentifier() + "\n");
-			int tax=0;
-			if(rand.nextInt(2)==0) {
-				history.getTextArea().append("-> Pay " + ((TaxableLocation) location).getIncomePercentage() + "% of your total net worth in taxes\n");
-				tax = (int) (player.getNetWorth()*((TaxableLocation) location).getIncomePercentage());
-				history.getTextArea().append("-> "+player.getName()+" paid $"+tax+" in taxes\n\n");
+public void roll(Player player,int currentPlayer,JLabel characterImage) throws InvalidFormatException, IOException {
+	
+	if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ) { // for if rolled doubles. Must buy/Auction before rolling again
+		history.getTextArea().append("-> Either 'Buy' or 'Auction' this property before finishing your turn.\n\n");	
+	}
+	else {
+			int moveCount;
+			String str = "";
+			ArrayList<Integer> diceFaces;
+			diceFaces = normalDice.getFaces();
+			moveCount = normalDice.rollDice(2, 6);
+			str += moveCount;
+			history.getTextArea().append("You have rolled a "+str+"  "+diceFaces+".\n");	
+			
+			if(!normalDice.isDouble()) {
+				player.setRolled(true);
+			}else {
+				history.getTextArea().append("You rolled Doubles!\n");	
+				if(normalDice.getNumberOfRolls()>=3) {
+					history.getTextArea().append("You have rolled 3 Doubles. \n");
+					player.setJail(new Jail(player, history));
+					history.getTextArea().append("-> Go to Jail!\n\n");
+					player.setLocation(locations.get(locations.size()/4));
+					board.updateIcons(player);
+					board.revalidate();
+					finishTurn(player, currentPlayer, characterImage);
+				}
+			}
+			for(int i=0;i<moveCount;i++) {
+				player.setLocation((NamedLocation)player.getNextLoc());
+				board.updateIcons(player);
+				board.repaint();
+				board.revalidate();
+			}
+			normalDice.refreshDice();
+			history.getTextArea().append("-> You have rolled onto "+player.getLocation().getIdentifier()+".\n\n");
+	
+			//After roll
+			Locatable location = player.getLocation();
+			if(location instanceof PrivateProperty) {
+				if(((PrivateProperty)location).getOwner()!=null){
+					player.payPlayer(((PrivateProperty)location).getOwner(),((PrivateProperty)location).getRentalAmount());
+					history.getTextArea().append("You paid "+((PrivateProperty)location).getRentalAmount()+ " in rent to "+((PrivateProperty)location).getOwner().getIdentifier()+".\n");
+				}
+			}
+			if(location instanceof MCQLocation) { // TODO get rid of !
+				MCQ mcq = new MCQ();
+				mcq.createMCQPanel(player, history, null);
+			}
+			if(location instanceof CardLocation) {
+				CardGenerator.createCard(player, history);
+			}
+			if(location instanceof GoToJail) {
+				player.setJail(new Jail(player, history));
+				history.getTextArea().append("-> Go to Jail!\n\n");
+				player.setLocation(locations.get(locations.size()/4));
+				board.revalidate();
+			}
+			if(location instanceof TaxableLocation) {
+				history.getTextArea().append("-> " + location.getIdentifier() + "\n");
+				int tax=0;
+				if(rand.nextInt(2)==0) {
+					history.getTextArea().append("-> Pay " + ((TaxableLocation) location).getIncomePercentage() + "% of your total net worth in taxes\n");
+					tax = (int) (player.getNetWorth()*((TaxableLocation) location).getIncomePercentage());
+					history.getTextArea().append("-> "+player.getName()+" paid $"+tax+" in taxes\n\n");
+					player.deductFromBalance(tax);
+				}
+				else {
+					tax = ((TaxableLocation) location).getFlatAmount();
+					history.getTextArea().append("-> "+player.getName()+" paid $"+tax+" in taxes\n\n");
+				}
 				player.deductFromBalance(tax);
 			}
-			else {
-				tax = ((TaxableLocation) location).getFlatAmount();
-				history.getTextArea().append("-> "+player.getName()+" paid $"+tax+" in taxes\n\n");
-			}
-			player.deductFromBalance(tax);
-		}
-				
+		}		
 	}
 	
 	public void buy(Player player) {
@@ -380,9 +404,15 @@ public class PartyLeader {
 	public int finishTurn(Player player, int currentPlayerNumber, JLabel characterImage){
 		//TODO
 		// check for in jail too long, unpaid rent, etc.
-		
+		//If player is on an ownable property that is unowned and hasn't bought it
+		//Force them to auction.
+		if(player.getNetWorth()<0) {
+			history.getTextArea().append("You are in debt! Sell houses and cards or mortgage properties to pay your debt!\n");
+		}else if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
+			history.getTextArea().append("Either 'Buy' or 'Auction' this property before finishing your turn.\n");
+		}else{
 		if(!player.hasRolled() && !player.isInJail()){
-			history.getTextArea().append("-> You must roll at least once before finishing your turn.\n\n");
+			history.getTextArea().append("-> You must roll before finishing your turn.\n\n");
 		}
 		
 		/*
@@ -390,8 +420,7 @@ public class PartyLeader {
 		 * 	Force them to auction.
 		 */
 		else if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
-			history.getTextArea().append("-> Either 'Buy' or 'Auction' this property before finishing your turn.\n\n");
-			
+			history.getTextArea().append("-> Either 'Buy' or 'Auction' this property before finishing your turn.\n\n");	
 		}
 
 		else{
@@ -413,9 +442,8 @@ public class PartyLeader {
 					e.printStackTrace();
 				}
 			}
-		
+		}
 		return currentPlayerNumber;
-		
 	}
 	
 	private String buildString(ArrayList<String> properties){
@@ -440,5 +468,25 @@ public class PartyLeader {
 		}
 		
 		return stringToBuild;
+	}
+	public void declareBankruptcy(Player player, int currentPlayerNumber, JLabel characterImage) {
+		history.getTextArea().append(player.getIdentifier()+" has declared bankruptcy and drops out.\n");
+		board.removeCharacter(player);
+		players.remove(player);
+		try {
+			BufferedImage myPicture = ImageIO
+					.read(new File(players.get(currentPlayerNumber).getPathForImageIcon()));
+			characterImage.setIcon(new ImageIcon(myPicture));
+			history.getTextArea()
+					.append("-> Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(players.size()==1) {
+			declareWinner(players.get(0));
+		}
+	}
+	public void declareWinner(Player p)  {
+		history.getTextArea().append("THE WINNER IS "+p.getIdentifier()+"\n");
 	}
 }

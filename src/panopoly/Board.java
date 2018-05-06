@@ -180,23 +180,29 @@ public class Board extends JPanel {
 		for(int i=0;i<locations.size();i++) {
 			if(locations.get(i) == p.getLocation()) {
 				Dimension panelSize = locationMap.get(locations.get(i)).getSize();
-				Image myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
+				int locationIndex = i;
+				Image myResizedPicture ;//= p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
+				if((locationIndex>0 && locationIndex<10) ||(locationIndex>20 && locationIndex<30)) {
+					myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/2, panelSize.height/4, Image.SCALE_SMOOTH);
+				}else if((locationIndex>10 && locationIndex<20) ||(locationIndex>30 && locationIndex<40)) {
+					myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/3, Image.SCALE_SMOOTH);
+				}else {
+					myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
+					}
 				GridLayout myGrid = new GridLayout(3,3,0,0);
 				JLabel currentLabel = new JLabel(new ImageIcon(myResizedPicture));
 				JLabel oldLabel = labelMapping.get(p);
 				locationMap.get(locations.get(i)).setLayout(myGrid);
 				locationMap.get(locations.get(i).getPrevLoc()).remove(oldLabel);//Remove old icon from previous square
+				labelMapping.remove(p, oldLabel);
 				locationMap.get(locations.get(i)).add(currentLabel);//Add it to the new square
 				labelMapping.put(p, currentLabel);
 			}
 			this.revalidate();
+			
 		}
 	}
 	NamedLocation getStartLocation() {
-//		Random rand = new Random();
-//
-//		int  n = rand.nextInt(20) + 1;
-//		return locations.get(n);
 		return locations.get(0);
 	}
 	
@@ -208,5 +214,16 @@ public class Board extends JPanel {
 			Entry<NamedLocation, JPanel> square = it.next();
 			square.getValue().repaint();
 		}
+	}
+	public void removeCharacter(Player p) {
+		for(int i=0;i<locations.size();i++) {
+			if(locations.get(i) == p.getLocation()) {
+				JLabel oldLabel = labelMapping.get(p);
+				locationMap.get(locations.get(i)).remove(oldLabel);//Remove old icon from previous square
+				labelMapping.remove(p);				
+			}	
+		}
+		this.revalidate();
+
 	}
 }

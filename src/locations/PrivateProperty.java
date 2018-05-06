@@ -97,5 +97,10 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	public int getNumHouses(){
 		return numOfHouses;
 	}
+	public void reset() {
+		isMortgaged = false;
+		owner = null;
+		//reset any houses built
+	}
 	
 }

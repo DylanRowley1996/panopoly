@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+
 import org.apache.commons.io.FilenameUtils;
 import javax.imageio.ImageIO;
 import interfaces.Locatable;
@@ -26,9 +28,8 @@ public class Player implements Playable {
     private Locatable location = null;
     private boolean hasRolled = false;
     private boolean mustDeclareBankruptcy = false;
-    private boolean isInJail;
+    private boolean isInJail = false;
     private Jail jail;
-    
     private BufferedImage characterIcon;
     
     public Player(String name,String pathToCharacterIcon) throws IOException,NullPointerException{
@@ -146,6 +147,10 @@ public class Player implements Playable {
 	public void setName(String filepath){
 		name = FilenameUtils.getBaseName(filepath);	
 	}
+	public void payPlayer(Playable p, int amount) {
+		addToBalance(-amount);
+		((Player)p).addToBalance(amount);
+	}
 	
 	public boolean hasJailCard() {
 		return getOutOfJailCard>0;
@@ -173,6 +178,13 @@ public class Player implements Playable {
 	
 	public Jail getJail() {
 		return jail;
+	}
+	public void revokeOwnership() {
+		for(PrivateProperty p:properties) {
+			p.reset();
+		}
+		properties.clear();
+		mortgages.clear();
 	}
 }
 
