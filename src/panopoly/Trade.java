@@ -14,6 +14,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
+import locations.PrivateProperty;
+
 /* 
  * This class works by iterating through panels
  * on the same JFrame.
@@ -61,17 +63,18 @@ public class Trade extends JFrame{
 	private JPanel playerOfferPanel = new JPanel(new GridLayout(0,1));
 	
 	//Components for fifth panel.
-	private JLabel bidQuestion = new JLabel("How much do you want to offer for these properties?");
-	private JPanel bidPanel = new JPanel(new GridLayout(0,1));
-	private JTextArea bidArea = new JTextArea();
+	private JLabel tradingQuestion = new JLabel();
+	private JPanel tradingPanel = new JPanel(new GridLayout(0,1));
+	private JTextArea cashBidArea = new JTextArea();
+	private ArrayList<JRadioButton> propertiesOpponentMayTrade = new ArrayList<JRadioButton>();
 	private int bid = 0;
 	
 	//Components for sixth panel.
 	private JLabel acceptDeclineOpponentsOffer = new JLabel();
 	private JPanel acceptDeclineOpponentsPanel = new JPanel(new GridLayout(0,1));
+	private ArrayList<String> propertiesOpponentWantsToTrade = new ArrayList<String>();
 	
 
-	
 	//Button panel is common to all panels.
 	private JPanel buttonPanel = new JPanel(new FlowLayout());
 	private JButton confirmationButton = new JButton("Confirm");
@@ -95,7 +98,7 @@ public class Trade extends JFrame{
 		this.players = players;
 		this.history = history;
 		
-		addActionListeners();
+		addConfirmationActionListener();
 		
 		createPropertyPanel(player);
 		
@@ -105,7 +108,6 @@ public class Trade extends JFrame{
 		 * for the other panels described above.
 		 */
 		tradingHouse.add(propertyPanel);
-		//tradingHouse.setLayout(new GridBagLayout());    
         tradingHouse.setLocationRelativeTo(null);
         tradingHouse.setVisible(true);
         tradingHouse.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -121,10 +123,8 @@ public class Trade extends JFrame{
 		propertyPanel.add(propertyDirections);
 		
 		//Add a radio button for each property.
-		for(int i=0;i<5;i++){
-			//player.getProperties().size()
-			//player.getProperties().get(i).getIdentifier()
-			propertyRadioButtons.add(new JRadioButton("Property"));
+		for(int i=0;i<player.getProperties().size();i++){
+			propertyRadioButtons.add(new JRadioButton(player.getProperties().get(i).getIdentifier()));
 			propertyRadioButtonPanel.add(propertyRadioButtons.get(i));
 		}
 		
@@ -218,20 +218,42 @@ public class Trade extends JFrame{
 	 */
 	private void createPlayerBidPanel(){
 		
-		bidPanel.add(bidQuestion);
-		bidPanel.add(bidArea);
+		if(cashChosen){
+			tradingQuestion.setText("What do you want to offer for these properties?");
+			tradingPanel.add(tradingQuestion);
+			tradingPanel.add(cashBidArea);
+		}
+		
+		else if(propertyChosen){
+			
+			tradingPanel.add(tradingQuestion);
+			tradingQuestion.setText("What properties do you want to trade?");
+			
+			for(int i=0;i<players.get(getPlayersIndex()).getProperties().size();i++){
+				propertiesOpponentMayTrade.add(new JRadioButton(players.get(getPlayersIndex()).getProperties().get(i).getIdentifier()));
+				tradingPanel.add(propertiesOpponentMayTrade.get(i));
+			}
+			
+		}
 		
 		confirmationButton.setText("Confirm");
 		cancelButton.setText("Cancel");
-		
-		bidPanel.add(buttonPanel);
+	
+		tradingPanel.add(buttonPanel);
 	}
 	
 	private void createAcceptDeclineOpponentsOfferPanel(){
 		
-		acceptDeclineOpponentsOffer.setText(player.getIdentifier()+", "+playerToTradeWith+" is offering "
-				+bid+". Accept or Reject");
-		acceptDeclineOpponentsPanel.add(acceptDeclineOpponentsOffer);
+		if(cashChosen){
+			acceptDeclineOpponentsOffer.setText(player.getIdentifier()+", "+playerToTradeWith+" is offering "
+					+bid+". Accept or Reject");
+			acceptDeclineOpponentsPanel.add(acceptDeclineOpponentsOffer);
+		}
+		else if(propertyChosen){
+			acceptDeclineOpponentsOffer.setText(playerToTradeWith+" has offered the following properties for "+
+					" your offered properties: "+String.join(", ", propertiesOpponentWantsToTrade));
+			acceptDeclineOpponentsPanel.add(acceptDeclineOpponentsOffer);
+		}
 		
 		confirmationButton.setText("Accept");
 		cancelButton.setText("Reject");
@@ -289,30 +311,33 @@ public class Trade extends JFrame{
 					
 					createPlayerBidPanel();
 					tradingHouse.remove(playerOfferPanel);
-					tradingHouse.add(bidPanel);
+					tradingHouse.add(tradingPanel);
 					tradingHouse.revalidate();
 					tradingHouse.repaint();
 					tradingHouse.pack();
 					
 				}
 			}else{//Chosen player has given offer, proceed to accepting/declining
+				
 				createAcceptDeclineOpponentsOfferPanel();
-				tradingHouse.remove(bidPanel);
+				tradingHouse.remove(tradingPanel);
 				tradingHouse.add(acceptDeclineOpponentsPanel);
 				tradingHouse.revalidate();
 				tradingHouse.repaint();
 				tradingHouse.pack();
+				
 			}
 		}else{//Offer has been accepted/declined. Accept -> dispose of frame. Decline -> Return to choosing another player
-			System.out.println("Entering the last case");
-			tradingHouse.dispose();
-			history.getTextArea().append("-> "+player.getIdentifier()+" traded "+String.join(",", propertiesWishingToTrade)+" with "+playerToTradeWith+" for "+bid+"\n\n");
+			
+			tradingHouse.dispose();			
+			tradeAssets();
+			
 		}
 	}
 	
 	
 	
-	private void addActionListeners(){
+	private void addConfirmationActionListener(){
 		//TODO Add action listeners to buttons
 		confirmationButton.addActionListener(new ActionListener() {
 			@Override
@@ -346,10 +371,21 @@ public class Trade extends JFrame{
 				}
 				
 				else if(!offerGiven){
+						
+					if(cashChosen){
 						if(validBid()){
 							offerGiven = true;
 							updateFrame();
 						}
+					}
+					
+					else if(propertyChosen){
+						if(hasOpponentChosenProperties()){
+							offerGiven = true;
+							updateFrame();
+						}
+					}
+						
 				}
 						
 				else if(!offerAccepted){
@@ -359,6 +395,112 @@ public class Trade extends JFrame{
 				}
 			
 		});
+	}
+	
+	private void addCancelButtonActionListener(){
+		
+		if(!offerAccepted){
+			if(!offerGiven){
+				if(!playerAccepted){
+					if(!playerChosen){
+						if(!assetsChosen){
+							if(!propertiesChosen){
+								
+							}
+						}
+					}
+				}
+			}
+				
+		}
+			
+	}
+	
+	/*
+	 * Executed when both parties to the trade accept.
+	 * Bid from player is put into the requesting players 
+	 * bank account.
+	 * The player that bid will recieve the properties that 
+	 * were offered up.
+	 */
+	private void tradeAssets(){
+				
+		/*
+		 Iterate through all the properties the player wishes to trade.
+		 Match by the identifiers.
+		 If it matches, remove it and add it to the properties of the player that accepted offer.
+		 */
+		if(cashChosen){
+			for(int i=0;i<propertiesWishingToTrade.size();i++){
+				for(int j=0;j<player.getProperties().size();j++){
+					
+					if(propertiesWishingToTrade.get(i).equals(player.getProperties().get(j).getIdentifier())){
+						PrivateProperty propertyToTrade = player.getProperties().get(j);
+						players.get(getPlayersIndex()).addProperty(propertyToTrade);
+						player.getProperties().remove(j);
+						System.out.println("Removed "+propertyToTrade.getIdentifier());
+					}
+					
+				}
+			}
+			
+			//Trade the money
+			players.get(getPlayersIndex()).deductFromBalance(bid);
+			player.addToBalance(bid);
+			history.getTextArea().append("-> "+player.getIdentifier()+" traded "+String.join(",", propertiesWishingToTrade)+" with "+playerToTradeWith+" for "+bid+"\n\n");
+
+		}
+		
+		else if(propertyChosen){
+			
+			//Move properties from current player to opponent
+			for(int i=0;i<propertiesWishingToTrade.size();i++){
+				for(int j=0;j<player.getProperties().size();j++){
+					
+					if(propertiesWishingToTrade.get(i).equals(player.getProperties().get(j).getIdentifier())){
+						PrivateProperty propertyToTrade = player.getProperties().get(j);
+						players.get(getPlayersIndex()).addProperty(propertyToTrade);
+						player.getProperties().remove(j);
+					}
+					
+				}
+			}
+			
+			//Move properties from opponent to current player.
+			for(int i=0;i<propertiesOpponentWantsToTrade.size();i++){
+				for(int j=0;j<players.get(getPlayersIndex()).getProperties().size();j++){
+					
+					if(propertiesOpponentWantsToTrade.get(i).equals(players.get(getPlayersIndex()).getProperties().get(j).getIdentifier())){
+						PrivateProperty propertyToTrade = players.get(getPlayersIndex()).getProperties().get(j);
+						player.addProperty(propertyToTrade);
+						players.get(getPlayersIndex()).getProperties().remove(j);
+					}
+				}
+			}
+			history.getTextArea().append("-> "+player.getIdentifier()+" has traded "+String.join(",", propertiesWishingToTrade)+" for "+
+			String.join(", ", propertiesOpponentWantsToTrade)+" with "+playerToTradeWith+"\n\n");
+
+		}
+			
+	}
+	
+		
+	
+	
+	private boolean hasOpponentChosenProperties(){
+		boolean chosenPropertiesToTrade = false;
+		
+		for(int i=0;i<propertiesOpponentMayTrade.size();i++){
+			if(propertiesOpponentMayTrade.get(i).isSelected()){
+				
+				chosenPropertiesToTrade = true;
+				
+				propertiesOpponentWantsToTrade.add(propertiesOpponentMayTrade.get(i).getText());
+				
+			}
+		}
+		
+		return chosenPropertiesToTrade;
 	}
 	
 	private boolean findPropertiesWishingToTrade(){
@@ -416,17 +558,45 @@ public class Trade extends JFrame{
 		
 		try{
 			
-			 bid = Integer.parseInt(bidArea.getText());
-			 validBid = true;
+			 bid = Integer.parseInt(cashBidArea.getText());
+			 
+			 //Make sure player can afford the bid.
+			 if(players.get(getPlayersIndex()).getNetWorth() < bid){
+				 cashBidArea.setText("Your balance is only: "+players.get(getPlayersIndex()).getNetWorth());
+			 }
+			 else{
+				 validBid = true;
+			 }
 			 
 		}catch(Exception e){
 			
-			bidArea.setText("Not a valid bid. Enter an Integer.");
+			cashBidArea.setText("Not a valid bid. Enter an Integer. If you entered an Integer, "
+					+ "it may have been out of range.");
 			
 		}
 		return validBid;
 	}
 	
-	
+	private int getPlayersIndex(){
+		int index=0;
+		boolean indexFound = false;
+		
+		//Find players index that we want to trade with by name.
+		while(!indexFound){
+			if(!players.get(index).getIdentifier().equals(playerToTradeWith)){
+					index++;
+			}
+			else{
+				indexFound = true;
+			}
+		}
+		
+		return index;
+			
+	}
 	
 }
+	
+	
+	
+
