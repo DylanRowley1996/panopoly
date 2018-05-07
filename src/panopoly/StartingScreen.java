@@ -1,10 +1,15 @@
 package panopoly;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class StartingScreen
 {	
@@ -22,10 +27,13 @@ public class StartingScreen
 	JButton startGameButton;
 	JButton quitGameButton;
 
-	public StartingScreen()
+	public StartingScreen() throws IOException
 	{
 		frame = new JFrame();
 		frame.setTitle("Panopoly");
+		BufferedImage myPhoto = ImageIO.read(new File("gameImages/rickMortyCommie.png"));
+		Image myGameIcon = myPhoto.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+		frame.setIconImage(myGameIcon);
 
 //		frame.setSize(screenSize.width - 10, screenSize.height - 10);
 		frame.setBounds(screenSize.width/2, 0, screenSize.width, screenSize.height);
