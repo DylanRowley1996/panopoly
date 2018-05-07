@@ -3,7 +3,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -39,12 +43,15 @@ public class Sell {
 	private JButton confirmationButton = new JButton("Confirm");
 	private JButton cancelationButton = new JButton("Cancel");
 	
+	private HashMap<String, Integer> propertyHousesToSell = new HashMap<String, Integer>();
+	
 	public Sell(Player player, HistoryLog history){
 		
 		this.history = history;
 		this.player = player;
 		
 		createMainPanel();
+		addActionListners();
 		
 		frame.add(mainPanel);
 	    frame.pack();
@@ -92,6 +99,14 @@ public class Sell {
 	}
 	
 	private void addActionListners(){
+		confirmationButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				
+			}
+		});
 		
 	}
 	
