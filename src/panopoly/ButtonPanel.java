@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class ButtonPanel extends JPanel
 {
-	Dimension panelDim = new Dimension(ButtonPanel.HEIGHT,ButtonPanel.WIDTH);
+
 	private static final long serialVersionUID = 1L;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -45,6 +45,7 @@ public class ButtonPanel extends JPanel
     {
     	setLayout(new GridBagLayout());
     	setMaximumSize(new Dimension(5,5));
+    	setSize(new Dimension((int) screenSize.getWidth()*30, (int) screenSize.getHeight()*40));
     	GridBagConstraints c = new GridBagConstraints();
     	c.weightx = .5;
         c.weighty = .5;

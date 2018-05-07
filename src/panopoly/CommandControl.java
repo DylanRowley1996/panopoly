@@ -55,6 +55,7 @@ public class CommandControl {
 			ArrayList<Integer> diceFaces;
 			diceFaces = normalDice.getFaces();
 			moveCount = normalDice.rollDice(2, 6);
+			moveCount = locations.size()/4;
 			history.getTextArea().append("-> You have rolled a "+moveCount+"  "+diceFaces+".\n");	
 
 			if(!normalDice.isDouble()) {
@@ -96,6 +97,7 @@ public class CommandControl {
 				CardGenerator.createCard(player, history);
 			}
 			if(location instanceof CommunismTax) {
+				oldLoc=(NamedLocation) player.getLocation();
 				CommunismTax.spreadWealth(players, history);
 			}
 			if(location instanceof GoToJail) {
