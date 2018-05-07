@@ -191,19 +191,6 @@ public class CardGenerator {
 			 finalOutcome += rewardPrecondition+" with "+props+"and "+reward+"\nTravel to "+locations.get(loc).getIdentifier();
 			 player.setLocation(locations.get(loc));
 
-			 //		}else if(effectDecider<46){
-			 //				//coin toss chance
-			 //				/* split 5 ways
-			 //				 * SET MONEY
-			 //				 * % MONEY
-			 //				 * GAIN OR LOSE ASSET
-			 //				 * GAIN POWER OR LOSE MONEY
-			 //				 * PERMANENT RENT INCREASE OR PEMANENT RENT DECREASE ON RANDOM PROPERTY
-			 //				 */
-			 //			history.getTextArea().append("Coin Toss\n");
-			 //		}else if(effectDecider<51){
-			 //		}else if(effectDecider<56){
-			 //		}else if(effectDecider<61){
 
 			 //also add a card that moves your location on the board
 		 }else if(effectDecider<66){
