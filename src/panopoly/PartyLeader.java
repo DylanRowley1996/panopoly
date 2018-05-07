@@ -150,21 +150,24 @@ public class PartyLeader {
 
 		//Check if a player even has houses to sell.
 		for(PrivateProperty property : player.getProperties() ){
-			if(property.getNumHouses() != 0){
-				hasHouses = true;
+			if(property instanceof ImprovableProperty){
+				if(((ImprovableProperty)property).getNumHouses() != 0){
+					hasHouses = true;
+				}
 			}
 		}
 
 		//Take corresponding action.
-		if(hasHouses == false){
+		if(!hasHouses){
 			history.getTextArea().append("-> You don't have any houses to sell.\n\n");
 		}
+		
 		else{
 			Sell sell = new Sell(player, history);
-
+			hasHouses = false;
 		}
-
-
+		
+		
 
 	}
 

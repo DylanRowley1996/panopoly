@@ -28,7 +28,7 @@ public class Sell {
 	
 	private Border border = BorderFactory.createLineBorder(Color.BLACK);
 	
-    
+
 	private JPanel mainPanel = new JPanel(new BorderLayout());
 	
 	//Top Panel
