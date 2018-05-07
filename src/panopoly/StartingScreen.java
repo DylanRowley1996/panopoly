@@ -30,8 +30,8 @@ public class StartingScreen
 	{
 		frame = new JFrame();
 		frame.setTitle("Panopoly");
-//		frame.setSize(910, 910);
-		frame.setSize(screenSize.width, screenSize.height);
+//		frame.setSize(screenSize.width - 10, screenSize.height - 10);
+		frame.setBounds(screenSize.width/2, 0, screenSize.width, screenSize.height);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -41,7 +41,7 @@ public class StartingScreen
 
 		frame.setLayout(null);
 		background = new JLabel();
-		background.setBounds(0, 0, 900, 900);
+		background.setBounds(0, 0, screenSize.width, screenSize.height);
 		frame.add(background);
 
 		buttons = new JPanel();
@@ -74,20 +74,11 @@ public class StartingScreen
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{				
-//				try
-//				{
+
 					buttons.removeAll();
 					buttons.add(getPlayerCount());
 					frame.add(buttons);
 					frame.setVisible(true);
-						
-//					gameSetup = new SetupGame(noOfPlayers);
-//					frame.dispose();
-				
-//				} catch (EncryptedDocumentException | InvalidFormatException | IOException | URISyntaxException e1)
-//				{				
-//					e1.printStackTrace();
-//				}
 			}
 		});
 		
@@ -99,8 +90,6 @@ public class StartingScreen
 				frame.dispose();
 			}
 		});
-		
-		//return gameSetup;
 		
 	}
 
@@ -118,7 +107,6 @@ public class StartingScreen
 		playerCount.setLayout(new FlowLayout());
 		ButtonGroup startingButtons = new ButtonGroup();
 		
-		JRadioButton one = new JRadioButton("1");
 	    JRadioButton two = new JRadioButton("2");
 	    JRadioButton three = new JRadioButton("3");
 	    JRadioButton four = new JRadioButton("4");
@@ -127,19 +115,14 @@ public class StartingScreen
 	    JButton confirmButton = new JButton("Confirm");
 	    
 	    
-	    startingButtons.add(one); // Grouping only allows one button to be selected at a time
+	    // Grouping only allows one button to be selected at a time
 	    startingButtons.add(two);
 	    startingButtons.add(three);
 	    startingButtons.add(four);
 	    startingButtons.add(five);
 	    startingButtons.add(six);
 	    
-	    JRadioButton numbers[] = {one, two, three, four, five, six};
-	    
-	    if(numbers[2].isSelected())
-	    {
-	    	System.out.println("TESTING");
-	    }
+	    JRadioButton numbers[] = {two, three, four, five, six};
 	    
 	    confirmButton.addActionListener(new ActionListener() 
 	    {
@@ -150,20 +133,11 @@ public class StartingScreen
             {
             	boolean numSelected = false;
 
-            		while(i < 6 && !numSelected)
+            		while(i < 5 && !numSelected)
             	    {
             	    	if(numbers[i].isSelected())
             	    	{
-            	    		noOfPlayers = i + 1;
-            	    		try
-            				{
-            	    			System.out.print(noOfPlayers);
-            	    			gameSetup = new SetupGame(noOfPlayers);
-            	    			
-            				} catch (EncryptedDocumentException | InvalidFormatException | IOException | URISyntaxException e1)
-            				{				
-            					e1.printStackTrace();
-            				}
+            	    		noOfPlayers = i + 2; // Numbers start at 2
             	    		numSelected = true;
             	    	}
             	    	else
@@ -177,7 +151,6 @@ public class StartingScreen
 	    JLabel question = new JLabel("How many players are there:\n");
 	    
 	    playerCount.add(question, BorderLayout.LINE_START);
-	    playerCount.add(one);
 	    playerCount.add(two);
 	    playerCount.add(three);
 	    playerCount.add(four);
@@ -186,11 +159,12 @@ public class StartingScreen
 	    
 	    playerCount.add(confirmButton);
 	    
+	    if(numbers[2].isSelected())
+	    {
+	    	System.out.println("TESTING");
+	    }
+	    
 	    return playerCount;
+	  
 	}
-
-//	public static void main(String[] args) throws NullPointerException
-//	{
-//		new StartingScreen();
-//	}
 }
