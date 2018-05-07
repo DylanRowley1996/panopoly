@@ -70,4 +70,9 @@ public class ImprovableProperty extends PrivateProperty implements Improvable {
 		}
 		return super.toString()+str;
 	}
+
+	@Override
+	public void removeHouse(int number) {
+		numHouses -= number;
+	}
 }
