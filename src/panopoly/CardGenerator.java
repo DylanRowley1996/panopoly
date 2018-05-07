@@ -185,7 +185,7 @@ public class CardGenerator {
 				 player.deductFromBalance((int) (player.getNetWorth()*percent));
 			 }   		
 	
-		 }else if(effectDecider>=37 && effectDecider <= 41) {
+		 }else if(effectDecider>=37 && effectDecider <= 56) {
 			 int loc = rand.nextInt(locations.size());
 			 reward = " robbed "+genderPossesive+" car";			
 			 finalOutcome += rewardPrecondition+" with "+props+"and "+reward+"\nTravel to "+locations.get(loc).getIdentifier();
@@ -216,44 +216,26 @@ public class CardGenerator {
 			  * 2 OUTPUTS LEAD TO RENT AVOID CARD
 			  * 10 OUTPUTS LEAD TO GET OUT OF JAIL CARD
 			  */
-			 reward = "You looted a GET OUT OF JAIL FREE card from "+genderPossesive2+" corpse";			
+			 reward = genderDeterminer+" offers you a free random unowned property to spare "+genderPossesive2+" life";			
 			 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward;
-			 // TODO add Jail Card
-			 	
-			 //new retainableCard object get out of jail
-			 //player.addCard(GetOutOfJailFree);
-			 //history.getTextArea().append("Retainable Card\n");	
-		 }else if(effectDecider<82) { // TODO
+			 String propOutcome = "";
+			 PrivateProperty prop = player.getRandomProperty(locations);
+			 if(prop!=null) {
+				 propOutcome = player.getIdentifier()+" was given "+prop.getIdentifier()+"for free!";
+			 }
+			 else {
+				 propOutcome = "Unfortunately there were no unowned properties available";
+			 }
+			 finalOutcome += "\n"+propOutcome;
+	
+		 }else if(effectDecider<82) {
 		
-			 reward = "Police find you standing over "+genderPossesive+" corpse";			
+			 reward = "Police find you standing over "+genderPossesive2+" corpse";			
 			 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward+"\nYou are arrested for murder.\n Go directly to jail";
 			 player.setLocation(locations.get(locations.size()/4));
 			 player.setJail(new Jail(player, history));
 		 }
-		 /*else if(effectDecider<78) {
-
-			 reward = "You looted a RENT AVOID card from "+genderPossesive2+" corpse";			
-			 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward;
-			 
-			 //TODO add card to player inventory
-			 //rent avoid
-
-		 }else if(effectDecider<82) { // TODO
-			 
-			  * up to 82 leads to boost of rent intake
-			  * up to 85 leads to cheaper prices on properties/buildings??
-			  
-			 reward = "You looted a RENT POWER UP from "+genderPossesive+" corpse";			
-			 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward+"\nAll your properties' rents have increased by 15%!";
-			 
-			 // set boolean to true within player class that can be searched for when calculating rent , must have a timer so gets revoked after x turns
-			 
-		 }else if(effectDecider<85) {
-			 reward = "You looted a PROPERTY COST POWER UP from "+genderPossesive+" corpse";			
-			 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward+"\nAll properties now cost 10% less for you to purchase!";
-			
-
-		 }*/else if(effectDecider<90) {
+		 else if(effectDecider<90) {
 			 
 			 int amount = rand.nextInt(131) + 20;
 			 penalty = genderDeterminer+" makes you pay $"+amount+" for each of your Properties";
@@ -297,7 +279,7 @@ public class CardGenerator {
 			 history.getTextArea().append("Error, random integer outside boundary for card selection\n");
 		 }
 		 
-		 history.getTextArea().append(finalOutcome+"\n");
+		 history.getTextArea().append(finalOutcome+"\n\n");
 	 }
 }
 

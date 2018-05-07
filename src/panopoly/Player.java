@@ -9,6 +9,7 @@ import org.apache.commons.io.FilenameUtils;
 import javax.imageio.ImageIO;
 import interfaces.Locatable;
 import interfaces.Playable;
+import locations.NamedLocation;
 import locations.PrivateProperty;
 import locations.PropertyGroup;
 
@@ -21,7 +22,6 @@ public class Player implements Playable {
     private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
     private ArrayList<PrivateProperty> mortgages = new ArrayList<PrivateProperty>();
     private int numImprovements = 0;
-    private int getOutOfJailCard = 0;
     
     private String pathToCharacterIcon = "";
     private Locatable location = null;
@@ -32,7 +32,7 @@ public class Player implements Playable {
     private Jail jail;
     private BufferedImage characterIcon;
     
-    public Player(String name,String pathToCharacterIcon) throws IOException,NullPointerException{
+    public Player(String name,String pathToCharacterIcon) throws IOException, NullPointerException{
     	this.name = name;
         this.pathToCharacterIcon = pathToCharacterIcon;
         isInJail = false;
@@ -93,6 +93,7 @@ public class Player implements Playable {
   	public void addProperty(PrivateProperty property){
      	property.setOwner(this);
   		properties.add(property);
+  		hasMonopoly(property);
   	}
 
     public ArrayList<PrivateProperty> getProperties() {
@@ -162,18 +163,6 @@ public class Player implements Playable {
 		addToBalance(-amount);
 		((Player)p).addToBalance(amount);
 	}
-	
-	public boolean hasJailCard() {
-		return getOutOfJailCard>0;
-	}
-	
-	public void addJailCard() {
-		getOutOfJailCard++;
-	}
-	
-	public void useJailCard() {
-		getOutOfJailCard--;
-	}
 
 	public void setInJail(boolean b) {
 		isInJail = b;
@@ -226,5 +215,19 @@ public class Player implements Playable {
 //		output = networth;
 //	}
 //	
+
+	public PrivateProperty getRandomProperty(ArrayList<NamedLocation> locations) {
+		PrivateProperty prop = null;
+		for(int i=0; i<locations.size(); i++) {
+			if(locations.get(i) instanceof PrivateProperty && ((PrivateProperty) locations.get(i)).getOwner()==null) {
+				prop = ((PrivateProperty) locations.get(i));
+			}
+			if(prop!=null) {
+				addProperty(prop);
+			}
+			
+		}
+		return prop;
+	}
 }
 
