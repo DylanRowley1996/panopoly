@@ -1,6 +1,5 @@
 package panopoly;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +29,10 @@ import locations.PrivateProperty;
  */
 public class Trade extends JFrame{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JFrame tradingHouse = new JFrame("Trading house");
 	private Player player;
 	private ArrayList<Player> players;
@@ -99,15 +102,15 @@ public class Trade extends JFrame{
 		this.history = history;
 		
 		addConfirmationActionListener();
+		addCancelButtonActionListener();
 		
-		createPropertyPanel(player);
+		updateFrame();
 		
 		/* 
 		 * Add the initial property panel.
 		 * This will be swapped out later
 		 * for the other panels described above.
 		 */
-		tradingHouse.add(propertyPanel);
         tradingHouse.setLocationRelativeTo(null);
         tradingHouse.setVisible(true);
         tradingHouse.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -269,12 +272,18 @@ public class Trade extends JFrame{
 					if(!playerChosen){
 						if(!assetsChosen){
 							if(!propertiesChosen){
+								
+								createPropertyPanel(player);
+								tradingHouse.add(propertyPanel);
+								tradingHouse.revalidate();
+								tradingHouse.repaint();
+								tradingHouse.pack();
+								
 							}else{//Properties chosen, set up assets
 								
 								/*
 								 * Create a list of properties they want to trade.
 								 */
-								System.out.println("In properties");
 								createAssetsPanel();
 								tradingHouse.remove(propertyPanel);
 								tradingHouse.add(assetsPanel);
@@ -290,6 +299,7 @@ public class Trade extends JFrame{
 							 * Create a list of players to choose from
 							 * that a player wants to trade with.
 							 */
+							clearInformationTo(1);
 							createPlayerChoicesPanel();
 							tradingHouse.remove(assetsPanel);
 							tradingHouse.add(playerChoicesPanel);
@@ -338,7 +348,6 @@ public class Trade extends JFrame{
 	
 	
 	private void addConfirmationActionListener(){
-		//TODO Add action listeners to buttons
 		confirmationButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -399,20 +408,59 @@ public class Trade extends JFrame{
 	
 	private void addCancelButtonActionListener(){
 		
-		if(!offerAccepted){
-			if(!offerGiven){
-				if(!playerAccepted){
-					if(!playerChosen){
-						if(!assetsChosen){
-							if(!propertiesChosen){
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if(!offerAccepted){
+					if(!offerGiven){
+						if(!playerAccepted){
+							if(!playerChosen){
+								if(!assetsChosen){
+									if(!propertiesChosen){
+										tradingHouse.dispose();
+									}
+									else{
+										propertiesChosen = false;
+										clearInformationTo(0);
+										tradingHouse.remove(assetsPanel);
+										updateFrame();
+									}
+								}else{
+		
+									assetsChosen = false;
+									clearInformationTo(1);
+									tradingHouse.remove(playerChoicesPanel);
+									updateFrame();
+									
+								}
+							}else{
+								
+								playerChosen = false;
+								clearInformationTo(2);
+								tradingHouse.remove(playerOfferPanel);
+								updateFrame();
 								
 							}
+						}else{
+							
+							playerAccepted = false;
+							clearInformationTo(3);
+							tradingHouse.remove(tradingPanel);
+							updateFrame();
+							
 						}
-					}
+					}else{
+						
+						offerGiven = false;
+						clearInformationTo(4);
+						tradingHouse.remove(acceptDeclineOpponentsPanel);
+						updateFrame();
+						
+					}	
 				}
 			}
-				
-		}
+		});
 			
 	}
 	
@@ -593,6 +641,41 @@ public class Trade extends JFrame{
 		
 		return index;
 			
+	}
+	
+	private void clearInformationTo(int stepOfProcess){
+		
+	
+		switch(stepOfProcess){
+		case 0:
+			assetsPanel.removeAll();
+			propertiesWishingToTrade.clear();
+			propertyChosen = false;
+			cashChosen = false;
+			break;
+		case 1:
+			playerChoicesPanel.removeAll();	
+			playerRadioButtonPanel.removeAll();
+			playerRadioButtons.clear();
+			break;
+		case 2:		
+			playerOfferPanel.removeAll();
+			playerOfferPanel.remove(acceptOrDeclineQuestion);
+			confirmationButton.setText("Confirm");
+			cancelButton.setText("Cancel");
+			break;
+		case 3:
+			tradingPanel.removeAll();
+			propertiesOpponentMayTrade.clear();
+			break;
+		case 4:
+			acceptDeclineOpponentsPanel.removeAll();
+			propertiesOpponentWantsToTrade.clear();
+			confirmationButton.setText("Confirm");
+			cancelButton.setText("Cancel");
+			break;
+		}
+		
 	}
 	
 }

@@ -1,34 +1,31 @@
 package panopoly;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
 public class ButtonPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-	ImageIcon imageIcon = new ImageIcon("gameImages/diceImage.png"); // load the image to a imageIcon
-	Image image = imageIcon.getImage();
-	Image newimg = image.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-	ImageIcon imageIcon1 = new ImageIcon(newimg); 
+	private ImageIcon imageIcon = new ImageIcon("gameImages/diceImage.png"); // load the image to a imageIcon
+	private Image image = imageIcon.getImage();
+	private Image newimg = image.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+	private ImageIcon imageIcon1 = new ImageIcon(newimg); 
 	private JButton rollButton = new JButton(imageIcon1);
-	ImageIcon imageIcon2 = new ImageIcon("gameImages/buyButton.png"); // load the image to a imageIcon
-	Image image1 = imageIcon2.getImage();
-	Image newimg1 = image1.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-	ImageIcon imageIcon3 = new ImageIcon(newimg1); 
+	private ImageIcon imageIcon2 = new ImageIcon("gameImages/buyButton.png"); // load the image to a imageIcon
+	private Image image1 = imageIcon2.getImage();
+	private Image newimg1 = image1.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+	private ImageIcon imageIcon3 = new ImageIcon(newimg1); 
 	private JButton buyButton = new JButton(imageIcon3);
-	ImageIcon imageIcon4 = new ImageIcon("gameImages/auctionButton.png"); // load the image to a imageIcon
-	Image image2 = imageIcon4.getImage();
-	Image newimg2 = image2.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-	ImageIcon imageIcon5 = new ImageIcon(newimg2); 
+	private ImageIcon imageIcon4 = new ImageIcon("gameImages/auctionButton.png"); // load the image to a imageIcon
+	private Image image2 = imageIcon4.getImage();
+	private Image newimg2 = image2.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+	private ImageIcon imageIcon5 = new ImageIcon(newimg2); 
     private JButton auctionButton = new JButton(imageIcon5);
-	ImageIcon imageIcon6 = new ImageIcon("gameImages/sellButton.png"); // load the image to a imageIcon
-	Image image3 = imageIcon6.getImage();
-	Image newimg3 = image3.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-	ImageIcon imageIcon7 = new ImageIcon(newimg3); 
+    private ImageIcon imageIcon6 = new ImageIcon("gameImages/sellButton.png"); // load the image to a imageIcon
+    private Image image3 = imageIcon6.getImage();
+    private Image newimg3 = image3.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+    private ImageIcon imageIcon7 = new ImageIcon(newimg3); 
     private JButton sellButton = new JButton(imageIcon7);
+    private JButton buildButton = new JButton("BUILD");
     private JButton bankruptyButton = new JButton("BANKRUPT");
     private JButton mortgageButton = new JButton("MORTGAGE");
     private JButton redeemMortgageButton = new JButton("REDEEM MORTGAGE");
@@ -69,15 +66,20 @@ public class ButtonPanel extends JPanel
     	c.gridwidth = 1;
 		c.gridx = 0;
     	c.gridy = 1;
+    	add(buildButton, c);
+    	
+    	c.gridwidth = 1;
+		c.gridx = 1;
+    	c.gridy = 1;
     	add(mortgageButton, c);
     	
-    	c.gridx = 1;
+    	c.gridx = 2;
     	c.gridy = 1;
     	add(redeemMortgageButton, c);
     	
     	
-    	c.gridwidth = 2;
-    	c.gridx = 2;
+    	c.gridwidth = 1;
+    	c.gridx = 3;
     	c.gridy = 1;
     	add(bankruptyButton, c);
     	
@@ -150,6 +152,10 @@ public class ButtonPanel extends JPanel
 	
 	public JButton getFinishTurnButton(){
 		return finishTurnButton;
+	}
+	
+	public JButton getBuildButton(){
+		return buildButton;
 	}
 	
 }

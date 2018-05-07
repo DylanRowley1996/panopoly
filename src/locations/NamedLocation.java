@@ -1,6 +1,5 @@
 package locations;
 import interfaces.Locatable;
-import interfaces.Mortgageable;
 
 public class NamedLocation implements Locatable {
 	

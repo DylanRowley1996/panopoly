@@ -176,11 +176,11 @@ public class CardGenerator {
 			 randomNumber = (int) Math.round(Math.random());   		
 			 if(randomNumber == 0){
 				 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward+"\nWallet increased by $"+player.getNetWorth()*randomAmount;
-				 player.addToBalance(player.getNetWorth()*randomAmount);
+				 player.addToBalance(player.getNetWorth()*randomAmount/100);
 			 }
 			 else{
 				 finalOutcome += penaltyPrecondition+" with "+props+".\n" + penalty+"\nYou lost $"+player.getNetWorth()*randomAmount;
-				 player.deductFromBalance(player.getNetWorth()*randomAmount);
+				 player.deductFromBalance(player.getNetWorth()*randomAmount/100);
 			 }   		
 	
 		 }else if(effectDecider>=37 && effectDecider <= 41) {

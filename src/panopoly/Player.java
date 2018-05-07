@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import javax.imageio.ImageIO;
@@ -17,10 +16,10 @@ import locations.PropertyGroup;
 public class Player implements Playable {
 
     private String name = "";
-    private int netWorth = 2000;
+    private int netWorth = 2500;
     private ArrayList<PrivateProperty> properties = new ArrayList<PrivateProperty>();
     private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
-    private ArrayList<PropertyGroup> mortgages = new ArrayList<PropertyGroup>();
+    private ArrayList<PrivateProperty> mortgages = new ArrayList<PrivateProperty>();
     private int numImprovements = 0;
     private int getOutOfJailCard = 0;
     
@@ -29,6 +28,7 @@ public class Player implements Playable {
     private boolean hasRolled = false;
     private boolean mustDeclareBankruptcy = false;
     private boolean isInJail = false;
+    private boolean isAnsweringMCQ = false;
     private Jail jail;
     private BufferedImage characterIcon;
     
@@ -76,6 +76,17 @@ public class Player implements Playable {
      	this.deductFromBalance(target.getPrice());
      	target.setOwner(this);
     	properties.add(target);
+    	hasMonopoly(target);
+    }
+    
+    public void hasMonopoly(PrivateProperty target) {
+    	boolean monopoly = target.getGroup().hasMonopoly(this);
+    	if(!monopoly&&monopolies.contains(target.getGroup())) {
+    		monopolies.remove(target.getGroup());
+    	}
+    	else if(monopoly&&!monopolies.contains(target.getGroup())) {
+    		monopolies.add(target.getGroup());
+    	}
     }
     
     //Used for Auctioning
@@ -92,7 +103,7 @@ public class Player implements Playable {
     	return monopolies;
     }
     
-    public ArrayList<PropertyGroup> getMortgages(){
+    public ArrayList<PrivateProperty> getMortgages(){
     	return mortgages;
     }
     
@@ -179,6 +190,7 @@ public class Player implements Playable {
 	public Jail getJail() {
 		return jail;
 	}
+	
 	public void revokeOwnership() {
 		for(PrivateProperty p:properties) {
 			p.reset();
@@ -186,5 +198,28 @@ public class Player implements Playable {
 		properties.clear();
 		mortgages.clear();
 	}
+	
+	public void mortgageProperty(PrivateProperty prop) {
+		mortgages.add(prop);
+		netWorth+=prop.getMortgageAmount();
+		prop.mortgage();
+		hasMonopoly(prop);
+	}
+	
+	public void redeemProperty(PrivateProperty prop) {
+		mortgages.remove(prop);
+		netWorth-=prop.getRedeemAmount();
+		prop.unmortgage();
+		hasMonopoly(prop);
+	}
+	
+	public void setAnsweringMCQ(boolean answer) {
+		isAnsweringMCQ=answer;
+	}
+	
+	public boolean isAnsweringMCQ() {
+		return isAnsweringMCQ;
+	}
+	
 }
 

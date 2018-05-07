@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
+import interfaces.Improvable;
 import interfaces.Locatable;
 import interfaces.Mortgageable;
 import interfaces.Ownable;
@@ -28,6 +29,7 @@ public class PartyLeader {
 
 	//Booleans for game control
 	private boolean boughtProperty = false;
+	private boolean hasHouses = false;
 
 	private HistoryLog history = null;
 	private static ArrayList<NamedLocation> locations = (ArrayList<NamedLocation>) SetupGame.getLocationList();
@@ -142,8 +144,27 @@ public class PartyLeader {
 		}
 	}
 
-	public void sell(Player player) {
+	public void sell(Player player, HistoryLog history) {
 		// TODO
+
+		//Check if a player even has houses to sell.
+		for(PrivateProperty property : player.getProperties() ){
+			if(property.getNumHouses() != 0){
+				hasHouses = true;
+			}
+		}
+
+		//Take corresponding action.
+		if(hasHouses == false){
+			history.getTextArea().append("-> You don't have any houses to sell.\n\n");
+		}
+		else{
+			Sell sell = new Sell(player, history);
+
+		}
+
+
+
 	}
 
 	public void mortgage(Player player) {
@@ -176,7 +197,7 @@ public class PartyLeader {
 			for (int i = 0; i < mortgageableProperties.size(); i++) {
 				mortgageableRadioButtons
 				.add(new JRadioButton("Property: " + mortgageableProperties.get(i).getIdentifier()
-						+ " Mortgage Amount: " + mortgageableProperties.get(i).getMortgageAmount()));
+						+ " Mortgage Amount: $" + mortgageableProperties.get(i).getMortgageAmount()));
 			}
 
 			// Create the button for choice confirmation.
@@ -229,15 +250,14 @@ public class PartyLeader {
 								for (int y = 0; y < player.getProperties().size(); y++) {
 									if (mortgageableIdentifiers.get(x)
 											.equals(player.getProperties().get(y).getIdentifier())) {
-										player.getProperties().get(y).mortgage();
+										player.mortgageProperty(player.getProperties().get(y));
 									}
 								}
 							}
 
 							// Add the total value to the players balance.
-							player.addToBalance(totalMortgageValue);
 							history.getTextArea().append("-> Properties Mortgaged: " + buildString(mortgageableIdentifiers)
-							+ " for total: " + totalMortgageValue + " \n\n");
+							+ " for total: $" + totalMortgageValue + " \n\n");
 							mortgageFrame.dispose();// Exit JFrame, player has
 							// selected the properties
 							// they want to redeem
@@ -305,7 +325,7 @@ public class PartyLeader {
 			ArrayList<JRadioButton> redeemableRadioButtons = new ArrayList<JRadioButton>();
 			for(int i=0;i<redeemableProperties.size();i++){
 				redeemableRadioButtons.add(new JRadioButton("Property: "+redeemableProperties.get(i).getIdentifier()
-						+" Redemption Amount: "+redeemableProperties.get(i).getMortgageAmount()));
+						+" Redemption Amount: $"+redeemableProperties.get(i).getMortgageAmount()));
 			}
 
 			//Create the button for choice confirmation.
@@ -327,24 +347,22 @@ public class PartyLeader {
 						int totalRedemptionValue = 0;
 
 						int j=0;
-
+						ArrayList<PrivateProperty> propertiesToRedeem = new ArrayList<PrivateProperty>();
 						while(j < redeemableRadioButtons.size()){
 							if(redeemableRadioButtons.get(j).isSelected()){
 
 								mortgagedSelected = true;
+								if(player.getNetWorth()>redeemableProperties.get(j).getRedeemAmount()) {	
 
-								//Start totalling value of mortgages.
-								totalRedemptionValue += redeemableProperties.get(j).getRedeemAmount();
+									//Start totalling value of mortgages.
+									totalRedemptionValue += redeemableProperties.get(j).getRedeemAmount();
 
-								//Find index of property to unmortgage then unmortgage this property in players list.
-								int indexToRedeem = player.getProperties().indexOf(redeemableProperties.get(j));
-
-								//Unmortgage the correct properties
-								player.getProperties().get(indexToRedeem).unmortgage();
-
-								//Add property name to list of Stringst that we'll print
-								redeemedPropertiesToPrint.add(player.getProperties().get(indexToRedeem).getIdentifier());
-
+									//Find index of property to unmortgage then unmortgage this property in players list.
+									int indexToRedeem = player.getProperties().indexOf(redeemableProperties.get(j));
+									propertiesToRedeem.add(player.getProperties().get(indexToRedeem));
+									//Add property name to list of Stringst that we'll print
+									redeemedPropertiesToPrint.add(player.getProperties().get(indexToRedeem).getIdentifier());
+								}
 							}
 							j++;
 						}
@@ -352,7 +370,11 @@ public class PartyLeader {
 						//Make sure player has enough funds to redeem mortgages and has actually chosen one.
 						if(player.getNetWorth() >= totalRedemptionValue && mortgagedSelected){
 							player.deductFromBalance(totalRedemptionValue);
-							history.getTextArea().append("-> Redeeemed Mortgages: "+buildString(redeemedPropertiesToPrint)+" for total: "+totalRedemptionValue+"\n\n");
+							for(int i=0; i<propertiesToRedeem.size(); i++) {
+								//Unmortgage the correct properties
+								player.redeemProperty(propertiesToRedeem.get(i));
+							}
+							history.getTextArea().append("-> Redeeemed Mortgages: "+buildString(redeemedPropertiesToPrint)+" for total: $"+totalRedemptionValue+"\n\n");
 							redeemFrame.dispose();//Exit JFrame, player has selected the properties they want to redeem	
 						}
 						else if(player.getNetWorth() < totalRedemptionValue && mortgagedSelected){
@@ -395,14 +417,14 @@ public class PartyLeader {
 
 	}
 
-	public void auction(Player player, ArrayList<Player> players, HistoryLog history){
+	public void auction(Player player){
 		//TODO
 		if(player.getLocation() instanceof Ownable && ((Ownable)player.getLocation()).getOwner() == null){
 			Auction auction = new Auction((Ownable)player.getLocation(),players,history);
 		}
 	}
 
-	public void trade(Player player, ArrayList<Player> players, HistoryLog history){
+	public void trade(Player player){
 		Trade trade = new Trade(player, players, history);
 	}
 
@@ -413,40 +435,35 @@ public class PartyLeader {
 		//Force them to auction.
 		if(player.getNetWorth()<0) {
 			history.getTextArea().append("You are in debt! Sell houses and cards or mortgage properties to pay your debt!\n");
-		}else if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
+		} 
+		else if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
 			history.getTextArea().append("Either 'Buy' or 'Auction' this property before finishing your turn.\n");
-		}else{
-			if(!player.hasRolled() && !player.isInJail()){
-				history.getTextArea().append("-> You must roll before finishing your turn.\n\n");
+		} 
+		else if(!player.hasRolled() && !player.isInJail()){
+			history.getTextArea().append("-> You must roll before finishing your turn.\n\n");
+		}
+		else if(player.isAnsweringMCQ()) {
+			history.getTextArea().append("-> Cannot end turn while answering MCQ.\n\n");
+		}
+		else{
+			boughtProperty = false;
+			player.setRolled(false);
+
+			if (currentPlayerNumber == players.size()-1) {
+				currentPlayerNumber = 0;
+			} else {
+				currentPlayerNumber++;
+			}
+			try {
+				BufferedImage myPicture = ImageIO
+						.read(new File(players.get(currentPlayerNumber).getPathForImageIcon()));
+				characterImage.setIcon(new ImageIcon(myPicture));
+				history.getTextArea()
+				.append("-> Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n\n");
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
-			/*
-			 * If player is on an ownable property that is unowned and hasn't bought it
-			 * 	Force them to auction.
-			 */
-			else if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
-				history.getTextArea().append("-> Either 'Buy' or 'Auction' this property before finishing your turn.\n\n");	
-			}
-
-			else{
-				boughtProperty = false;
-				player.setRolled(false);
-
-				if (currentPlayerNumber == players.size()-1) {
-					currentPlayerNumber = 0;
-				} else {
-					currentPlayerNumber++;
-				}
-				try {
-					BufferedImage myPicture = ImageIO
-							.read(new File(players.get(currentPlayerNumber).getPathForImageIcon()));
-					characterImage.setIcon(new ImageIcon(myPicture));
-					history.getTextArea()
-					.append("-> Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n\n");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return currentPlayerNumber;
 	}
@@ -474,6 +491,7 @@ public class PartyLeader {
 
 		return stringToBuild;
 	}
+
 	public void declareBankruptcy(Player player, int currentPlayerNumber, JLabel characterImage) {
 		history.getTextArea().append(player.getIdentifier()+" has declared bankruptcy and drops out.\n");
 		board.removeCharacter(player);
@@ -491,7 +509,119 @@ public class PartyLeader {
 			declareWinner(players.get(0));
 		}
 	}
+
 	public void declareWinner(Player p)  {
 		history.getTextArea().append("THE WINNER IS "+p.getIdentifier()+"\n");
+	}
+
+	public void build(Player player) {
+		if(player.getMonopolies().size() == 0){
+			history.getTextArea().append("-> You have no monopolies or one with a mortgaged property. Unable to build.\n\n");
+
+		}
+		else{
+			ArrayList<ImprovableProperty> buildableProperties = new ArrayList<ImprovableProperty>();
+			JFrame redeemFrame = new JFrame("Buildable properties");
+			JLabel userDirections = new JLabel("Choose which properties to build on then hit 'Confirm'");
+			JLabel userAlert = new JLabel("You currently have enough to build.");
+
+			for(int i=0;i<player.getProperties().size();i++){
+				//If property is improvable, player has monopoly and is not mortgaged and doesn't already have a hotel
+				if(player.getProperties().get(i) instanceof ImprovableProperty && player.getMonopolies().contains(player.getProperties().get(i).getGroup())
+						&& ((ImprovableProperty) player.getProperties().get(i)).getNumHotels()==0) {
+					buildableProperties.add((ImprovableProperty) player.getProperties().get(i));	
+				}
+
+			}
+
+			/*
+			 * Create an array list of buttons. One for each mortgageable property.
+			 */
+			ArrayList<JRadioButton> buildableRadioButtons = new ArrayList<JRadioButton>();
+			for(int i=0;i<buildableProperties.size();i++) {
+				buildableRadioButtons.add(new JRadioButton("Property: "+buildableProperties.get(i).getIdentifier()
+						+" Build Cost: $"+buildableProperties.get(i).getBuildCost()
+						+". Houses: " + buildableProperties.get(i).getNumHouses()));
+			}
+
+			//Create the button for choice confirmation.
+			JButton confirmationButton = new JButton("Confirm");
+
+			/* 1. Check which buttons are selected
+			 * 2. Count the total redemption amount of mortgages selected.
+			 * 3. Remove this from players account if player can afford it
+			 * 4. Unmortgage all properties that are selected.
+			 */
+			confirmationButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					//This list is used to create a string that will be appended to text area on the GUI
+					ArrayList<String> builtPropertiesToPrint = new ArrayList<String>();
+					boolean buildSelected = false;
+					try {	               
+						int totalBuildValue = 0;
+						int j=0;
+						while(j < buildableRadioButtons.size()){
+							if(buildableRadioButtons.get(j).isSelected()){
+								buildSelected = true;
+								//Start totalling value of mortgages.
+								totalBuildValue += buildableProperties.get(j).getBuildCost();
+								//Find index of property to build on then build on this property in players list.
+								int indexToBuild = player.getProperties().indexOf(buildableProperties.get(j));
+
+								//Build on the correct properties
+								((ImprovableProperty) player.getProperties().get(indexToBuild)).buildHouses(1);
+
+								//Add property name to list of Strings that we'll print
+								builtPropertiesToPrint.add(player.getProperties().get(indexToBuild).getIdentifier());
+
+							}
+							j++;
+						}
+
+						//Make sure player has enough funds to build and has actually chosen one.
+						if(player.getNetWorth() >= totalBuildValue && buildSelected){
+							player.deductFromBalance(totalBuildValue);
+							history.getTextArea().append("-> Built on: "+buildString(builtPropertiesToPrint)+" for total: "+totalBuildValue+"\n\n");
+							redeemFrame.dispose();//Exit JFrame, player has selected the properties they want to redeem	
+						}
+						else if(player.getNetWorth() < totalBuildValue && buildSelected){
+							userAlert.setForeground(Color.red);
+							userAlert.setText("Insufficient funds. Choose Less to Build.");
+						}
+					} 
+					catch (Exception e1) {
+						e1.printStackTrace();
+					}	
+				} 
+
+			});
+
+			//Add all choices to JPanel
+			JPanel radioPanel = new JPanel(new GridLayout(0, 1));
+
+			//Add label that contains directions for user onto panel
+			radioPanel.add(userDirections);
+
+			for(int i=0;i<buildableProperties.size();i++){
+				radioPanel.add(buildableRadioButtons.get(i));
+			}
+
+			//Tell user if they have enough money to mortgage the property.
+			radioPanel.add(userAlert);
+
+			//Add button below choices
+			radioPanel.add(confirmationButton);
+
+			radioPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+			redeemFrame.add(radioPanel);
+			redeemFrame.setVisible(true);
+			redeemFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			redeemFrame.pack();
+			redeemFrame.setLocationRelativeTo(null);
+
+		}
+
+
 	}
 }
