@@ -542,7 +542,7 @@ public class PartyLeader {
 
 		}
 		else{
-			ArrayList<ImprovableProperty> buildableProperties = new ArrayList<ImprovableProperty>();
+			/*ArrayList<ImprovableProperty> buildableProperties = new ArrayList<ImprovableProperty>();
 			JFrame redeemFrame = new JFrame("Buildable properties");
 			JLabel userDirections = new JLabel("Choose which properties to build on then hit 'Confirm'");
 			JLabel userAlert = new JLabel("You currently have enough to build.");
@@ -556,9 +556,9 @@ public class PartyLeader {
 
 			}
 
-			/*
+			
 			 * Create an array list of buttons. One for each mortgageable property.
-			 */
+			 
 			ArrayList<JRadioButton> buildableRadioButtons = new ArrayList<JRadioButton>();
 			for(int i=0;i<buildableProperties.size();i++) {
 				buildableRadioButtons.add(new JRadioButton("Property: "+buildableProperties.get(i).getIdentifier()
@@ -569,11 +569,11 @@ public class PartyLeader {
 			//Create the button for choice confirmation.
 			JButton confirmationButton = new JButton("Confirm");
 
-			/* 1. Check which buttons are selected
+			 1. Check which buttons are selected
 			 * 2. Count the total redemption amount of mortgages selected.
 			 * 3. Remove this from players account if player can afford it
 			 * 4. Unmortgage all properties that are selected.
-			 */
+			 
 			confirmationButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -641,7 +641,8 @@ public class PartyLeader {
 			redeemFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			redeemFrame.pack();
 			redeemFrame.setLocationRelativeTo(null);
-
+*/
+			new Build(player, history);
 		}
 
 
