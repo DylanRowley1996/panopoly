@@ -38,7 +38,7 @@ public class ConfirmationScreen {
 	private JPanel buttonPanel = new JPanel(new GridLayout(2,2));
 	GridBagConstraints c = new GridBagConstraints();
 
-	public ConfirmationScreen(PartyLeader party,Player currentPlayer,int index,JLabel characterImage) {
+	public ConfirmationScreen(PartyLeader party,Player currentPlayer,int index,JLabel characterImage, JFrame frame) {
 		decision =false;
 		finish =false;
 
@@ -62,7 +62,7 @@ public class ConfirmationScreen {
 			@Override
 			public void actionPerformed(ActionEvent e) {						
 				try {
-					party.declareBankruptcy(currentPlayer,index,characterImage);
+					party.declareBankruptcy(currentPlayer,index,characterImage, frame);
 					confScr.dispose();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

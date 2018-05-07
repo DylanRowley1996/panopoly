@@ -1,11 +1,15 @@
 package panopoly;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +24,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.apache.commons.io.FileUtils;
+
 
 public class EndGamePanel extends JPanel{
 
@@ -27,18 +33,21 @@ public class EndGamePanel extends JPanel{
 	
 	private int currentPlayerNumber = 0;
 	
-	public EndGamePanel(ArrayList<Player> players) throws IOException{
+	public EndGamePanel(ArrayList<Player> players, Board board, Frame frame) throws IOException{
     	
     	JPanel characterPanel = new JPanel(new GridBagLayout());
+//    	characterPanel.setBounds(Toolkit.getDefaultToolkit().getScreenSize());
 
     	JButton[] imageButtons = new JButton[players.size()];
     	JLabel[] position = new JLabel[players.size()];
     	JFrame selectionPanel = new JFrame();
+    	selectionPanel.setSize(Toolkit.getDefaultToolkit().getScreenSize());
     	//Set the frame icon to an image loaded from a file.
 		BufferedImage myPhoto = ImageIO.read(new File("gameImages/trophy.png"));
 		Image myGameIcon = myPhoto.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
 		selectionPanel.setIconImage(myGameIcon);
     	JLabel informationArea = new JLabel("The label",SwingConstants.CENTER);
+    	
     	
     	selectionPanel.setLayout(new GridBagLayout());
     	GridBagConstraints c = new GridBagConstraints();
@@ -105,8 +114,20 @@ public class EndGamePanel extends JPanel{
     	selectionPanel.pack();
     	selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
     	selectionPanel.setVisible(true);
-    	selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
- }
+        //selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	selectionPanel.addWindowListener(new WindowAdapter(){
+    	    public void windowClosing(WindowEvent e){
+    			try {
+					FileUtils.cleanDirectory(new File("savedImages"));
+					selectionPanel.dispose();
+					frame.dispose();		
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
+    	    }
+    	}); 
+    }
 	
 	public int getCurrentPlayerNumber(){
 		return this.currentPlayerNumber;

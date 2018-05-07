@@ -493,7 +493,7 @@ public class PartyLeader {
 		return stringToBuild;
 	}
 
-	public void declareBankruptcy(Player player, int currentPlayerNumber, JLabel characterImage) throws IOException {
+	public void declareBankruptcy(Player player, int currentPlayerNumber, JLabel characterImage, JFrame frame) throws IOException {
 		history.getTextArea().append(player.getIdentifier()+" has declared bankruptcy and drops out.\n");
 		board.removeCharacter(player);
 		lostPlayers.add(player);
@@ -510,10 +510,10 @@ public class PartyLeader {
 		if(players.size()==1) {
 			lostPlayers.add(players.get(0));
 			players.clear();
-			declareWinner();
+			declareWinner(frame);
 		}
 	}	
-	public void declareWinner() throws IOException  {
+	public void declareWinner(JFrame frame) throws IOException  {
 		int position;
 		Player curr;
 		for(int i=lostPlayers.size()-1;i>=0;i--) {
@@ -530,7 +530,7 @@ public class PartyLeader {
 				history.getTextArea().append(position+"th: "+curr.getIdentifier()+"\n");
 			}
 		}
-		EndGamePanel endGame = new EndGamePanel(lostPlayers);	
+		EndGamePanel endGame = new EndGamePanel(lostPlayers, board, frame);	
 	}
 
 	public void build(Player player) {

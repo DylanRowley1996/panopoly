@@ -172,7 +172,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(players.size()>1) {
-					ConfirmationScreen askForConfirm = new ConfirmationScreen(partyLeader,players.get(currentPlayer),currentPlayer,characterImage);
+					ConfirmationScreen askForConfirm = new ConfirmationScreen(partyLeader,players.get(currentPlayer),currentPlayer,characterImage, frame);
 				}
 
 			}
