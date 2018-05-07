@@ -2,18 +2,12 @@ package panopoly;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 public class StartingScreen {
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -33,7 +27,7 @@ public class StartingScreen {
 	public StartingScreen() throws IOException
 	{
 		frame = new JFrame();
-		frame.setTitle("Panopoly");
+		frame.setTitle("Interdimensional Panopoly");
 		BufferedImage myPhoto = ImageIO.read(new File("gameImages/rickMortyCommie.png"));
 		Image myGameIcon = myPhoto.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
 		frame.setIconImage(myGameIcon);

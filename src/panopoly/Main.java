@@ -14,7 +14,7 @@ public class Main {
 			Thread.sleep(5);
 		}
 		
-		SetupGame gameSetup = new SetupGame(startScreen.getNoOfPlayers());
+		new SetupGame(startScreen.getNoOfPlayers());
 		
 		startScreen.sleepTime();
 	}

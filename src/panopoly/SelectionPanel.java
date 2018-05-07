@@ -1,5 +1,5 @@
 package panopoly;
-import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
