@@ -1,4 +1,5 @@
 package panopoly;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -114,7 +115,7 @@ public class SelectionPanel extends JPanel{
     	
     	characterPanel.add(informationArea,c);//Add information about selecting characters under buttons with images
     	selectionPanel.add(characterPanel);//Add this to JFrame.
-    	selectionPanel.setPreferredSize(new Dimension(1125,150));
+    	selectionPanel.setPreferredSize(new Dimension(1125,250));
     	selectionPanel.pack();
     	selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
     	selectionPanel.setVisible(true);

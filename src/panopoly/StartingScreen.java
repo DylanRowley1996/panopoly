@@ -17,6 +17,7 @@ public class StartingScreen {
 
 	JFrame frame;
 	SetupGame gameSetup;
+	SelectionPanel selection;
 	private int noOfPlayers = 0;
 	private boolean numSelected = false;
 
@@ -31,7 +32,7 @@ public class StartingScreen {
 		frame.setTitle("Panopoly");
 
 		// frame.setSize(screenSize.width - 10, screenSize.height - 10);
-		frame.setBounds(screenSize.width / 2, 0, screenSize.width, screenSize.height);
+		frame.setBounds(screenSize.width / 2, 0, 800, 800);
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,7 +100,6 @@ public class StartingScreen {
 
 		playerCount.setLayout(new FlowLayout());
 		ButtonGroup startingButtons = new ButtonGroup();
-<<<<<<< HEAD
 
 		JRadioButton two = new JRadioButton("2");
 		two.setBackground(Color.RED);
@@ -134,15 +134,21 @@ public class StartingScreen {
 						noOfPlayers = i + 2; // Numbers start at 2
 
 						numSelected = true;
-
+						
+						buttons.removeAll();
+						buttons.add(getLoadingScreen());
+						frame.add(buttons);
+						frame.setVisible(true);
 					} else {
 						i++;
 					}
 				}
+//				sleepTime();
+//				frame.dispose();
 			}
 		});
 
-		JLabel question = new JLabel("How many players are there:\n");
+		JLabel question = new JLabel("  How many players are there:\n");
 
 		playerCount.add(question, BorderLayout.LINE_START);
 		playerCount.add(two);
@@ -163,5 +169,28 @@ public class StartingScreen {
 	public int getNoOfPlayers() {
 		return noOfPlayers;
 	}
-
+	
+	public void sleepTime()
+	{	
+		try {
+			Thread.sleep(2500);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		
+		frame.dispose();
+	}
+	
+	public JPanel getLoadingScreen()
+	{
+		JPanel loadScreen = new JPanel();
+		loadScreen.setBackground(Color.RED);
+		loadScreen.setSize(650, 250);
+		
+		JLabel load = new JLabel("Loading...");
+		
+		loadScreen.add(load);
+		
+		return loadScreen;
+	}
 }
