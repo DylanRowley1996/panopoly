@@ -48,7 +48,7 @@ public class StartingScreen {
 		frame.add(background);
 
 		buttons = new JPanel();
-		buttons.setBounds(200, 650, 500, 95);
+		buttons.setBounds(200, 600, 500, 95);
 		buttons.setBackground(Color.RED);
 		startGameButton = new JButton("START GAME");
 		startGameButton.setPreferredSize(new Dimension(235, 85));
@@ -60,7 +60,7 @@ public class StartingScreen {
 
 		frame.add(buttons);
 
-		frame.setSize(900, 900);
+		frame.setSize(900, 750);
 
 		startGame();
 	}
