@@ -96,7 +96,6 @@ public class GUI {
 		frame.add(boardAndGameInformationPane);
 
 		frame.setTitle("Interdimensional Panopoly");
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setSize(screenSize.width, screenSize.height);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
