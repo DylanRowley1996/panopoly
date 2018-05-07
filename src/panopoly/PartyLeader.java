@@ -527,7 +527,7 @@ public class PartyLeader {
 			curr = lostPlayers.get(i);
 			position = lostPlayers.size()-i;
 			if(position == 1) {
-				history.getTextArea().append(curr.getIdentifier()+"wins the game!\n");
+				history.getTextArea().append(curr.getIdentifier()+" wins the game!\n");
 			}
 			else if(position == 2) {
 				history.getTextArea().append(position+"nd: "+curr.getIdentifier()+"\n");

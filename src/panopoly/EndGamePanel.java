@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,6 +30,7 @@ public class EndGamePanel extends JPanel{
 	public EndGamePanel(ArrayList<Player> players) throws IOException{
     	
     	JPanel characterPanel = new JPanel(new GridBagLayout());
+
     	JButton[] imageButtons = new JButton[players.size()];
     	JLabel[] position = new JLabel[players.size()];
     	JFrame selectionPanel = new JFrame();
@@ -56,7 +58,7 @@ public class EndGamePanel extends JPanel{
          */
 		int place;
 		Player curr;
-		for(int i=0;i<players.size();i++) {
+		for(int i=players.size()-1;i>=0;i--) {
 			curr = players.get(i);
 			place = players.size()-i;
 			if(place==1) {
@@ -69,17 +71,22 @@ public class EndGamePanel extends JPanel{
 			}else {
 	        	position[i] = new JLabel(place+"th");
 			}
+    		c.fill = GridBagConstraints.HORIZONTAL;
+    		c.gridx = place-1;
+    		c.gridy = 0;
         	characterPanel.add(position[i],c);
         }
-    	for(int i=0;i<players.size();i++){
+		int j=0;
+    	for(int i=players.size()-1;i>=0;i--){
     		c.fill = GridBagConstraints.HORIZONTAL;
-    		c.gridx = i;
-    		c.gridy = 0;
-    		imageButtons[i] = new JButton();
+    		c.gridx = j;
+    		c.gridy = 1;
+    		imageButtons[j] = new JButton();
     		BufferedImage myPicture = ImageIO.read(new File(players.get(i).getPathForImageIcon()));
     		Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-        	imageButtons[i].setIcon(new ImageIcon(myResizedPicture));
-        	characterPanel.add(imageButtons[i],c);
+        	imageButtons[j].setIcon(new ImageIcon(myResizedPicture));
+        	characterPanel.add(imageButtons[j],c);
+        	j++;
     	}
     	
     	//Constraints for JLabel that presents character selection info.
@@ -93,6 +100,7 @@ public class EndGamePanel extends JPanel{
     	
     	characterPanel.add(informationArea,c);//Add information about selecting characters under buttons with images
     	selectionPanel.add(characterPanel);//Add this to JFrame.
+
     	selectionPanel.setPreferredSize(new Dimension(1125,150));
     	selectionPanel.pack();
     	selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
