@@ -37,33 +37,36 @@ public class SetupGame {
 	private static final int DOMAIN_LINE_TOTAL = 614;
 	private static final int WORLDS_LINE_TOTAL = 242;
 
-	private static final int noOfPlayers = 6;
+	private int noOfPlayers;
 	private ArrayList<ArrayList<String>> charactersAndThemes = new ArrayList<ArrayList<String>>(noOfPlayers);
 	private ArrayList<String> characters = new ArrayList<String>();
 	private static ArrayList<NamedLocation> locationList = new ArrayList<NamedLocation>(); // TODO maybe change to ArrayList of ArrayLists for multiple boards
 	private static ArrayList<Player> players = new ArrayList<Player>();
 	
 	Random rand = new Random();
-	private String[] pathsToIcons = new String[noOfPlayers];
+	private String[] pathsToIcons = null;
 
 	public SetupGame(int noOfPlayers) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException{
 
+		this.noOfPlayers = noOfPlayers;
+		pathsToIcons = new String[noOfPlayers];
 		int noBoardRows = rand.nextInt(5) + 11;
 		int noLocations = (noBoardRows-3)*4; //total number of squares on the board
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
 
 
-		findCharactersFromThemes(findThemes(0, 0, 6/*noCharacters*/));
+		findCharactersFromThemes(findThemes(0, 0, this.noOfPlayers/*noCharacters*/));
 		compileChoiceOfCharacters();
 		
 		//TODO - Uncomment code below when we need queries working
-		/*imageRetriever = new FindImages(characters);
-		imageRetriever.searchForCharacterImages();
-		imageRetriever.resizeAllImages();*/
+//		FindImages imageRetriever = new FindImages(characters, this.noOfPlayers);
+//		imageRetriever.searchForCharacterImages();
+//		imageRetriever.resizeAllImages();
 		
 		resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
+		addRandomPropertiesToEachPlayer();
 //		addRandomPropertiesToEachPlayer();
 
 		new GUI(players, noBoardRows, locationList);
@@ -533,8 +536,9 @@ public class SetupGame {
 	public void addRandomPropertiesToEachPlayer(){
 		int j=0;
 		for(int i =0;i<players.size();i++){
-			while(j < 20){
+			while(j < 30){
 				if(locationList.get(j) instanceof PrivateProperty){
+					System.out.println(locationList.get(j).getIdentifier());
 					players.get(i).buyProperty((PrivateProperty)locationList.get(j));
 				}
 				j++;

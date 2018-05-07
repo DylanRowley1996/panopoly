@@ -176,24 +176,27 @@ public class Board extends JPanel {
 			}
 		}
 	}
-	void updateIcons(Player p) {
+	void updateIcons(Player p, NamedLocation oldLoc) {
 		for(int i=0;i<locations.size();i++) {
 			if(locations.get(i) == p.getLocation()) {
 				Dimension panelSize = locationMap.get(locations.get(i)).getSize();
 				int locationIndex = i;
 				Image myResizedPicture ;//= p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
-				if((locationIndex>0 && locationIndex<10) ||(locationIndex>20 && locationIndex<30)) {
-					myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/2, panelSize.height/4, Image.SCALE_SMOOTH);
-				}else if((locationIndex>10 && locationIndex<20) ||(locationIndex>30 && locationIndex<40)) {
-					myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/3, Image.SCALE_SMOOTH);
+				if((locationIndex>0 && locationIndex<locations.size()/4) ||(locationIndex>(locations.size()-1)-locations.size()/4 && locationIndex<locations.size()-1)) {
+					myResizedPicture = p.getIcon().getScaledInstance(panelSize.height/4, panelSize.height/4, Image.SCALE_SMOOTH);
+					System.out.println("if");
+				}else if((locationIndex>locations.size()/4 && locationIndex<(locations.size()-1)-locations.size()/4)) {
+					myResizedPicture = p.getIcon().getScaledInstance(panelSize.height/2, panelSize.height/3, Image.SCALE_SMOOTH);
+					System.out.println("else if");
 				}else {
 					myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
+					System.out.println("here");
 					}
 				GridLayout myGrid = new GridLayout(3,3,0,0);
 				JLabel currentLabel = new JLabel(new ImageIcon(myResizedPicture));
 				JLabel oldLabel = labelMapping.get(p);
 				locationMap.get(locations.get(i)).setLayout(myGrid);
-				locationMap.get(locations.get(i).getPrevLoc()).remove(oldLabel);//Remove old icon from previous square
+				locationMap.get(oldLoc).remove(oldLabel);//Remove old icon from previous square
 				labelMapping.remove(p, oldLabel);
 				locationMap.get(locations.get(i)).add(currentLabel);//Add it to the new square
 				labelMapping.put(p, currentLabel);

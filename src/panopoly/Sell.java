@@ -28,7 +28,7 @@ public class Sell {
 	
 	private Border border = BorderFactory.createLineBorder(Color.BLACK);
 	
-    
+
 	private JPanel mainPanel = new JPanel(new BorderLayout());
 	
 	//Top Panel
@@ -44,6 +44,8 @@ public class Sell {
 	private JPanel buttonPanel = new JPanel(new FlowLayout());
 	private JButton confirmationButton = new JButton("Confirm");
 	private JButton cancelationButton = new JButton("Cancel");
+	
+	private ArrayList<Integer> indicesToRemove = new ArrayList<Integer>();
 		
 	public Sell(Player player, HistoryLog history){
 		
@@ -76,7 +78,7 @@ public class Sell {
 				}
 			}
 		}
-		
+				
 		for(int i=0;i<houseNumberInput.size();i++){
 			
 			//Format JTextArea
@@ -128,18 +130,24 @@ public class Sell {
 								 * Update JFrame.
 								 */
 								sellHousesUpdateBalance(propertyButtons.get(i).getText(),noOfHousesToSell);
-								updateFrame(i);
+								indicesToRemove.add(i);
 								
 							}
 
 						}catch(Exception exception){
 							
 							houseNumberInput.get(i).setText("Not a valid input. Enter an Integer.");
-							
-							
+
 						}
 					}
 				}
+				
+				for(int i=0;i<indicesToRemove.size();i++){
+					System.out.println("Removing "+indicesToRemove.get(i));
+					updateFrame(indicesToRemove.get(i));
+				}
+				
+				indicesToRemove.clear();
 				
 			}
 		});
@@ -181,9 +189,15 @@ public class Sell {
 		
 		propertyHouseSelectionPanel.remove(propertyButtons.get(i));
 		propertyHouseSelectionPanel.remove(houseNumberInput.get(i));
+		propertyHouseSelectionPanel.repaint();
+		propertyHouseSelectionPanel.revalidate();
 		
+		System.out.println("Removing Button: "+propertyButtons.get(i).getText());
+
 		propertyButtons.remove(i);
 		houseNumberInput.remove(i);
+		propertyButtons.trimToSize();
+		houseNumberInput.trimToSize();
 		
 		//No choices left. Dispose of frame.
 		if(propertyButtons.size() == 0){
@@ -195,7 +209,7 @@ public class Sell {
 			frame.revalidate();
 			frame.repaint();
 		}
-		
+				
 	}
 	
 	private void sellHousesUpdateBalance(String property, int noOfHousesToSell){

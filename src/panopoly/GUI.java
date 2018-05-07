@@ -96,7 +96,6 @@ public class GUI {
 		frame.add(boardAndGameInformationPane);
 
 		frame.setTitle("Interdimensional Panopoly");
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setSize(screenSize.width, screenSize.height);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -182,7 +181,6 @@ public class GUI {
 				if(players.size()>1) {
 					ConfirmationScreen askForConfirm = new ConfirmationScreen();
 					askForConfirm.ConfirmationBankrupt(partyLeader,players.get(currentPlayer),currentPlayer,characterImage, frame);
-					
 				}
 
 			}
@@ -191,6 +189,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				partyLeader.mortgage(players.get(currentPlayer));
+				updatePropCard(players.get(currentPlayer));
 			}
 		});
 
@@ -199,6 +198,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				partyLeader.redeem(players.get(currentPlayer));
+				updatePropCard(players.get(currentPlayer));
 			}
 		});
 
@@ -207,6 +207,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				partyLeader.trade(players.get(currentPlayer));
+				updatePropCard(players.get(currentPlayer));
 			}
 		});
 

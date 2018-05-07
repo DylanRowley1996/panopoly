@@ -50,10 +50,11 @@ public class PartyLeader {
 		}
 		else {
 			int moveCount;
-			String str = "";
+			NamedLocation oldLoc = (NamedLocation) player.getLocation();;
 			ArrayList<Integer> diceFaces;
 			diceFaces = normalDice.getFaces();
 			moveCount = normalDice.rollDice(2, 6);
+			moveCount = 10;
 			history.getTextArea().append("-> You have rolled a "+moveCount+"  "+diceFaces+".\n");	
 
 			if(!normalDice.isDouble()) {
@@ -71,7 +72,6 @@ public class PartyLeader {
 			}
 			for(int i=0;i<moveCount;i++) {
 				player.setLocation((NamedLocation)player.getNextLoc());
-				board.updateIcons(player);
 			}
 			normalDice.refreshDice();
 			history.getTextArea().append("-> You have rolled onto "+player.getLocation().getIdentifier()+".\n\n");
@@ -87,21 +87,20 @@ public class PartyLeader {
 					history.getTextArea().append("-> You paid $"+rent+ " in rent to "+((PrivateProperty)location).getOwner().getIdentifier()+".\n\n");
 				}
 			}
-			if(location instanceof MCQLocation) { // TODO get rid of !
+			if(location instanceof MCQLocation) {
 				MCQ mcq = new MCQ();
 				mcq.createMCQPanel(player, history, null);
 			}
 			if(location instanceof CardLocation) {
+				oldLoc=(NamedLocation) player.getLocation();
 				CardGenerator.createCard(player, history);
-				if(location!=player.getLocation())	board.updateIcons(player);
-				board.repaint();
-				board.revalidate();
 			}
 			if(location instanceof GoToJail) {
 				player.setJail(new Jail(player, history));
 				history.getTextArea().append("-> Go to Jail!\n\n");
+				oldLoc=(NamedLocation) player.getLocation();
 				player.setLocation(locations.get(locations.size()/4));
-				board.updateIcons(player);
+
 			}
 			if(location instanceof TaxableLocation) {
 				history.getTextArea().append("-> " + location.getIdentifier() + "\n");
@@ -119,6 +118,7 @@ public class PartyLeader {
 				player.deductFromBalance(tax);
 			}
 
+			board.updateIcons(player, oldLoc);
 			board.repaint();
 			board.revalidate();
 		}		
@@ -150,21 +150,24 @@ public class PartyLeader {
 
 		//Check if a player even has houses to sell.
 		for(PrivateProperty property : player.getProperties() ){
-			if(property.getNumHouses() != 0){
-				hasHouses = true;
+			if(property instanceof ImprovableProperty){
+				if(((ImprovableProperty)property).getNumHouses() != 0){
+					hasHouses = true;
+				}
 			}
 		}
 
 		//Take corresponding action.
-		if(hasHouses == false){
+		if(!hasHouses){
 			history.getTextArea().append("-> You don't have any houses to sell.\n\n");
 		}
+		
 		else{
 			Sell sell = new Sell(player, history);
-
+			hasHouses = false;
 		}
-
-
+		
+		
 
 	}
 
