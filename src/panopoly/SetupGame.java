@@ -174,7 +174,7 @@ public class SetupGame {
 					 * If one of the current rows domains equals one of the current domains we've chosen,
 					 * add the character to the given list
 					 */
-					if(domainsOfCurrentRow.contains(themes.get(i))){
+					if(domainsOfCurrentRow.contains(themes.get(i)) && row.getCell(0).getStringCellValue()!=null){
 						charactersAndThemes.get(i).add(row.getCell(0).getStringCellValue());
 					}
 
@@ -184,16 +184,6 @@ public class SetupGame {
 
 		}
 
-		//System.out.println("Size of characters and themes: "+charactersAndThemes.size()+"\n");
-		for(int k=0;k<charactersAndThemes.size();k++){
-			for(int x=0;x<charactersAndThemes.get(k).size()-1;x++){
-				//if((x+1) < charactersAndThemes.get(k).size()){
-				/*System.out.println("k: "+k+", x: "+x+"\n");
-					System.out.println("Current Theme: "+charactersAndThemes.get(k).get(0));
-					System.out.println(" Current Character: "+charactersAndThemes.get(k).get(x+1)+"\n\n");	*/
-				//}
-			}
-		}
 	}
 
 
