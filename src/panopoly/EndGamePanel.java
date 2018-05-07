@@ -126,16 +126,13 @@ public class EndGamePanel extends JPanel{
         //selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	selectionPanel.addWindowListener(new WindowAdapter(){
     	    public void windowClosing(WindowEvent e){
- //   			try {
-					//FileUtils.cleanDirectory(new File("savedImages"));
-					
-					
+					try {
+						FileUtils.cleanDirectory(new File("savedImages"));
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 					selectionPanel.dispose();
 					frame.dispose();		
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				} 
     	    }
     	}); 
     }
