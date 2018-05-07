@@ -23,7 +23,7 @@ public void setGroups(List<GResults> items){
 }
 
 public GResults getThing (int i){
-    System.out.println(items.get(i));
+//    System.out.println(items.get(i));
 	return items.get(i);
 }
 

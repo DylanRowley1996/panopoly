@@ -108,7 +108,12 @@ public class ConfirmationScreen {
         confirmationButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {						
-				party.QuitEarly();
+				try {
+					party.QuitEarly(frame);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				confScr.dispose();
 			}
 		});
