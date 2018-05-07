@@ -113,7 +113,6 @@ public class GUI {
 
 		propertyInformationPanel.getPropNamePane().setText(locations.get(0).getIdentifier());
 		propertyInformationPanel.getPropNamePane().setBackground(Color.WHITE);
-
 		buttonPanel.getRollButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {						
@@ -132,7 +131,7 @@ public class GUI {
 				}
 			}
 		});
-		
+
 		buttonPanel.getSellButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -149,30 +148,29 @@ public class GUI {
 		});
 
 		buttonPanel.getAuctionButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                        partyLeader.auction(players.get(currentPlayer));
-                        updatePropCard(players.get(currentPlayer));
-                    }
-            
-        });
-		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.auction(players.get(currentPlayer));
+				updatePropCard(players.get(currentPlayer));
+			}
+
+		});
+
 		buttonPanel.getBuildButton().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				partyLeader.build(players.get(currentPlayer));
-                updatePropCard(players.get(currentPlayer));
+				updatePropCard(players.get(currentPlayer));
 			}
-			
+
 		});
-		
+
 		buttonPanel.getQuitGameButton().addActionListener(e->history.getTextArea().append("-> Quit Game clicked\n"));
 		buttonPanel.getBankruptyButton().addActionListener(new ActionListener() {        
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				partyLeader.declareBankruptcy(players.get(currentPlayer),currentPlayer,characterImage);
-				
 			}
 		});
 		buttonPanel.getMortgageButton().addActionListener(new ActionListener() {
@@ -216,8 +214,6 @@ public class GUI {
 
 		});
 
-
-
 		buttonPanel.getOverviewButton().addActionListener(new ActionListener() {
 
 			@Override
@@ -231,7 +227,10 @@ public class GUI {
 
 			}
 		});
+
 	}
+
+		
 	
 	public void updatePropCard(Player player) {
 		Locatable currLoc = player.getLocation();
