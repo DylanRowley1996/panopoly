@@ -1,4 +1,5 @@
 package panopoly;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,22 +21,23 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 
-public class SelectionPanel extends JPanel{
+public class EndGamePanel extends JPanel{
 
 	private static final long serialVersionUID = 4940008794098536402L;
 	
 	private int currentPlayerNumber = 0;
 	
-	public SelectionPanel(ArrayList<Player> players) throws IOException{
+	public EndGamePanel(ArrayList<Player> players) throws IOException{
     	
     	JPanel characterPanel = new JPanel(new GridBagLayout());
+
     	JButton[] imageButtons = new JButton[players.size()];
+    	JLabel[] position = new JLabel[players.size()];
     	JFrame selectionPanel = new JFrame();
     	//Set the frame icon to an image loaded from a file.
-		BufferedImage myPhoto = ImageIO.read(new File("gameImages/rickMortyCommie.png"));
+		BufferedImage myPhoto = ImageIO.read(new File("gameImages/trophy.png"));
 		Image myGameIcon = myPhoto.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
 		selectionPanel.setIconImage(myGameIcon);
-		
     	JLabel informationArea = new JLabel("The label",SwingConstants.CENTER);
     	
     	selectionPanel.setLayout(new GridBagLayout());
@@ -53,16 +56,37 @@ public class SelectionPanel extends JPanel{
          * These are then resized and added to the buttons.
          * Each button added to the JPanel.
          */
-    	for(int i=0;i<players.size();i++){
+		int place;
+		Player curr;
+		for(int i=players.size()-1;i>=0;i--) {
+			curr = players.get(i);
+			place = players.size()-i;
+			if(place==1) {
+	        	position[i] = new JLabel(place+"st");
+			}
+			else if(place == 2) {
+	        	position[i] = new JLabel(place+"nd");
+			}else if(place == 3) {
+	        	position[i] = new JLabel(place+"rd");
+			}else {
+	        	position[i] = new JLabel(place+"th");
+			}
     		c.fill = GridBagConstraints.HORIZONTAL;
-    		c.gridx = i;
+    		c.gridx = place-1;
     		c.gridy = 0;
-    		imageButtons[i] = new JButton();
-    		BufferedImage myPicture = ImageIO.read(new File(children[i].toString()));
+        	characterPanel.add(position[i],c);
+        }
+		int j=0;
+    	for(int i=players.size()-1;i>=0;i--){
+    		c.fill = GridBagConstraints.HORIZONTAL;
+    		c.gridx = j;
+    		c.gridy = 1;
+    		imageButtons[j] = new JButton();
+    		BufferedImage myPicture = ImageIO.read(new File(players.get(i).getPathForImageIcon()));
     		Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-    		//ImageIO.write((BufferedImage)myResizedPicture, "jpg", new File(children[i].toString()));
-        	imageButtons[i].setIcon(new ImageIcon(myResizedPicture));
-        	characterPanel.add(imageButtons[i],c);
+        	imageButtons[j].setIcon(new ImageIcon(myResizedPicture));
+        	characterPanel.add(imageButtons[j],c);
+        	j++;
     	}
     	
     	//Constraints for JLabel that presents character selection info.
@@ -72,48 +96,11 @@ public class SelectionPanel extends JPanel{
     	
     	//Ensures the JLabel spans all columns when beneath the images.
     	c.gridwidth = players.size();
-    
-    	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
-    	
-    	//Add action listeners to all images.
-    	for(int i=0;i<players.size();i++){
-    		
-    		//https://stackoverflow.com/questions/33799800/java-local-variable-mi-defined-in-an-enclosing-scope-must-be-final-or-effective
-    	    final Integer innerI = new Integer(i);
-    	    
-    		imageButtons[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                	
-                	System.out.println("Child "+children[innerI].toString());
-                	players.get(currentPlayerNumber).setPathForImageIcon(children[innerI].toString());
-                	players.get(currentPlayerNumber).setName(children[innerI].toString());
-                	currentPlayerNumber++;
-                
-                	characterPanel.remove(imageButtons[innerI]);
-                                	
-                	//Repaint JFrame so removed button is present to user.
-                	selectionPanel.repaint();
-                	
-                	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
-
-                	//When all characters are chosen, close JFrame and create players
-                	if(currentPlayerNumber == players.size()){
-                		selectionPanel.dispose();
-                		//createPlayers();
-                		/*try {
-							gui = new GUI(createPlayers());
-						} catch (EncryptedDocumentException | InvalidFormatException | IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}*/
-                	}
-                }
-    		});
-       }
+       	
     	
     	characterPanel.add(informationArea,c);//Add information about selecting characters under buttons with images
     	selectionPanel.add(characterPanel);//Add this to JFrame.
+
     	selectionPanel.setPreferredSize(new Dimension(1125,150));
     	selectionPanel.pack();
     	selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.

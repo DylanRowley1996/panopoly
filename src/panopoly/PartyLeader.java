@@ -34,6 +34,7 @@ public class PartyLeader {
 	private HistoryLog history = null;
 	private static ArrayList<NamedLocation> locations = (ArrayList<NamedLocation>) SetupGame.getLocationList();
 	private static ArrayList<Player> players = SetupGame.getPlayers();
+	private static ArrayList<Player> lostPlayers = new ArrayList<Player>();
 	private Board board;
 	private static Dice normalDice = new Dice();
 	private static Random rand = new Random();
@@ -492,9 +493,10 @@ public class PartyLeader {
 		return stringToBuild;
 	}
 
-	public void declareBankruptcy(Player player, int currentPlayerNumber, JLabel characterImage) {
+	public void declareBankruptcy(Player player, int currentPlayerNumber, JLabel characterImage) throws IOException {
 		history.getTextArea().append(player.getIdentifier()+" has declared bankruptcy and drops out.\n");
 		board.removeCharacter(player);
+		lostPlayers.add(player);
 		players.remove(player);
 		try {
 			BufferedImage myPicture = ImageIO
@@ -506,12 +508,29 @@ public class PartyLeader {
 			e.printStackTrace();
 		}
 		if(players.size()==1) {
-			declareWinner(players.get(0));
+			lostPlayers.add(players.get(0));
+			players.clear();
+			declareWinner();
 		}
-	}
-
-	public void declareWinner(Player p)  {
-		history.getTextArea().append("THE WINNER IS "+p.getIdentifier()+"\n");
+	}	
+	public void declareWinner() throws IOException  {
+		int position;
+		Player curr;
+		for(int i=lostPlayers.size()-1;i>=0;i--) {
+			curr = lostPlayers.get(i);
+			position = lostPlayers.size()-i;
+			if(position == 1) {
+				history.getTextArea().append(curr.getIdentifier()+" wins the game!\n");
+			}
+			else if(position == 2) {
+				history.getTextArea().append(position+"nd: "+curr.getIdentifier()+"\n");
+			}else if(position == 3) {
+				history.getTextArea().append(position+"rd: "+curr.getIdentifier()+"\n");
+			}else {
+				history.getTextArea().append(position+"th: "+curr.getIdentifier()+"\n");
+			}
+		}
+		EndGamePanel endGame = new EndGamePanel(lostPlayers);	
 	}
 
 	public void build(Player player) {
