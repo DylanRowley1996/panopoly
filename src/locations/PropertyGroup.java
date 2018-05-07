@@ -9,7 +9,7 @@ import interfaces.Playable;
 
 public class PropertyGroup {
 
-	private ArrayList<Groupable> locs = new ArrayList<Groupable>();
+	private ArrayList<PrivateProperty> locs = new ArrayList<PrivateProperty>();
 	private String name;
 	private int min;
 	private int max;
@@ -23,12 +23,12 @@ public class PropertyGroup {
 		return;
 	}
 	
-	public void addMember(Groupable site) {
+	public void addMember(PrivateProperty site) {
 		locs.add(site);
 		return;
 	}
 	
-	public ArrayList<Groupable> getMembers() {
+	public ArrayList<PrivateProperty> getMembers() {
 		return locs;
 	}
 	
@@ -77,6 +77,12 @@ public class PropertyGroup {
 	}
 	
 	public boolean hasMonopoly(Playable player) {
-		return getNumLocsOwned(player)==locs.size();
+		boolean monopoly = true;
+		for(PrivateProperty prop : locs) {
+			if(prop.getOwner()!=player || prop.isMortgaged()){
+				monopoly=false;
+			}
+		}
+		return monopoly;
 	}
 }

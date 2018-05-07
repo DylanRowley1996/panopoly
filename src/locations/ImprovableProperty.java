@@ -34,18 +34,21 @@ public class ImprovableProperty extends PrivateProperty implements Improvable {
 		if(numHouses + amount <= 4) {
 			numHouses += amount;
 		}
+		else if(numHouses+amount==5) {
+			numHouses = 5;
+			buildHotel();
+		}
 		else System.out.println("Error: Too many houses!");
 	}
 
 	@Override
 	public void buildHotel() {
 		if(numHouses==4) {
-			numHouses = 0;
 			numHotels++;
 		}
 	}
 	
-	public int getHouseCost() {
+	public int getBuildCost() {
 		return buildCost;
 	}
 

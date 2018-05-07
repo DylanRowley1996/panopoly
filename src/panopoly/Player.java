@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import javax.imageio.ImageIO;
@@ -17,10 +16,10 @@ import locations.PropertyGroup;
 public class Player implements Playable {
 
     private String name = "";
-    private int netWorth = 2000;
+    private int netWorth = 2500;
     private ArrayList<PrivateProperty> properties = new ArrayList<PrivateProperty>();
     private ArrayList<PropertyGroup> monopolies = new ArrayList<PropertyGroup>();
-    private ArrayList<PropertyGroup> mortgages = new ArrayList<PropertyGroup>();
+    private ArrayList<PrivateProperty> mortgages = new ArrayList<PrivateProperty>();
     private int numImprovements = 0;
     private int getOutOfJailCard = 0;
     
@@ -76,6 +75,17 @@ public class Player implements Playable {
      	this.deductFromBalance(target.getPrice());
      	target.setOwner(this);
     	properties.add(target);
+    	hasMonopoly(target);
+    }
+    
+    public void hasMonopoly(PrivateProperty target) {
+    	boolean monopoly = target.getGroup().hasMonopoly(this);
+    	if(!monopoly&&monopolies.contains(target.getGroup())) {
+    		monopolies.remove(target.getGroup());
+    	}
+    	else if(monopoly&&!monopolies.contains(target.getGroup())) {
+    		monopolies.add(target.getGroup());
+    	}
     }
     
     //Used for Auctioning
@@ -92,7 +102,7 @@ public class Player implements Playable {
     	return monopolies;
     }
     
-    public ArrayList<PropertyGroup> getMortgages(){
+    public ArrayList<PrivateProperty> getMortgages(){
     	return mortgages;
     }
     
