@@ -59,9 +59,9 @@ public class SetupGame {
 		compileChoiceOfCharacters();
 		
 		//TODO - Uncomment code below when we need queries working
-		FindImages imageRetriever = new FindImages(characters, this.noOfPlayers);
-		imageRetriever.searchForCharacterImages();
-		imageRetriever.resizeAllImages();
+//		FindImages imageRetriever = new FindImages(characters, this.noOfPlayers);
+//		imageRetriever.searchForCharacterImages();
+//		imageRetriever.resizeAllImages();
 		
 		resizeAllImages();
 		createPlayers();
