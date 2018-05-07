@@ -72,9 +72,7 @@ public class EndGamePanel extends JPanel{
          * Each button added to the JPanel.
          */
 		int place;
-		Player curr;
 		for(int i=players.size()-1;i>=0;i--) {
-			curr = players.get(i);
 			place = players.size()-i;
 			if(place==1) {
 	        	position[i] = new JLabel(place+"st");

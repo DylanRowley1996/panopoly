@@ -11,7 +11,7 @@ public class ImprovableProperty extends PrivateProperty implements Improvable {
 		super(name, group);
 		numHouses = 1;//TODO Set back to 0
 		numHotels = 0;
-		buildCost = (int) (super.getPrice()*0.6);
+		buildCost = (int) (super.getPrice()*0.3);
 	}
 	
 	@Override

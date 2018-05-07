@@ -29,7 +29,7 @@ public class Board extends JPanel {
 	private static final long serialVersionUID = 7490346528321340119L;
 	private ArrayList<JPanel> squares = new ArrayList<JPanel>();
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private final int boardWidth = (int) (screenSize.getWidth()*0.66);
+	private final int boardWidth = (int) (screenSize.getWidth()*0.65);
 	private final int boardHeight = (int) (screenSize.getHeight()*0.9);
 	private final int boardRows;
 	private static  Map<Player,JLabel> labelMapping = new HashMap<Player,JLabel>();
@@ -184,13 +184,10 @@ public class Board extends JPanel {
 				Image myResizedPicture ;//= p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
 				if((locationIndex>0 && locationIndex<locations.size()/4) ||(locationIndex>(locations.size()-1)-locations.size()/4 && locationIndex<locations.size()-1)) {
 					myResizedPicture = p.getIcon().getScaledInstance(panelSize.height/4, panelSize.height/4, Image.SCALE_SMOOTH);
-					System.out.println("if");
 				}else if((locationIndex>locations.size()/4 && locationIndex<(locations.size()-1)-locations.size()/4)) {
 					myResizedPicture = p.getIcon().getScaledInstance(panelSize.height/2, panelSize.height/3, Image.SCALE_SMOOTH);
-					System.out.println("else if");
 				}else {
 					myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
-					System.out.println("here");
 					}
 				GridLayout myGrid = new GridLayout(3,3,0,0);
 				JLabel currentLabel = new JLabel(new ImageIcon(myResizedPicture));
