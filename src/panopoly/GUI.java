@@ -167,12 +167,22 @@ public class GUI {
 
 		});
 
-		buttonPanel.getQuitGameButton().addActionListener(e->history.getTextArea().append("-> Quit Game clicked\n"));
-		buttonPanel.getBankruptyButton().addActionListener(new ActionListener() {        
+		buttonPanel.getQuitGameButton().addActionListener(new ActionListener() { 
+			@Override
+				public void actionPerformed(ActionEvent e) {
+				ConfirmationScreen askForConfirm = new ConfirmationScreen();
+				askForConfirm.ConfirmationQuit(partyLeader,players.get(currentPlayer),currentPlayer,characterImage, frame);
+		}
+	});
+		
+		
+		buttonPanel.getBankruptButton().addActionListener(new ActionListener() {        
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(players.size()>1) {
-					ConfirmationScreen askForConfirm = new ConfirmationScreen(partyLeader,players.get(currentPlayer),currentPlayer,characterImage, frame);
+					ConfirmationScreen askForConfirm = new ConfirmationScreen();
+					askForConfirm.ConfirmationBankrupt(partyLeader,players.get(currentPlayer),currentPlayer,characterImage, frame);
+					
 				}
 
 			}

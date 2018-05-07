@@ -513,6 +513,17 @@ public class PartyLeader {
 			declareWinner(frame);
 		}
 	}	
+	public void QuitEarly() {
+		Player currentPlayer;
+		Player nextPlayer;
+		for(int i=0;i<players.size();i++) {
+			currentPlayer = players.get(i);
+			for(int j=i;j<players.size();j++) {
+				nextPlayer = players.get(j);
+				
+			}
+		}
+	}
 	public void declareWinner(JFrame frame) throws IOException  {
 		int position;
 		Player curr;
