@@ -9,7 +9,7 @@ public class PrivateProperty extends NamedLocation implements Ownable, Rentable,
 	protected int[] rentArray;
 	private boolean isMortgaged;
 	private PropertyGroup group;
-	private int numOfHouses = 0;
+	private int numOfHouses = 1;//TODO Set back to 0
 	
 	public PrivateProperty(String name, PropertyGroup group) {
 		super(name);

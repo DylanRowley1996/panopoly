@@ -155,7 +155,7 @@ public class StartingScreen
             	    		noOfPlayers = i + 1;
             	    		try
             				{
-            	    			System.out.print(noOfPlayers);
+            	    			System.out.print(noOfPlayers+"\n");
             	    			gameSetup = new SetupGame(noOfPlayers);
             	    			
             				} catch (EncryptedDocumentException | InvalidFormatException | IOException | URISyntaxException e1)
@@ -187,7 +187,7 @@ public class StartingScreen
 	    
 	    playerCount.add(confirmButton);
 	    
-	    return new SetupGame(noOfPlayers);
+	    return playerCount;
 	}
 
 //	public static void main(String[] args) throws NullPointerException
