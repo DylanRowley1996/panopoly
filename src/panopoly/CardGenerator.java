@@ -187,8 +187,8 @@ public class CardGenerator {
 	
 		 }else if(effectDecider>=37 && effectDecider <= 56) {
 			 int loc = rand.nextInt(locations.size());
-			 reward = " robbed "+genderPossesive+" car";			
-			 finalOutcome += rewardPrecondition+" with "+props+"and "+reward+"\nTravel to "+locations.get(loc).getIdentifier();
+			 reward = " robbed "+genderPossesive2+" car";			
+			 finalOutcome += rewardPrecondition+" with "+props+" and "+reward+"\nTravel to "+locations.get(loc).getIdentifier();
 			 player.setLocation(locations.get(loc));
 
 
