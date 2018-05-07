@@ -110,6 +110,7 @@ public class GUI {
 			board.paintCharacterIcons(p , p.getIcon());
 			board.revalidate();
 		}
+		
 
 		propertyInformationPanel.getPropNamePane().setText(locations.get(0).getIdentifier());
 		propertyInformationPanel.getPropNamePane().setBackground(Color.WHITE);
@@ -170,7 +171,15 @@ public class GUI {
 		buttonPanel.getBankruptyButton().addActionListener(new ActionListener() {        
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				partyLeader.declareBankruptcy(players.get(currentPlayer),currentPlayer,characterImage);
+				if(players.size()>1) {
+					try{
+						partyLeader.declareBankruptcy(players.get(currentPlayer),currentPlayer,characterImage);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
 			}
 		});
 		buttonPanel.getMortgageButton().addActionListener(new ActionListener() {

@@ -30,6 +30,11 @@ public class SelectionPanel extends JPanel{
     	JPanel characterPanel = new JPanel(new GridBagLayout());
     	JButton[] imageButtons = new JButton[players.size()];
     	JFrame selectionPanel = new JFrame();
+    	//Set the frame icon to an image loaded from a file.
+		BufferedImage myPhoto = ImageIO.read(new File("gameImages/rickMortyCommie.png"));
+		Image myGameIcon = myPhoto.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+		selectionPanel.setIconImage(myGameIcon);
+		
     	JLabel informationArea = new JLabel("The label",SwingConstants.CENTER);
     	
     	selectionPanel.setLayout(new GridBagLayout());
