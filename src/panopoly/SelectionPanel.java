@@ -30,6 +30,8 @@ public class SelectionPanel extends JPanel{
     	
     	JPanel characterPanel = new JPanel(new GridBagLayout());
     	JButton[] imageButtons = new JButton[players.size()];
+    	JLabel[] names = new JLabel[players.size()];
+
     	JFrame selectionPanel = new JFrame();
     	//Set the frame icon to an image loaded from a file.
 		BufferedImage myPhoto = ImageIO.read(new File("gameImages/rickMortyCommie.png"));
@@ -49,6 +51,7 @@ public class SelectionPanel extends JPanel{
         c.weightx = .5;
         c.weighty = .5;
         
+
         /*
          * Images are obtained from /savedImages.
          * These are then resized and added to the buttons.
@@ -57,12 +60,18 @@ public class SelectionPanel extends JPanel{
     	for(int i=0;i<players.size();i++){
     		c.fill = GridBagConstraints.HORIZONTAL;
     		c.gridx = i;
-    		c.gridy = 0;
+    		c.gridy = 5;
     		imageButtons[i] = new JButton();
     		BufferedImage myPicture = ImageIO.read(new File(children[i].toString()));
     		Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
     		//ImageIO.write((BufferedImage)myResizedPicture, "jpg", new File(children[i].toString()));
         	imageButtons[i].setIcon(new ImageIcon(myResizedPicture));
+        	
+    		c.gridy = 2;
+    		
+    		Player curr = players.get(i);
+	        names[i] = new JLabel(curr.getIdentifier());
+        	characterPanel.add(names[i],c);
         	characterPanel.add(imageButtons[i],c);
     	}
     	
@@ -75,6 +84,7 @@ public class SelectionPanel extends JPanel{
     	c.gridwidth = players.size();
     
     	informationArea.setText("Click an image to select a character for player: "+(currentPlayerNumber+1));
+    	
     	
     	//Add action listeners to all images.
     	for(int i=0;i<players.size();i++){

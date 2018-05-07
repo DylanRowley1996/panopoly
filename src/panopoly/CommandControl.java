@@ -8,6 +8,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -518,16 +521,24 @@ public class CommandControl {
 			declareWinner(frame);
 		}
 	}	
-	public void QuitEarly() {
-		Player currentPlayer;
-		Player nextPlayer;
-		for(int i=0;i<players.size();i++) {
-			currentPlayer = players.get(i);
-			for(int j=i;j<players.size();j++) {
-				nextPlayer = players.get(j);
-				
+	public void QuitEarly(JFrame frame) throws IOException {
+		Collections.sort(players, new Comparator<Player>(){
+			public int compare(Player o1, Player o2){
+				if(o1.getTotalWorth() == o2.getTotalWorth())
+					return 0;
+				return o1.getTotalWorth() < o2.getTotalWorth() ? -1 : 1;
 			}
+		});
+		Collections.reverseOrder();
+		
+		Iterator<Player> it = players.iterator();
+
+		while(it.hasNext()) {
+			lostPlayers.add(it.next());
+			//players.remove(it.next());	
 		}
+		declareWinner(frame);
+
 	}
 	public void declareWinner(JFrame frame) throws IOException  {
 		int position;

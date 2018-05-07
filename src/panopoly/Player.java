@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import org.apache.commons.io.FilenameUtils;
 import javax.imageio.ImageIO;
 import interfaces.Locatable;
@@ -209,12 +208,14 @@ public class Player implements Playable {
 	public boolean isAnsweringMCQ() {
 		return isAnsweringMCQ;
 	}
-//	public int getTotalWorth() {
-//		int output;
-//		for()
-//		output = networth;
-//	}
-//	
+
+	public int getTotalWorth() {
+		int score=netWorth;
+		for(PrivateProperty p:properties) {
+			score+=(p.getRedeemAmount()+p.getRentalAmount());
+		}
+		return score;
+	}
 
 	public PrivateProperty getRandomProperty(ArrayList<NamedLocation> locations) {
 		PrivateProperty prop = null;
@@ -229,5 +230,6 @@ public class Player implements Playable {
 		}
 		return prop;
 	}
+
 }
 

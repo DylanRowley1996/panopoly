@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Test;
 
 
 public class EndGamePanel extends JPanel{
@@ -36,11 +37,16 @@ public class EndGamePanel extends JPanel{
 	public EndGamePanel(ArrayList<Player> players, Board board, Frame frame) throws IOException{
     	
     	JPanel characterPanel = new JPanel(new GridBagLayout());
-//    	characterPanel.setBounds(Toolkit.getDefaultToolkit().getScreenSize());
+    	
+ //   	BufferedImage endImage = ImageIO.read(new File("gameImages/endGameGif.gif"));
+//    	ImageIcon endImage = new ImageIcon(this.getClass().getResource("gameImages/endGameGif.gif"));
+//
+ //   	JLabel picLabel = new JLabel(endImage); 
 
-    	JButton[] imageButtons = new JButton[players.size()];
+    	JLabel[] imageLabels = new JLabel[players.size()];
     	JLabel[] position = new JLabel[players.size()];
     	JFrame selectionPanel = new JFrame();
+    
     	selectionPanel.setSize(Toolkit.getDefaultToolkit().getScreenSize());
     	//Set the frame icon to an image loaded from a file.
 		BufferedImage myPhoto = ImageIO.read(new File("gameImages/trophy.png"));
@@ -66,9 +72,7 @@ public class EndGamePanel extends JPanel{
          * Each button added to the JPanel.
          */
 		int place;
-		Player curr;
 		for(int i=players.size()-1;i>=0;i--) {
-			curr = players.get(i);
 			place = players.size()-i;
 			if(place==1) {
 	        	position[i] = new JLabel(place+"st");
@@ -81,6 +85,7 @@ public class EndGamePanel extends JPanel{
 	        	position[i] = new JLabel(place+"th");
 			}
     		c.fill = GridBagConstraints.HORIZONTAL;
+    		c.ipadx = 5;
     		c.gridx = place-1;
     		c.gridy = 0;
         	characterPanel.add(position[i],c);
@@ -90,13 +95,17 @@ public class EndGamePanel extends JPanel{
     		c.fill = GridBagConstraints.HORIZONTAL;
     		c.gridx = j;
     		c.gridy = 1;
-    		imageButtons[j] = new JButton();
+    		imageLabels[j] = new JLabel();
     		BufferedImage myPicture = ImageIO.read(new File(players.get(i).getPathForImageIcon()));
     		Image myResizedPicture = myPicture.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-        	imageButtons[j].setIcon(new ImageIcon(myResizedPicture));
-        	characterPanel.add(imageButtons[j],c);
+    		imageLabels[j].setIcon(new ImageIcon(myResizedPicture));
+        	characterPanel.add(imageLabels[j],c);
         	j++;
     	}
+    	
+//		c.gridx = 3;
+//		c.gridy = 2;
+//		characterPanel.add(picLabel,c);
     	
     	//Constraints for JLabel that presents character selection info.
         c.fill = GridBagConstraints.BOTH;
@@ -110,21 +119,23 @@ public class EndGamePanel extends JPanel{
     	characterPanel.add(informationArea,c);//Add information about selecting characters under buttons with images
     	selectionPanel.add(characterPanel);//Add this to JFrame.
 
-    	selectionPanel.setPreferredSize(new Dimension(1125,300));
+    	selectionPanel.setPreferredSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
     	selectionPanel.pack();
     	selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
     	selectionPanel.setVisible(true);
         //selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	selectionPanel.addWindowListener(new WindowAdapter(){
     	    public void windowClosing(WindowEvent e){
-    			try {
-					FileUtils.cleanDirectory(new File("savedImages"));
+ //   			try {
+					//FileUtils.cleanDirectory(new File("savedImages"));
+					
+					
 					selectionPanel.dispose();
 					frame.dispose();		
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} 
+//				} catch (IOException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				} 
     	    }
     	}); 
     }
