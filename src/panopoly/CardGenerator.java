@@ -169,18 +169,20 @@ public class CardGenerator {
 			 }   		
 
 		 }else if(effectDecider<37) {			//win or lose a % amount		
-			 randomAmount = (int) (Math.random() * (20 - 5)) + 5;			
-			 reward = "You take all of "+genderPossesive2+ " cash, increasing your wallet by "+randomAmount+"%!";
-			 penalty = genderDeterminer+" takes "+randomAmount+ "% of your money!";
+			 randomAmount = (int) (Math.random() * (20 - 5)) + 5;	
+			 double percent = randomAmount/100;
+			 percent = Math.round(randomAmount*100.0)/100.0;
+			 reward = "You take all of "+genderPossesive2+ " cash, increasing your wallet by "+percent+"%!";
+			 penalty = genderDeterminer+" takes "+percent+ "% of your money!";
 
 			 randomNumber = (int) Math.round(Math.random());   		
 			 if(randomNumber == 0){
-				 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward+"\nWallet increased by $"+player.getNetWorth()*randomAmount;
-				 player.addToBalance(player.getNetWorth()*randomAmount/100);
+				 finalOutcome += rewardPrecondition+" with "+props+".\n"+reward+"\nWallet increased by $"+(int) (player.getNetWorth()*percent);
+				 player.addToBalance((int) (player.getNetWorth()*percent));
 			 }
 			 else{
-				 finalOutcome += penaltyPrecondition+" with "+props+".\n" + penalty+"\nYou lost $"+player.getNetWorth()*randomAmount;
-				 player.deductFromBalance(player.getNetWorth()*randomAmount/100);
+				 finalOutcome += penaltyPrecondition+" with "+props+".\n" + penalty+"\nYou lost $"+(int) (player.getNetWorth()*percent);
+				 player.deductFromBalance((int) (player.getNetWorth()*percent));
 			 }   		
 	
 		 }else if(effectDecider>=37 && effectDecider <= 41) {
