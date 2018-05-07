@@ -133,7 +133,7 @@ public class ButtonPanel extends JPanel
 		return sellButton;
 	}
 
-	public JButton getBankruptyButton() {
+	public JButton getBankruptButton() {
 		return bankruptyButton;
 	}
 

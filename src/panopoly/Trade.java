@@ -1,6 +1,8 @@
 package panopoly;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class Trade extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Dimension dimensions = Toolkit.getDefaultToolkit().getScreenSize();
+
 	private JFrame tradingHouse = new JFrame("Trading house");
 	private Player player;
 	private ArrayList<Player> players;
@@ -111,7 +115,7 @@ public class Trade extends JFrame{
 		 * This will be swapped out later
 		 * for the other panels described above.
 		 */
-        tradingHouse.setLocationRelativeTo(null);
+        tradingHouse.setLocation((int)(dimensions.getWidth()/4.5),(int)(dimensions.getHeight()/2.25));
         tradingHouse.setVisible(true);
         tradingHouse.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         tradingHouse.setResizable(true);
