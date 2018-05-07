@@ -60,6 +60,10 @@ public class Auction extends JFrame{
 
 
 	public Auction(Ownable propertyToAuction, ArrayList<Player> players, HistoryLog history){
+		
+		for(Player player : players) {
+			player.setPopUpOpen(true);
+		}
 
 		this.players = players;
 		this.history = history;
@@ -298,7 +302,9 @@ public class Auction extends JFrame{
 							+ ((PrivateProperty)propertyToAuction).getIdentifier()+" for $"
 							+playersAndBids.get(players.get(currentPlayerNumber).getIdentifier())+"!\n\n");
 
-
+					for(Player player : players) {
+						player.setPopUpOpen(false);
+					}
 					auctionHouse.dispose();
 				}
 

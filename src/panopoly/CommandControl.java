@@ -56,7 +56,6 @@ public class CommandControl {
 			ArrayList<Integer> diceFaces;
 			diceFaces = normalDice.getFaces();
 			moveCount = normalDice.rollDice(2, 6);
-			moveCount = locations.size()/4;
 			history.getTextArea().append("-> You have rolled a "+moveCount+"  "+diceFaces+".\n");	
 
 			if(!normalDice.isDouble()) {
@@ -451,8 +450,8 @@ public class CommandControl {
 		else if(!player.hasRolled() && !player.isInJail()){
 			history.getTextArea().append("-> You must roll before finishing your turn.\n\n");
 		}
-		else if(player.isAnsweringMCQ()) {
-			history.getTextArea().append("-> Cannot end turn while answering MCQ.\n\n");
+		else if(player.isPopUpOpen()) {
+			history.getTextArea().append("-> Cannot end turn while a pop up screen is open.\n\n");
 		}
 		else{
 			boughtProperty = false;

@@ -55,7 +55,7 @@ public class SetupGame {
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
 
 
-		findCharactersFromThemes(findThemes(0, 0, this.noOfPlayers/*noCharacters*/));
+		findCharactersFromThemes(findThemes(0, 0, this.noOfPlayers));
 		compileChoiceOfCharacters();
 		
 		//TODO - Uncomment code below when we need queries working
@@ -65,7 +65,7 @@ public class SetupGame {
 		resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		addRandomPropertiesToEachPlayer();
+		//addRandomPropertiesToEachPlayer(); //TODO remove
 
 		new GUI(players, noBoardRows, locationList);
 	}

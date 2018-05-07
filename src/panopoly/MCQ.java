@@ -860,7 +860,7 @@ public class MCQ {
 	public void createMCQPanel(Player player, HistoryLog history, Jail jail) throws InvalidFormatException, IOException{
 		
 		Random rand = new Random();
-		player.setAnsweringMCQ(true);
+		player.setPopUpOpen(true);
 		int mcqAmount = rand.nextInt(301)+200;
 		if(jail==null) {
 			history.getTextArea().append("-> Answer the following question to win or lose $"+mcqAmount+"\n\n");
@@ -942,7 +942,7 @@ public class MCQ {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	            	boolean jailCorrect = false;
-	            	player.setAnsweringMCQ(false);
+	            	player.setPopUpOpen(false);
 	                if (correctButton.isSelected()) {
 	                	history.getTextArea().append("-> Correct!\n");
 	                	if(jail==null) {
