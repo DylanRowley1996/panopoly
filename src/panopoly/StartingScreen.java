@@ -64,7 +64,7 @@ public class StartingScreen
 		return startGameButton;
 	}
 	
-	public SetupGame startGame()
+	public void startGame()
 	{
 		getStartGameButton().addActionListener(new ActionListener()
 		{
@@ -98,7 +98,7 @@ public class StartingScreen
 			}
 		});
 		
-		return gameSetup;
+		//return gameSetup;
 		
 	}
 
@@ -124,6 +124,7 @@ public class StartingScreen
 	    JRadioButton six = new JRadioButton("6");
 	    JButton confirmButton = new JButton("Confirm");
 	    
+	    
 	    startingButtons.add(one); // Grouping only allows one button to be selected at a time
 	    startingButtons.add(two);
 	    startingButtons.add(three);
@@ -141,7 +142,7 @@ public class StartingScreen
 	    confirmButton.addActionListener(new ActionListener() 
 	    {
 	    	int i = 0;
-	    	JRadioButton selectedButton = new JRadioButton();
+	    	
             @Override
             public void actionPerformed(ActionEvent e)
             {
@@ -151,10 +152,12 @@ public class StartingScreen
             	    {
             	    	if(numbers[i].isSelected())
             	    	{
-            	    		noOfPlayers = i;
+            	    		noOfPlayers = i + 1;
             	    		try
             				{
+            	    			System.out.print(noOfPlayers);
             	    			gameSetup = new SetupGame(noOfPlayers);
+            	    			
             				} catch (EncryptedDocumentException | InvalidFormatException | IOException | URISyntaxException e1)
             				{				
             					e1.printStackTrace();
@@ -167,43 +170,10 @@ public class StartingScreen
             	    	}
             	    }
             		
-            		selectedButton = numbers[i];
+            		//selectedButton = numbers[i];
             	
             }
 	    });
-	    
-//	    boolean numSelected = false;
-//	    
-//	    int i = 0;
-//	    while(i < 6 && !numSelected)
-//	    {
-//	    	if(numbers[i].isSelected())
-//	    	{
-//	    		noOfPlayers = i;
-//	    		numSelected = true;
-//	    	}
-//	    	else
-//	    	{
-//	    		i++;
-//	    	}
-//	    }
-	    
-//	    JRadioButton selectedButton = numbers[i];
-	    
-//	    noOfPlayers = i;
-//	    confirmButton.addActionListener(new ActionListener() 
-//	    {
-//            @Override
-//            public void actionPerformed(ActionEvent e)
-//            {
-//            	if(numbers[i].isSelected() == true)
-//            	{
-//            		noOfPlayers = i;
-//            	}
-//            }
-//	    });
-	    	    
-//	    startingButtons.add(confirmButton);
 	    
 	    JLabel question = new JLabel("How many players are there:\n");
 	    
@@ -214,14 +184,14 @@ public class StartingScreen
 	    playerCount.add(four);
 	    playerCount.add(five);
 	    playerCount.add(six);
-//	    playerCount.setLayout(new GridLayout(0, 1));
+	    
 	    playerCount.add(confirmButton);
 	    
-	    return playerCount;
+	    return new SetupGame(noOfPlayers);
 	}
 
-	public static void main(String[] args) throws NullPointerException
-	{
-		new StartingScreen();
-	}
+//	public static void main(String[] args) throws NullPointerException
+//	{
+//		new StartingScreen();
+//	}
 }

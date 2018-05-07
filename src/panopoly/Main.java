@@ -16,9 +16,9 @@ public class Main {
 		// findImages.Search();
 
 		//SelectionPanel panel = new SelectionPanel(players);
-		int noOfPlayers = 6;
-		SetupGame gameSetup = new SetupGame(noOfPlayers);
-//		StartingScreen startScreen = new StartingScreen();
+//		int noOfPlayers = 6;
+//		SetupGame gameSetup = new SetupGame(noOfPlayers);
+		StartingScreen startScreen = new StartingScreen();
 
 		/*gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
          gameSetup.compileChoiceOfCharacters();
