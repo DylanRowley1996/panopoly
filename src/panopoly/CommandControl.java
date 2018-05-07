@@ -96,6 +96,7 @@ public class CommandControl {
 				CardGenerator.createCard(player, history);
 			}
 			if(location instanceof CommunismTax) {
+				oldLoc=(NamedLocation) player.getLocation();
 				CommunismTax.spreadWealth(players, history);
 			}
 			if(location instanceof GoToJail) {
@@ -446,8 +447,8 @@ public class CommandControl {
 		else if(!player.hasRolled() && !player.isInJail()){
 			history.getTextArea().append("-> You must roll before finishing your turn.\n\n");
 		}
-		else if(player.isAnsweringMCQ()) {
-			history.getTextArea().append("-> Cannot end turn while answering MCQ.\n\n");
+		else if(player.isPopUpOpen()) {
+			history.getTextArea().append("-> Cannot end turn while a pop up screen is open.\n\n");
 		}
 		else{
 			boughtProperty = false;

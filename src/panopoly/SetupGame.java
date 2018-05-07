@@ -55,7 +55,7 @@ public class SetupGame {
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
 
 
-		findCharactersFromThemes(findThemes(0, 0, this.noOfPlayers/*noCharacters*/));
+		findCharactersFromThemes(findThemes(0, 0, this.noOfPlayers));
 		compileChoiceOfCharacters();
 		
 		//TODO - Uncomment code below when we need queries working
@@ -66,6 +66,10 @@ public class SetupGame {
 		//resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
+<<<<<<< HEAD
+=======
+		//addRandomPropertiesToEachPlayer(); //TODO remove
+>>>>>>> 7ba3889a9c9c3059788a903f5d20e9c010912583
 
 		new GUI(players, noBoardRows, locationList);
 	}
@@ -168,7 +172,7 @@ public class SetupGame {
 					 * If one of the current rows domains equals one of the current domains we've chosen,
 					 * add the character to the given list
 					 */
-					if(domainsOfCurrentRow.contains(themes.get(i))){
+					if(domainsOfCurrentRow.contains(themes.get(i)) && row.getCell(0).getStringCellValue()!=null){
 						charactersAndThemes.get(i).add(row.getCell(0).getStringCellValue());
 					}
 
@@ -178,7 +182,10 @@ public class SetupGame {
 
 		}
 
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 7ba3889a9c9c3059788a903f5d20e9c010912583
 	}
 
 

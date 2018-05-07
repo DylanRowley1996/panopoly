@@ -27,7 +27,7 @@ public class Player implements Playable {
     private boolean hasRolled = false;
     private boolean mustDeclareBankruptcy = false;
     private boolean isInJail = false;
-    private boolean isAnsweringMCQ = false;
+    private boolean isPopUpOpen = false;
     private Jail jail;
     private BufferedImage characterIcon;
     
@@ -201,12 +201,12 @@ public class Player implements Playable {
 		hasMonopoly(prop);
 	}
 	
-	public void setAnsweringMCQ(boolean answer) {
-		isAnsweringMCQ=answer;
+	public void setPopUpOpen(boolean answer) {
+		isPopUpOpen=answer;
 	}
 	
-	public boolean isAnsweringMCQ() {
-		return isAnsweringMCQ;
+	public boolean isPopUpOpen() {
+		return isPopUpOpen;
 	}
 
 	public int getTotalWorth() {
