@@ -52,7 +52,7 @@ public class GUI {
 		frame.setIconImage(myGameIcon);
 
 		board = new Board(squares, locations);
-		PartyLeader partyLeader = new PartyLeader(history, board);
+		CommandControl partyLeader = new CommandControl(history, board);
 
 
 		SelectionPanel selectionPanel = new SelectionPanel(players);
