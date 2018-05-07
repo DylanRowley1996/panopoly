@@ -22,13 +22,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import interfaces.Improvable;
 import interfaces.Locatable;
 import interfaces.Mortgageable;
 import interfaces.Ownable;
 import locations.*;
 
-public class PartyLeader {
+public class CommandControl {
 
 	//Booleans for game control
 	private boolean boughtProperty = false;
@@ -42,7 +41,7 @@ public class PartyLeader {
 	private static Dice normalDice = new Dice();
 	private static Random rand = new Random();
 
-	public PartyLeader(HistoryLog history, Board board){
+	public CommandControl(HistoryLog history, Board board){
 		this.history = history;
 		this.board = board;
 	}
@@ -57,7 +56,7 @@ public class PartyLeader {
 			ArrayList<Integer> diceFaces;
 			diceFaces = normalDice.getFaces();
 			moveCount = normalDice.rollDice(2, 6);
-			moveCount = 10;
+			moveCount = locations.size()/4;
 			history.getTextArea().append("-> You have rolled a "+moveCount+"  "+diceFaces+".\n");	
 
 			if(!normalDice.isDouble()) {
@@ -97,6 +96,9 @@ public class PartyLeader {
 			if(location instanceof CardLocation) {
 				oldLoc=(NamedLocation) player.getLocation();
 				CardGenerator.createCard(player, history);
+			}
+			if(location instanceof CommunismTax) {
+				CommunismTax.spreadWealth(players, history);
 			}
 			if(location instanceof GoToJail) {
 				player.setJail(new Jail(player, history));

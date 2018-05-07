@@ -65,7 +65,7 @@ public class SetupGame {
 		resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		addRandomPropertiesToEachPlayer();
+//		addRandomPropertiesToEachPlayer();
 
 		new GUI(players, noBoardRows, locationList);
 	}
@@ -324,7 +324,7 @@ public class SetupGame {
 		locationList.add(0, new NamedLocation("Go"));
 		locationList.add(noBoardRows-3, new NamedLocation("Jail"));
 		locationList.add((noLocations-1)-(noBoardRows-3), new GoToJail("Go to Jail"));
-		locationList.add(noLocations-1, new Shop("Marketplace", noLocations-1));
+		locationList.add(noLocations-1, new CommunismTax("Communism Spread the Wealth", noLocations-1));
 
 		// set next and prev locations
 		for(int i=1; i<noBoardRows-3; i++) { // top row (without corner squares)
@@ -373,14 +373,12 @@ public class SetupGame {
 
 
 	private ArrayList<NamedLocation> createRandomLocationList(int size) {
-		ArrayList<String> taxNames = new ArrayList<>(Arrays.asList("Income Tax", "Property Tax"));
+		ArrayList<String> taxNames = new ArrayList<>(Arrays.asList("Income Tax", "Property Tax", "Luxury Tax"));
 		ArrayList<String> utilityNames = new ArrayList<>(Arrays.asList("Coal Mines", "The Gulag", "Nuclear Power Facility", "Advanced Weapons Facility", "Experimental Sciences Lab"));
 		PropertyGroup utilityGroup = new PropertyGroup("Utilities", new int[]{50, 250}, Color.WHITE);
 
 		ArrayList<NamedLocation> locList = new ArrayList<NamedLocation>();
 
-		int attempts = 0;
-		int wealthTaxAdded = 0;
 		int noLocsAdded = 0;
 		while(noLocsAdded < size) {
 			NamedLocation loc = null;
@@ -409,17 +407,6 @@ public class SetupGame {
 					loc = new Utility(name, utilityGroup);
 				}
 				break;
-			}
-
-			if(loc==null && wealthTaxAdded<2) {
-				if(attempts<3) {
-					attempts++;
-				}
-				else {
-					loc = new TaxableLocation("Communism Spread the Wealth Tax", .25, 250);
-					wealthTaxAdded++;
-					attempts = 0;
-				}
 			}
 
 			if(loc!=null) 	{

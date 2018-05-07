@@ -38,7 +38,7 @@ public class ConfirmationScreen {
 	private JPanel buttonPanel = new JPanel(new GridLayout(2,2));
 	GridBagConstraints c = new GridBagConstraints();
 
-	public void ConfirmationBankrupt(PartyLeader party,Player currentPlayer,int index,JLabel characterImage, JFrame frame) {
+	public void ConfirmationBankrupt(CommandControl party,Player currentPlayer,int index,JLabel characterImage, JFrame frame) {
 		decision =false;
 		finish =false;
 		confScr.setTitle("Bankruptcy");
@@ -81,7 +81,7 @@ public class ConfirmationScreen {
         });
 	}
 	
-	public void ConfirmationQuit(PartyLeader party,Player currentPlayer,int index,JLabel characterImage, JFrame frame) {
+	public void ConfirmationQuit(CommandControl party,Player currentPlayer,int index,JLabel characterImage, JFrame frame) {
 		decision =false;
 		finish =false;
 
