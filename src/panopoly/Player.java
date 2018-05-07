@@ -189,12 +189,27 @@ public class Player implements Playable {
 	public Jail getJail() {
 		return jail;
 	}
+	
 	public void revokeOwnership() {
 		for(PrivateProperty p:properties) {
 			p.reset();
 		}
 		properties.clear();
 		mortgages.clear();
+	}
+	
+	public void mortgageProperty(PrivateProperty prop) {
+		mortgages.add(prop);
+		netWorth+=prop.getMortgageAmount();
+		prop.mortgage();
+		hasMonopoly(prop);
+	}
+	
+	public void redeemProperty(PrivateProperty prop) {
+		mortgages.remove(prop);
+		netWorth-=prop.getRedeemAmount();
+		prop.unmortgage();
+		hasMonopoly(prop);
 	}
 }
 

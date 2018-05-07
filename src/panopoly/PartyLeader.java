@@ -197,7 +197,7 @@ public class PartyLeader {
 			for (int i = 0; i < mortgageableProperties.size(); i++) {
 				mortgageableRadioButtons
 				.add(new JRadioButton("Property: " + mortgageableProperties.get(i).getIdentifier()
-						+ " Mortgage Amount: " + mortgageableProperties.get(i).getMortgageAmount()));
+						+ " Mortgage Amount: $" + mortgageableProperties.get(i).getMortgageAmount()));
 			}
 
 			// Create the button for choice confirmation.
@@ -250,16 +250,14 @@ public class PartyLeader {
 								for (int y = 0; y < player.getProperties().size(); y++) {
 									if (mortgageableIdentifiers.get(x)
 											.equals(player.getProperties().get(y).getIdentifier())) {
-										player.getProperties().get(y).mortgage();
-										player.hasMonopoly(player.getProperties().get(y)); // if player had monopoly on this group they will no longer
+										player.mortgageProperty(player.getProperties().get(y));
 									}
 								}
 							}
 
 							// Add the total value to the players balance.
-							player.addToBalance(totalMortgageValue);
 							history.getTextArea().append("-> Properties Mortgaged: " + buildString(mortgageableIdentifiers)
-							+ " for total: " + totalMortgageValue + " \n\n");
+							+ " for total: $" + totalMortgageValue + " \n\n");
 							mortgageFrame.dispose();// Exit JFrame, player has
 							// selected the properties
 							// they want to redeem
@@ -327,7 +325,7 @@ public class PartyLeader {
 			ArrayList<JRadioButton> redeemableRadioButtons = new ArrayList<JRadioButton>();
 			for(int i=0;i<redeemableProperties.size();i++){
 				redeemableRadioButtons.add(new JRadioButton("Property: "+redeemableProperties.get(i).getIdentifier()
-						+" Redemption Amount: "+redeemableProperties.get(i).getMortgageAmount()));
+						+" Redemption Amount: $"+redeemableProperties.get(i).getMortgageAmount()));
 			}
 
 			//Create the button for choice confirmation.
@@ -349,25 +347,22 @@ public class PartyLeader {
 						int totalRedemptionValue = 0;
 
 						int j=0;
-
+						ArrayList<PrivateProperty> propertiesToRedeem = new ArrayList<PrivateProperty>();
 						while(j < redeemableRadioButtons.size()){
 							if(redeemableRadioButtons.get(j).isSelected()){
 
 								mortgagedSelected = true;
-
-								//Start totalling value of mortgages.
-								totalRedemptionValue += redeemableProperties.get(j).getRedeemAmount();
-
-								//Find index of property to unmortgage then unmortgage this property in players list.
-								int indexToRedeem = player.getProperties().indexOf(redeemableProperties.get(j));
-
-								//Unmortgage the correct properties
-								player.getProperties().get(indexToRedeem).unmortgage();
-								player.hasMonopoly(player.getProperties().get(indexToRedeem));
-
-								//Add property name to list of Stringst that we'll print
-								redeemedPropertiesToPrint.add(player.getProperties().get(indexToRedeem).getIdentifier());
-
+								if(player.getNetWorth()>redeemableProperties.get(j).getRedeemAmount()) {	
+	
+									//Start totalling value of mortgages.
+									totalRedemptionValue += redeemableProperties.get(j).getRedeemAmount();
+	
+									//Find index of property to unmortgage then unmortgage this property in players list.
+									int indexToRedeem = player.getProperties().indexOf(redeemableProperties.get(j));
+									propertiesToRedeem.add(player.getProperties().get(indexToRedeem));
+									//Add property name to list of Stringst that we'll print
+									redeemedPropertiesToPrint.add(player.getProperties().get(indexToRedeem).getIdentifier());
+								}
 							}
 							j++;
 						}
@@ -375,7 +370,11 @@ public class PartyLeader {
 						//Make sure player has enough funds to redeem mortgages and has actually chosen one.
 						if(player.getNetWorth() >= totalRedemptionValue && mortgagedSelected){
 							player.deductFromBalance(totalRedemptionValue);
-							history.getTextArea().append("-> Redeeemed Mortgages: "+buildString(redeemedPropertiesToPrint)+" for total: "+totalRedemptionValue+"\n\n");
+							for(int i=0; i<propertiesToRedeem.size(); i++) {
+								//Unmortgage the correct properties
+								player.redeemProperty(propertiesToRedeem.get(i));
+							}
+							history.getTextArea().append("-> Redeeemed Mortgages: "+buildString(redeemedPropertiesToPrint)+" for total: $"+totalRedemptionValue+"\n\n");
 							redeemFrame.dispose();//Exit JFrame, player has selected the properties they want to redeem	
 						}
 						else if(player.getNetWorth() < totalRedemptionValue && mortgagedSelected){
@@ -533,9 +532,8 @@ public class PartyLeader {
 
 			for(int i=0;i<player.getProperties().size();i++){
 				//If property is improvable, player has monopoly and is not mortgaged and doesn't already have a hotel
-				if(player.getProperties().get(i) instanceof ImprovableProperty && !player.getProperties().get(i).isMortgaged()
-						&& player.getMonopolies().contains(player.getProperties().get(i).getGroup()) &&
-						((ImprovableProperty) player.getProperties().get(i)).getNumHotels()==0) {
+				if(player.getProperties().get(i) instanceof ImprovableProperty && player.getMonopolies().contains(player.getProperties().get(i).getGroup())
+						&& ((ImprovableProperty) player.getProperties().get(i)).getNumHotels()==0) {
 					buildableProperties.add((ImprovableProperty) player.getProperties().get(i));	
 				}
 

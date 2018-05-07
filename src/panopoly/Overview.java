@@ -76,9 +76,9 @@ public class Overview extends JFrame {
         }
         
     	String balance = buildBalanceString(players.get(i));
-    	String properties = buildPropertiesString(players.get(i));;
+    	String properties = buildPropertiesString(players.get(i));
     	String mortgages = buildMortgagesString(players.get(i));
-    	String monopolies = "";
+    	String monopolies = buildMonopoliesString(players.get(i));
         
         
 
@@ -133,15 +133,15 @@ public class Overview extends JFrame {
     	return mortgages;
     }
     
-   /* private String buildMonopoliesString(Player player){
-    	String monopolies = "MONOPOLIES: ";
+   private String buildMonopoliesString(Player player){
+    	String monopolies = "";
 	    	if(player.getMonopolies().size() == 0){
 	    		monopolies += "None.";
 	    	}
 	    	else{
-	    		player.getMonopolies().
+	    		player.getMonopolies();
 	    	}
 	    	return monopolies;
     }
-*/
+
 }

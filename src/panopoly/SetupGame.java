@@ -64,7 +64,7 @@ public class SetupGame {
 		resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-	//	addRandomPropertiesToEachPlayer();
+		addRandomPropertiesToEachPlayer();
 
 		new GUI(players, noBoardRows, locationList);
 	}
@@ -530,10 +530,10 @@ public class SetupGame {
 	//TODO - Remove when testing of Mortgaging is complete.
 	//This just adds a random amount of properties to each player
 	//so checking if Mortgaging/Redeeming etc is working correctly.
-	/*public void addRandomPropertiesToEachPlayer(){
+	public void addRandomPropertiesToEachPlayer(){
 		int j=0;
 		for(int i =0;i<players.size();i++){
-			while(j < 10){
+			while(j < 20){
 				if(locationList.get(j) instanceof PrivateProperty){
 					players.get(i).buyProperty((PrivateProperty)locationList.get(j));
 				}
@@ -541,5 +541,5 @@ public class SetupGame {
 			}
 			j=0;
 		}
-	}*/
+	}
 }
