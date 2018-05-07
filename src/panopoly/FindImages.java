@@ -52,8 +52,6 @@ public class FindImages {
         	 
         	 //Assign the newly created string to the array we'll use to query.
         	 queries[i] = string;
-        	 
-        	 System.out.println("Query: "+queries[i]);
          }
 	}
 	
@@ -116,7 +114,6 @@ public class FindImages {
     public void resizeAllImages() throws IOException{
     	
     	//TODO - Change so it only loops on number of players
-    	System.out.println(" HERE " +noOfPlayers);
     	for(int i=0;i<this.noOfPlayers;i++){ 		
     		 BufferedImage originalImage = ImageIO.read(new File("savedImages/"+characters.get(i)+".jpg"));//change path to where file is located
     		 

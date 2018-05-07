@@ -96,7 +96,6 @@ public class SelectionPanel extends JPanel{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                 	
-                	System.out.println("Child "+children[innerI].toString());
                 	players.get(currentPlayerNumber).setPathForImageIcon(children[innerI].toString());
                 	players.get(currentPlayerNumber).setName(children[innerI].toString());
                 	currentPlayerNumber++;
@@ -111,13 +110,6 @@ public class SelectionPanel extends JPanel{
                 	//When all characters are chosen, close JFrame and create players
                 	if(currentPlayerNumber == players.size()){
                 		selectionPanel.dispose();
-                		//createPlayers();
-                		/*try {
-							gui = new GUI(createPlayers());
-						} catch (EncryptedDocumentException | InvalidFormatException | IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}*/
                 	}
                 }
     		});

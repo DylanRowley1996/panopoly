@@ -66,7 +66,6 @@ public class SetupGame {
 		//resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		addRandomPropertiesToEachPlayer();
 
 		new GUI(players, noBoardRows, locationList);
 	}
@@ -105,7 +104,6 @@ public class SetupGame {
 
 			int i = 0;
 			while(!newThemeFound && i < themes.size()){
-				System.out.println("Current theme: "+themes.get(i)+"\n");
 				if(!listOfThemes.contains(themes.get(i))){
 					listOfThemes.add(themes.get(i));
 					newThemeFound = true;
@@ -124,8 +122,6 @@ public class SetupGame {
 
 		locationListingWb.close();
 
-		if(listOfThemes.size() == 0) System.out.println("\nBROKEN!\n");
-		System.out.println("Themes: " + listOfThemes.size());
 		return listOfThemes;
 	}
 
@@ -158,8 +154,6 @@ public class SetupGame {
 
 				Row row = rowIterator.next();
 
-				//System.out.println("On row: "+l++);
-
 				List<String> domainsOfCurrentRow = null;
 
 				if(row.getCell(13) != null){
@@ -184,16 +178,7 @@ public class SetupGame {
 
 		}
 
-		//System.out.println("Size of characters and themes: "+charactersAndThemes.size()+"\n");
-		for(int k=0;k<charactersAndThemes.size();k++){
-			for(int x=0;x<charactersAndThemes.get(k).size()-1;x++){
-				//if((x+1) < charactersAndThemes.get(k).size()){
-				/*System.out.println("k: "+k+", x: "+x+"\n");
-					System.out.println("Current Theme: "+charactersAndThemes.get(k).get(0));
-					System.out.println(" Current Character: "+charactersAndThemes.get(k).get(x+1)+"\n\n");	*/
-				//}
-			}
-		}
+	
 	}
 
 
@@ -206,8 +191,7 @@ public class SetupGame {
 			int choice = rand.nextInt(charactersAndThemes.get(i).size());
 
 			if(choice == 0) choice  += 1;
-			if(!characters.contains(charactersAndThemes.get(i).get(choice))){
-				System.out.println("Current Theme: "+charactersAndThemes.get(i).get(0)+" Current Character:"+charactersAndThemes.get(i).get(choice)+"\n");
+			if(charactersAndThemes.get(i).size() != 1 && !characters.contains(charactersAndThemes.get(i).get(choice))){
 				characters.add(charactersAndThemes.get(i).get(choice));
 				i++;
 			}
@@ -474,7 +458,6 @@ public class SetupGame {
 			This is the character name*/
 			String characterName = FilenameUtils.getBaseName(pathsToIcons[i]);
 			players.add(new Player(characterName,pathsToIcons[i]));
-			System.out.println("Path to icon for player "+players.get(i).getName()+" PATH:"+players.get(i).getPathForImageIcon());
 		}
 	}
 	
@@ -506,7 +489,6 @@ public class SetupGame {
 
 		//TODO - Change so it only loops on number of players
 		for(int i=0;i<pathsToIcons.length;i++){
-			System.out.println("Trying to read: "+children[i].toString());
 			BufferedImage originalImage = ImageIO.read(new File(children[i].toString()));//change path to where file is located
 			int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
 
@@ -516,20 +498,4 @@ public class SetupGame {
 
 	}
 
-	//TODO - Remove when testing of Mortgaging is complete.
-	//This just adds a random amount of properties to each player
-	//so checking if Mortgaging/Redeeming etc is working correctly.
-	public void addRandomPropertiesToEachPlayer(){
-		int j=0;
-		for(int i =0;i<players.size();i++){
-			while(j < 30){
-				if(locationList.get(j) instanceof PrivateProperty){
-					System.out.println(locationList.get(j).getIdentifier());
-					players.get(i).buyProperty((PrivateProperty)locationList.get(j));
-				}
-				j++;
-			}
-			j=0;
-		}
-	}
 }

@@ -82,6 +82,7 @@ public class GUI {
 		// it is.
 		history.getTextArea().append("Current Player is now: " + players.get(currentPlayer).getName() + "\n");
 
+		imageDetailsAndHistory.setEnabled(false);
 		imageDetailsAndHistory.setDividerLocation(.5);
 		imageDetailsAndHistory.setTopComponent(characterImagePanel);
 		imageDetailsAndHistory.setBottomComponent(detailsAndHistoryLog);
