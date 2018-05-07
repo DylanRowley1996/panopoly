@@ -64,7 +64,11 @@ public class SetupGame {
 		resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
+<<<<<<< HEAD
 		addRandomPropertiesToEachPlayer();
+=======
+		//addRandomPropertiesToEachPlayer();
+>>>>>>> 0dd0fcb55d60e40c0c6801934ef36b390c962027
 
 		new GUI(players, noBoardRows, locationList);
 	}

@@ -28,6 +28,7 @@ public class Player implements Playable {
     private boolean hasRolled = false;
     private boolean mustDeclareBankruptcy = false;
     private boolean isInJail = false;
+    private boolean isAnsweringMCQ = false;
     private Jail jail;
     private BufferedImage characterIcon;
     
@@ -189,6 +190,7 @@ public class Player implements Playable {
 	public Jail getJail() {
 		return jail;
 	}
+	
 	public void revokeOwnership() {
 		for(PrivateProperty p:properties) {
 			p.reset();
@@ -196,5 +198,28 @@ public class Player implements Playable {
 		properties.clear();
 		mortgages.clear();
 	}
+	
+	public void mortgageProperty(PrivateProperty prop) {
+		mortgages.add(prop);
+		netWorth+=prop.getMortgageAmount();
+		prop.mortgage();
+		hasMonopoly(prop);
+	}
+	
+	public void redeemProperty(PrivateProperty prop) {
+		mortgages.remove(prop);
+		netWorth-=prop.getRedeemAmount();
+		prop.unmortgage();
+		hasMonopoly(prop);
+	}
+	
+	public void setAnsweringMCQ(boolean answer) {
+		isAnsweringMCQ=answer;
+	}
+	
+	public boolean isAnsweringMCQ() {
+		return isAnsweringMCQ;
+	}
+	
 }
 
