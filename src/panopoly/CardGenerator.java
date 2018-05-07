@@ -140,6 +140,7 @@ public class CardGenerator {
 
 
 		 //Begin to build final outcome of generation.
+		
 		 finalOutcome += "You enter "+determiner+" "+location+".\nIt's "+ambience+
 				 "\nYou're "+interactions+" "+character+".\n";
 
@@ -192,11 +193,6 @@ public class CardGenerator {
 			 player.setLocation(locations.get(loc));
 
 
-			 //also add a card that moves your location on the board
-		 }else if(effectDecider<66){
-			 history.getTextArea().append("Coin Toss\n");
-
-
 		 }else if(effectDecider<76) {
 			 /*
 			  * SPLIT 2 WAYS
@@ -208,7 +204,7 @@ public class CardGenerator {
 			 String propOutcome = "";
 			 PrivateProperty prop = player.getRandomProperty(locations);
 			 if(prop!=null) {
-				 propOutcome = player.getIdentifier()+" was given "+prop.getIdentifier()+"for free!";
+				 propOutcome = player.getIdentifier()+" was given "+prop.getIdentifier()+" for free!";
 			 }
 			 else {
 				 propOutcome = "Unfortunately there were no unowned properties available";
