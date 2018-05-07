@@ -4,11 +4,12 @@ import java.awt.*;
 
 public class ButtonPanel extends JPanel
 {
+	Dimension panelDim = new Dimension(ButtonPanel.HEIGHT,ButtonPanel.WIDTH);
 	private static final long serialVersionUID = 1L;
-	private ImageIcon imageIcon = new ImageIcon("gameImages/diceImage.png"); // load the image to a imageIcon
-	private Image image = imageIcon.getImage();
-	private Image newimg = image.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-	private ImageIcon imageIcon1 = new ImageIcon(newimg); 
+	ImageIcon imageIcon = new ImageIcon("gameImages/diceImage.png"); // load the image to a imageIcon
+	Image image = imageIcon.getImage();
+	Image newimg = image.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+	ImageIcon imageIcon1 = new ImageIcon(newimg); 
 	private JButton rollButton = new JButton(imageIcon1);
 	private ImageIcon imageIcon2 = new ImageIcon("gameImages/buyButton.png"); // load the image to a imageIcon
 	private Image image1 = imageIcon2.getImage();
@@ -29,14 +30,17 @@ public class ButtonPanel extends JPanel
     private JButton bankruptyButton = new JButton("BANKRUPT");
     private JButton mortgageButton = new JButton("MORTGAGE");
     private JButton redeemMortgageButton = new JButton("REDEEM MORTGAGE");
-    private JButton tradeButton = new JButton("TRADE");
+    private ImageIcon imageIcon8 = new ImageIcon("gameImages/tradeButton.png"); // load the image to a imageIcon
+    private Image image4 = imageIcon8.getImage();
+    private Image newimg4 = image4.getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+    private ImageIcon imageIcon9 = new ImageIcon(newimg4); 
+    private JButton tradeButton = new JButton(imageIcon9);
     private JButton overviewButton = new JButton("OVERVIEW");
     private JButton quitGameButton = new JButton("QUIT GAME");
     private JButton finishTurnButton = new JButton("FINISH TURN");
     
     public ButtonPanel()
     {
-    	
     	setLayout(new GridBagLayout());
     	setMaximumSize(new Dimension(5,5));
     	GridBagConstraints c = new GridBagConstraints();
@@ -103,6 +107,7 @@ public class ButtonPanel extends JPanel
     	c.gridx = 0;
     	c.gridy = 4;
     	add(rollButton, c);
+    	 
     	
     }
 
