@@ -18,8 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
-import interfaces.Improvable;
 import interfaces.Locatable;
 import interfaces.Mortgageable;
 import interfaces.Ownable;
@@ -146,8 +144,6 @@ public class PartyLeader {
 	}
 
 	public void sell(Player player, HistoryLog history) {
-		// TODO
-
 		//Check if a player even has houses to sell.
 		for(PrivateProperty property : player.getProperties() ){
 			if(property instanceof ImprovableProperty){
@@ -163,6 +159,7 @@ public class PartyLeader {
 		}
 		
 		else{
+			@SuppressWarnings("unused")
 			Sell sell = new Sell(player, history);
 			hasHouses = false;
 		}
@@ -172,7 +169,6 @@ public class PartyLeader {
 	}
 
 	public void mortgage(Player player) {
-		// TODO
 		// Get list of players properties.
 		// Check what properties are mortgageable
 		// Pass information to JPanel
@@ -422,18 +418,18 @@ public class PartyLeader {
 	}
 
 	public void auction(Player player){
-		//TODO
 		if(player.getLocation() instanceof Ownable && ((Ownable)player.getLocation()).getOwner() == null){
+			@SuppressWarnings("unused")
 			Auction auction = new Auction((Ownable)player.getLocation(),players,history);
 		}
 	}
 
 	public void trade(Player player){
+		@SuppressWarnings("unused")
 		Trade trade = new Trade(player, players, history);
 	}
 
 	public int finishTurn(Player player, int currentPlayerNumber, JLabel characterImage){
-		//TODO
 		// check for in jail too long, unpaid rent, etc.
 		//If player is on an ownable property that is unowned and hasn't bought it
 		//Force them to auction.
@@ -533,6 +529,7 @@ public class PartyLeader {
 				history.getTextArea().append(position+"th: "+curr.getIdentifier()+"\n");
 			}
 		}
+		@SuppressWarnings("unused")
 		EndGamePanel endGame = new EndGamePanel(lostPlayers);	
 	}
 
