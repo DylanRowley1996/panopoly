@@ -291,6 +291,7 @@ public class Auction extends JFrame{
 					players.get(currentPlayerNumber).addProperty((PrivateProperty)propertyToAuction);
 					players.get(currentPlayerNumber).deductFromBalance(playersAndBids.get(players.get(currentPlayerNumber).getIdentifier())); 
 					propertyToAuction.setOwner(players.get(currentPlayerNumber));
+					players.get(currentPlayerNumber).hasMonopoly((PrivateProperty) propertyToAuction);
 
 					//Tell users who has won the auction on the property and dispose of JFrame.
 					history.getTextArea().append("-> "+players.get(currentPlayerNumber).getIdentifier()+" has won the auction for "

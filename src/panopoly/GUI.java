@@ -151,11 +151,21 @@ public class GUI {
 		buttonPanel.getAuctionButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                        partyLeader.auction(players.get(currentPlayer), players, history);
+                        partyLeader.auction(players.get(currentPlayer));
                         updatePropCard(players.get(currentPlayer));
                     }
             
         });
+		
+		buttonPanel.getBuildButton().addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				partyLeader.build(players.get(currentPlayer));
+                updatePropCard(players.get(currentPlayer));
+			}
+			
+		});
 		
 		buttonPanel.getQuitGameButton().addActionListener(e->history.getTextArea().append("-> Quit Game clicked\n"));
 		buttonPanel.getBankruptyButton().addActionListener(new ActionListener() {        
@@ -184,7 +194,7 @@ public class GUI {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				partyLeader.trade(players.get(currentPlayer), players, history);
+				partyLeader.trade(players.get(currentPlayer));
 			}
 		});
 
