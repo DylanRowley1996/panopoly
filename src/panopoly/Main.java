@@ -17,8 +17,8 @@ public class Main {
 
 		//SelectionPanel panel = new SelectionPanel(players);
 		int noOfPlayers = 6;
-//		SetupGame gameSetup = new SetupGame(noOfPlayers);
-		StartingScreen startScreen = new StartingScreen();
+		SetupGame gameSetup = new SetupGame(noOfPlayers);
+//		StartingScreen startScreen = new StartingScreen();
 
 		/*gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
          gameSetup.compileChoiceOfCharacters();

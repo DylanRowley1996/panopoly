@@ -16,7 +16,7 @@ public class StartingScreen
 {	
 	JFrame frame;
 	SetupGame gameSetup;
-	int noOfPlayers = 6;
+	int noOfPlayers = 0;
 
 	JLabel background;
 	JPanel buttons;
@@ -71,20 +71,23 @@ public class StartingScreen
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{				
-				try
-				{
-//					getPlayerCount();
-					gameSetup = new SetupGame(noOfPlayers);
-					frame.dispose();
+//				try
+//				{
+					buttons.removeAll();
+					buttons.add(getPlayerCount());
+					frame.add(buttons);
+					frame.setVisible(true);
+					
+					
+//					gameSetup = new SetupGame(noOfPlayers);
+//					frame.dispose();
 				
-				} catch (EncryptedDocumentException | InvalidFormatException | IOException | URISyntaxException e1)
-				{				
-					e1.printStackTrace();
-				}
+//				} catch (EncryptedDocumentException | InvalidFormatException | IOException | URISyntaxException e1)
+//				{				
+//					e1.printStackTrace();
+//				}
 			}
 		});
-		
-//		frame.dispose();
 		
 		getQuitGameButton().addActionListener(new ActionListener()
 		{
@@ -94,10 +97,9 @@ public class StartingScreen
 				frame.dispose();
 			}
 		});
-//		System.exit(0);
+		
 		return gameSetup;
 		
-//		return gameSetup;
 	}
 
 	public JButton getQuitGameButton()
@@ -105,24 +107,15 @@ public class StartingScreen
 		return quitGameButton;
 	}
 	
-	public SetupGame quit()
+	public JPanel getPlayerCount()
 	{
-		getQuitGameButton().addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{				
-				frame.dispose();
-			}
-		});
-//		System.exit(0);
-		return gameSetup;
-	}
-	
-	public int getPlayerCount()
-	{
-		JPanel playerCount = new JPanel(new GridLayout(0, 1));
+		JPanel playerCount = new JPanel();
+//		playerCount.setLayout(null);
+		playerCount.setBackground(Color.RED);
+//		playerCount.setBounds(0, 0, 500, 100);
+		playerCount.setSize(500, 200);
 		
+		playerCount.setLayout(new FlowLayout());
 		ButtonGroup startingButtons = new ButtonGroup();
 		
 		JRadioButton one = new JRadioButton("1");
@@ -131,6 +124,40 @@ public class StartingScreen
 	    JRadioButton four = new JRadioButton("4");
 	    JRadioButton five = new JRadioButton("5");
 	    JRadioButton six = new JRadioButton("6");
+	    JButton confirmButton = new JButton("Confirm");
+	    
+	    JRadioButton numbers[] = {one, two, three, four, five, six};
+	    
+	    boolean numSelected = false;
+	    
+	    int i = 0;
+	    while(i < 6 && !numSelected)
+	    {
+	    	if(numbers[i].isSelected())
+	    	{
+	    		numSelected = true;
+//	    		noOfPlayers = i;
+	    	}
+	    	else
+	    	{
+	    		i++;
+	    	}
+	    }
+	    
+//	    noOfPlayers = i;
+	    confirmButton.addActionListener(new ActionListener() 
+	    {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+            	if(numbers[i].isSelected() == true)
+            	{
+            		noOfPlayers = i;
+            	}
+            }
+	    });
+	    
+	    System.out.println(noOfPlayers);
 	    
 	    startingButtons.add(one);
 	    startingButtons.add(two);
@@ -138,10 +165,11 @@ public class StartingScreen
 	    startingButtons.add(four);
 	    startingButtons.add(five);
 	    startingButtons.add(six);
+	    startingButtons.add(confirmButton);
 	    
-	    JLabel question = new JLabel("How many players are there:");
+	    JLabel question = new JLabel("How many players are there:\n");
 	    
-	    playerCount.add(question);
+	    playerCount.add(question, BorderLayout.LINE_START);
 	    playerCount.add(one);
 	    playerCount.add(two);
 	    playerCount.add(three);
@@ -149,7 +177,7 @@ public class StartingScreen
 	    playerCount.add(five);
 	    playerCount.add(six);
 	    
-	    return 6;
+	    return playerCount;
 	}
 
 	public static void main(String[] args) throws NullPointerException
