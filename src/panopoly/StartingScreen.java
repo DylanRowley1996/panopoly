@@ -110,9 +110,7 @@ public class StartingScreen
 	public JPanel getPlayerCount()
 	{
 		JPanel playerCount = new JPanel();
-//		playerCount.setLayout(null);
 		playerCount.setBackground(Color.RED);
-//		playerCount.setBounds(0, 0, 500, 100);
 		playerCount.setSize(500, 200);
 		
 		playerCount.setLayout(new FlowLayout());
@@ -126,46 +124,86 @@ public class StartingScreen
 	    JRadioButton six = new JRadioButton("6");
 	    JButton confirmButton = new JButton("Confirm");
 	    
-	    JRadioButton numbers[] = {one, two, three, four, five, six};
-	    
-	    boolean numSelected = false;
-	    
-	    int i = 0;
-	    while(i < 6 && !numSelected)
-	    {
-	    	if(numbers[i].isSelected())
-	    	{
-	    		numSelected = true;
-//	    		noOfPlayers = i;
-	    	}
-	    	else
-	    	{
-	    		i++;
-	    	}
-	    }
-	    
-//	    noOfPlayers = i;
-	    confirmButton.addActionListener(new ActionListener() 
-	    {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-            	if(numbers[i].isSelected() == true)
-            	{
-            		noOfPlayers = i;
-            	}
-            }
-	    });
-	    
-	    System.out.println(noOfPlayers);
-	    
-	    startingButtons.add(one);
+	    startingButtons.add(one); // Grouping only allows one button to be selected at a time
 	    startingButtons.add(two);
 	    startingButtons.add(three);
 	    startingButtons.add(four);
 	    startingButtons.add(five);
 	    startingButtons.add(six);
-	    startingButtons.add(confirmButton);
+	    
+	    JRadioButton numbers[] = {one, two, three, four, five, six};
+	    
+	    if(numbers[2].isSelected())
+	    {
+	    	System.out.println("TESTING");
+	    }
+	    
+	    confirmButton.addActionListener(new ActionListener() 
+	    {
+	    	int i = 0;
+	    	JRadioButton selectedButton = new JRadioButton();
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+            	boolean numSelected = false;
+
+            		while(i < 6 && !numSelected)
+            	    {
+            	    	if(numbers[i].isSelected())
+            	    	{
+            	    		noOfPlayers = i;
+            	    		try
+            				{
+            	    			gameSetup = new SetupGame(noOfPlayers);
+            				} catch (EncryptedDocumentException | InvalidFormatException | IOException | URISyntaxException e1)
+            				{				
+            					e1.printStackTrace();
+            				}
+            	    		numSelected = true;
+            	    	}
+            	    	else
+            	    	{
+            	    		i++;
+            	    	}
+            	    }
+            		
+            		selectedButton = numbers[i];
+            	
+            }
+	    });
+	    
+//	    boolean numSelected = false;
+//	    
+//	    int i = 0;
+//	    while(i < 6 && !numSelected)
+//	    {
+//	    	if(numbers[i].isSelected())
+//	    	{
+//	    		noOfPlayers = i;
+//	    		numSelected = true;
+//	    	}
+//	    	else
+//	    	{
+//	    		i++;
+//	    	}
+//	    }
+	    
+//	    JRadioButton selectedButton = numbers[i];
+	    
+//	    noOfPlayers = i;
+//	    confirmButton.addActionListener(new ActionListener() 
+//	    {
+//            @Override
+//            public void actionPerformed(ActionEvent e)
+//            {
+//            	if(numbers[i].isSelected() == true)
+//            	{
+//            		noOfPlayers = i;
+//            	}
+//            }
+//	    });
+	    	    
+//	    startingButtons.add(confirmButton);
 	    
 	    JLabel question = new JLabel("How many players are there:\n");
 	    
@@ -176,6 +214,8 @@ public class StartingScreen
 	    playerCount.add(four);
 	    playerCount.add(five);
 	    playerCount.add(six);
+//	    playerCount.setLayout(new GridLayout(0, 1));
+	    playerCount.add(confirmButton);
 	    
 	    return playerCount;
 	}
