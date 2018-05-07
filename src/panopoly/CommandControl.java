@@ -21,7 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
 import interfaces.Locatable;
 import interfaces.Mortgageable;
 import interfaces.Ownable;
@@ -176,7 +175,6 @@ public class CommandControl {
 	}
 
 	public void mortgage(Player player) {
-		// TODO
 		// Get list of players properties.
 		// Check what properties are mortgageable
 		// Pass information to JPanel
@@ -426,7 +424,6 @@ public class CommandControl {
 	}
 
 	public void auction(Player player){
-		//TODO
 		if(player.getLocation() instanceof Ownable && ((Ownable)player.getLocation()).getOwner() == null){
 			new Auction((Ownable)player.getLocation(),players,history);
 		}
@@ -437,7 +434,6 @@ public class CommandControl {
 	}
 
 	public int finishTurn(Player player, int currentPlayerNumber, JLabel characterImage){
-		//TODO
 		// check for in jail too long, unpaid rent, etc.
 		//If player is on an ownable property that is unowned and hasn't bought it
 		//Force them to auction.
@@ -556,6 +552,7 @@ public class CommandControl {
 				history.getTextArea().append(position+"th: "+curr.getIdentifier()+"\n");
 			}
 		}
+
 		new EndGamePanel(lostPlayers, board, frame);	
 	}
 

@@ -1,4 +1,5 @@
 package panopoly;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import interfaces.Groupable;
 import locations.*;
 
@@ -176,6 +176,7 @@ public class Board extends JPanel {
 			}
 		}
 	}
+	  
 	void updateIcons(Player p, NamedLocation oldLoc) {
 		for(int i=0;i<locations.size();i++) {
 			if(locations.get(i) == p.getLocation()) {

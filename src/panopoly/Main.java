@@ -15,7 +15,7 @@ public class Main {
 		}
 		
 		new SetupGame(startScreen.getNoOfPlayers());
-		
+				
 		startScreen.sleepTime();
 	}
 }
