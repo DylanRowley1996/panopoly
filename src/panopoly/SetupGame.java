@@ -64,7 +64,7 @@ public class SetupGame {
 		resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-		//addRandomPropertiesToEachPlayer();
+		addRandomPropertiesToEachPlayer();
 //		addRandomPropertiesToEachPlayer();
 
 		new GUI(players, noBoardRows, locationList);
@@ -534,8 +534,9 @@ public class SetupGame {
 	public void addRandomPropertiesToEachPlayer(){
 		int j=0;
 		for(int i =0;i<players.size();i++){
-			while(j < 20){
+			while(j < 30){
 				if(locationList.get(j) instanceof PrivateProperty){
+					System.out.println(locationList.get(j).getIdentifier());
 					players.get(i).buyProperty((PrivateProperty)locationList.get(j));
 				}
 				j++;
