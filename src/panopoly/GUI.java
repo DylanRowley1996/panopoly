@@ -132,7 +132,13 @@ public class GUI {
 				}
 			}
 		});
-		buttonPanel.getSellButton().addActionListener(e -> history.getTextArea().setText("Sell button clicked."));
+		
+		buttonPanel.getSellButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				partyLeader.sell(players.get(currentPlayer), history);
+			}
+		});
 
 		buttonPanel.getBuyButton().addActionListener(new ActionListener() {
 			@Override
