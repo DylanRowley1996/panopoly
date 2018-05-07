@@ -99,6 +99,7 @@ public class StartingScreen {
 
 		playerCount.setLayout(new FlowLayout());
 		ButtonGroup startingButtons = new ButtonGroup();
+<<<<<<< HEAD
 
 		JRadioButton two = new JRadioButton("2");
 		two.setBackground(Color.RED);
@@ -153,7 +154,6 @@ public class StartingScreen {
 		playerCount.add(confirmButton);
 
 		return playerCount;
-
 	}
 
 	public boolean getNumSelected() {
