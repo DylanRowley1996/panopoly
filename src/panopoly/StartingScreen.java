@@ -14,6 +14,8 @@ import java.net.URISyntaxException;
 
 public class StartingScreen
 {	
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	
 	JFrame frame;
 	SetupGame gameSetup;
 	int noOfPlayers = 0;
@@ -28,7 +30,8 @@ public class StartingScreen
 	{
 		frame = new JFrame();
 		frame.setTitle("Panopoly");
-		frame.setSize(910, 910);
+//		frame.setSize(910, 910);
+		frame.setSize(screenSize.width, screenSize.height);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -77,8 +80,7 @@ public class StartingScreen
 					buttons.add(getPlayerCount());
 					frame.add(buttons);
 					frame.setVisible(true);
-					
-					
+						
 //					gameSetup = new SetupGame(noOfPlayers);
 //					frame.dispose();
 				
@@ -169,9 +171,6 @@ public class StartingScreen
             	    		i++;
             	    	}
             	    }
-            		
-            		//selectedButton = numbers[i];
-            	
             }
 	    });
 	    
