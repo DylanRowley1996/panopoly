@@ -59,11 +59,11 @@ public class SetupGame {
 		compileChoiceOfCharacters();
 		
 		//TODO - Uncomment code below when we need queries working
-//		FindImages imageRetriever = new FindImages(characters, this.noOfPlayers);
-//		imageRetriever.searchForCharacterImages();
-//		imageRetriever.resizeAllImages();
+		FindImages imageRetriever = new FindImages(characters, this.noOfPlayers);
+		imageRetriever.searchForCharacterImages();
+		imageRetriever.resizeAllImages();
 		
-		resizeAllImages();
+		//resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
 		addRandomPropertiesToEachPlayer();
@@ -203,7 +203,7 @@ public class SetupGame {
 		Random rand = new Random();
 		int i = 0;
 
-		while(characters.size() != noOfPlayers){
+		while(characters.size() != this.noOfPlayers){
 			int choice = rand.nextInt(charactersAndThemes.get(i).size());
 
 			if(choice == 0) choice  += 1;
