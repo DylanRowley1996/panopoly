@@ -15,7 +15,7 @@ public class Main {
 		StartingScreen startScreen = new StartingScreen();
 		
 		while(!startScreen.getNumSelected()){
-			Thread.sleep(100);
+			Thread.sleep(5);
 		}
 		
 		

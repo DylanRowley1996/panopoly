@@ -12,15 +12,13 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class StartingScreen
-{	
+public class StartingScreen {
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	
+
 	JFrame frame;
 	SetupGame gameSetup;
 	private int noOfPlayers = 0;
 	private boolean numSelected = false;
-
 
 	JLabel background;
 	JPanel buttons;
@@ -28,13 +26,12 @@ public class StartingScreen
 	JButton startGameButton;
 	JButton quitGameButton;
 
-	public StartingScreen()
-	{
+	public StartingScreen() {
 		frame = new JFrame();
 		frame.setTitle("Panopoly");
 
-//		frame.setSize(screenSize.width - 10, screenSize.height - 10);
-		frame.setBounds(screenSize.width/2, 0, screenSize.width, screenSize.height);
+		// frame.setSize(screenSize.width - 10, screenSize.height - 10);
+		frame.setBounds(screenSize.width / 2, 0, screenSize.width, screenSize.height);
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,130 +57,110 @@ public class StartingScreen
 		buttons.add(quitGameButton);
 
 		frame.add(buttons);
-		
+
 		frame.setSize(900, 900);
-		
+
 		startGame();
 	}
 
-	public JButton getStartGameButton()
-	{
+	public JButton getStartGameButton() {
 		return startGameButton;
 	}
-	
-	public void startGame()
-	{
-		getStartGameButton().addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{				
 
-					buttons.removeAll();
-					buttons.add(getPlayerCount());
-					frame.add(buttons);
-					frame.setVisible(true);
+	public void startGame() {
+		getStartGameButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				buttons.removeAll();
+				buttons.add(getPlayerCount());
+				frame.add(buttons);
+				frame.setVisible(true);
 			}
 		});
-		
-		getQuitGameButton().addActionListener(new ActionListener()
-		{
+
+		getQuitGameButton().addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{				
+			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 			}
 		});
-		
+
 	}
 
-	public JButton getQuitGameButton()
-	{
+	public JButton getQuitGameButton() {
 		return quitGameButton;
 	}
-	
-	public JPanel getPlayerCount()
-	{
+
+	public JPanel getPlayerCount() {
 		JPanel playerCount = new JPanel();
 		playerCount.setBackground(Color.RED);
 		playerCount.setSize(500, 200);
-		
+
 		playerCount.setLayout(new FlowLayout());
 		ButtonGroup startingButtons = new ButtonGroup();
-		
-	    JRadioButton two = new JRadioButton("2");
-	    two.setBackground(Color.RED);
-	    JRadioButton three = new JRadioButton("3");
-	    three.setBackground(Color.RED);
-	    JRadioButton four = new JRadioButton("4");
-	    four.setBackground(Color.RED);
-	    JRadioButton five = new JRadioButton("5");
-	    five.setBackground(Color.RED);
-	    JRadioButton six = new JRadioButton("6");
-	    six.setBackground(Color.RED);
-	    JButton confirmButton = new JButton("Confirm");
-	    confirmButton.setBackground(Color.RED);
-	    
-	    
-	    // Grouping only allows one button to be selected at a time
-	    startingButtons.add(two);
-	    startingButtons.add(three);
-	    startingButtons.add(four);
-	    startingButtons.add(five);
-	    startingButtons.add(six);
-	    
-	    JRadioButton numbers[] = {two, three, four, five, six};
-	    
-	    confirmButton.addActionListener(new ActionListener() 
-	    {
-	    	int i = 0;
-	    	
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
 
-            	boolean numSelected = false;
+		JRadioButton two = new JRadioButton("2");
+		two.setBackground(Color.RED);
+		JRadioButton three = new JRadioButton("3");
+		three.setBackground(Color.RED);
+		JRadioButton four = new JRadioButton("4");
+		four.setBackground(Color.RED);
+		JRadioButton five = new JRadioButton("5");
+		five.setBackground(Color.RED);
+		JRadioButton six = new JRadioButton("6");
+		six.setBackground(Color.RED);
+		JButton confirmButton = new JButton("Confirm");
+		confirmButton.setBackground(Color.RED);
 
-            		while(i < 5 && !numSelected)
-            	    {
-            	    	if(numbers[i].isSelected())
-            	    	{
-            	    		noOfPlayers = i + 2; // Numbers start at 2
+		// Grouping only allows one button to be selected at a time
+		startingButtons.add(two);
+		startingButtons.add(three);
+		startingButtons.add(four);
+		startingButtons.add(five);
+		startingButtons.add(six);
 
-            	    		numSelected = true;
-            	    		
-            	    	}
-            	    	else
-            	    	{
-            	    		i++;
-            	    	}
-            	    }
-            }
-	    });
-	    
-	  
-	    JLabel question = new JLabel("How many players are there:\n");
-	    
-	    playerCount.add(question, BorderLayout.LINE_START);
-	    playerCount.add(two);
-	    playerCount.add(three);
-	    playerCount.add(four);
-	    playerCount.add(five);
-	    playerCount.add(six);
-	    
-	    playerCount.add(confirmButton);
-	    
-	    return playerCount;
-	  
+		JRadioButton numbers[] = { two, three, four, five, six };
+
+		confirmButton.addActionListener(new ActionListener() {
+			int i = 0;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				while (i < 5 && !numSelected) {
+					if (numbers[i].isSelected()) {
+						noOfPlayers = i + 2; // Numbers start at 2
+
+						numSelected = true;
+
+					} else {
+						i++;
+					}
+				}
+			}
+		});
+
+		JLabel question = new JLabel("How many players are there:\n");
+
+		playerCount.add(question, BorderLayout.LINE_START);
+		playerCount.add(two);
+		playerCount.add(three);
+		playerCount.add(four);
+		playerCount.add(five);
+		playerCount.add(six);
+
+		playerCount.add(confirmButton);
+
+		return playerCount;
+
 	}
-	
-	public boolean getNumSelected()
-	{
+
+	public boolean getNumSelected() {
 		return numSelected;
 	}
-	
-	public int getNoOfPlayers()
-	{
+
+	public int getNoOfPlayers() {
 		return noOfPlayers;
 	}
 
