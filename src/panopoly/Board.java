@@ -29,7 +29,7 @@ public class Board extends JPanel {
 	private static final long serialVersionUID = 7490346528321340119L;
 	private ArrayList<JPanel> squares = new ArrayList<JPanel>();
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private final int boardWidth = (int) (screenSize.getWidth()*0.66);
+	private final int boardWidth = (int) (screenSize.getWidth()*0.65);
 	private final int boardHeight = (int) (screenSize.getHeight()*0.9);
 	private final int boardRows;
 	private static  Map<Player,JLabel> labelMapping = new HashMap<Player,JLabel>();

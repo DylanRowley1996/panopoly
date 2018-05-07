@@ -34,6 +34,7 @@ public class GUI {
 	private HistoryLog history = new HistoryLog();
 	private PropertyInformationPanel propertyInformationPanel = new PropertyInformationPanel();
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
 	private ButtonPanel buttonPanel = new ButtonPanel();
 	private Board board;
 	private int currentPlayer = 0;
