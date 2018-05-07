@@ -146,14 +146,14 @@ public class PartyLeader {
 
 	public void sell(Player player, HistoryLog history) {
 		// TODO
-		
+
 		//Check if a player even has houses to sell.
 		for(PrivateProperty property : player.getProperties() ){
 			if(property.getNumHouses() != 0){
 				hasHouses = true;
 			}
 		}
-		
+
 		//Take corresponding action.
 		if(hasHouses == false){
 			history.getTextArea().append("-> You don't have any houses to sell.\n\n");
@@ -162,9 +162,9 @@ public class PartyLeader {
 			Sell sell = new Sell(player, history);
 
 		}
-		
-		
-		
+
+
+
 	}
 
 	public void mortgage(Player player) {
@@ -353,10 +353,10 @@ public class PartyLeader {
 
 								mortgagedSelected = true;
 								if(player.getNetWorth()>redeemableProperties.get(j).getRedeemAmount()) {	
-	
+
 									//Start totalling value of mortgages.
 									totalRedemptionValue += redeemableProperties.get(j).getRedeemAmount();
-	
+
 									//Find index of property to unmortgage then unmortgage this property in players list.
 									int indexToRedeem = player.getProperties().indexOf(redeemableProperties.get(j));
 									propertiesToRedeem.add(player.getProperties().get(indexToRedeem));
@@ -435,40 +435,35 @@ public class PartyLeader {
 		//Force them to auction.
 		if(player.getNetWorth()<0) {
 			history.getTextArea().append("You are in debt! Sell houses and cards or mortgage properties to pay your debt!\n");
-		}else if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
+		} 
+		else if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
 			history.getTextArea().append("Either 'Buy' or 'Auction' this property before finishing your turn.\n");
-		}else{
-			if(!player.hasRolled() && !player.isInJail()){
-				history.getTextArea().append("-> You must roll before finishing your turn.\n\n");
+		} 
+		else if(!player.hasRolled() && !player.isInJail()){
+			history.getTextArea().append("-> You must roll before finishing your turn.\n\n");
+		}
+		else if(player.isAnsweringMCQ()) {
+			history.getTextArea().append("-> Cannot end turn while answering MCQ.\n\n");
+		}
+		else{
+			boughtProperty = false;
+			player.setRolled(false);
+
+			if (currentPlayerNumber == players.size()-1) {
+				currentPlayerNumber = 0;
+			} else {
+				currentPlayerNumber++;
+			}
+			try {
+				BufferedImage myPicture = ImageIO
+						.read(new File(players.get(currentPlayerNumber).getPathForImageIcon()));
+				characterImage.setIcon(new ImageIcon(myPicture));
+				history.getTextArea()
+				.append("-> Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n\n");
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
-			/*
-			 * If player is on an ownable property that is unowned and hasn't bought it
-			 * 	Force them to auction.
-			 */
-			else if(player.getLocation() instanceof Ownable && !boughtProperty && ((Ownable)player.getLocation()).getOwner() == null ){
-				history.getTextArea().append("-> Either 'Buy' or 'Auction' this property before finishing your turn.\n\n");	
-			}
-
-			else{
-				boughtProperty = false;
-				player.setRolled(false);
-
-				if (currentPlayerNumber == players.size()-1) {
-					currentPlayerNumber = 0;
-				} else {
-					currentPlayerNumber++;
-				}
-				try {
-					BufferedImage myPicture = ImageIO
-							.read(new File(players.get(currentPlayerNumber).getPathForImageIcon()));
-					characterImage.setIcon(new ImageIcon(myPicture));
-					history.getTextArea()
-					.append("-> Current Player is now: " + players.get(currentPlayerNumber).getName() + "\n\n");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return currentPlayerNumber;
 	}
@@ -496,7 +491,7 @@ public class PartyLeader {
 
 		return stringToBuild;
 	}
-	
+
 	public void declareBankruptcy(Player player, int currentPlayerNumber, JLabel characterImage) {
 		history.getTextArea().append(player.getIdentifier()+" has declared bankruptcy and drops out.\n");
 		board.removeCharacter(player);
@@ -514,11 +509,11 @@ public class PartyLeader {
 			declareWinner(players.get(0));
 		}
 	}
-	
+
 	public void declareWinner(Player p)  {
 		history.getTextArea().append("THE WINNER IS "+p.getIdentifier()+"\n");
 	}
-	
+
 	public void build(Player player) {
 		if(player.getMonopolies().size() == 0){
 			history.getTextArea().append("-> You have no monopolies or one with a mortgaged property. Unable to build.\n\n");
