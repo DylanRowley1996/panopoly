@@ -18,7 +18,9 @@ public class StartingScreen
 	
 	JFrame frame;
 	SetupGame gameSetup;
-	int noOfPlayers = 0;
+	private int noOfPlayers = 0;
+	private boolean numSelected = false;
+
 
 	JLabel background;
 	JPanel buttons;
@@ -30,8 +32,10 @@ public class StartingScreen
 	{
 		frame = new JFrame();
 		frame.setTitle("Panopoly");
+
 //		frame.setSize(screenSize.width - 10, screenSize.height - 10);
 		frame.setBounds(screenSize.width/2, 0, screenSize.width, screenSize.height);
+
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -131,6 +135,7 @@ public class StartingScreen
             @Override
             public void actionPerformed(ActionEvent e)
             {
+
             	boolean numSelected = false;
 
             		while(i < 5 && !numSelected)
@@ -138,7 +143,9 @@ public class StartingScreen
             	    	if(numbers[i].isSelected())
             	    	{
             	    		noOfPlayers = i + 2; // Numbers start at 2
+
             	    		numSelected = true;
+            	    		
             	    	}
             	    	else
             	    	{
@@ -148,6 +155,7 @@ public class StartingScreen
             }
 	    });
 	    
+	  
 	    JLabel question = new JLabel("How many players are there:\n");
 	    
 	    playerCount.add(question, BorderLayout.LINE_START);
@@ -159,12 +167,18 @@ public class StartingScreen
 	    
 	    playerCount.add(confirmButton);
 	    
-	    if(numbers[2].isSelected())
-	    {
-	    	System.out.println("TESTING");
-	    }
-	    
 	    return playerCount;
 	  
 	}
+	
+	public boolean getNumSelected()
+	{
+		return numSelected;
+	}
+	
+	public int getNoOfPlayers()
+	{
+		return noOfPlayers;
+	}
+
 }

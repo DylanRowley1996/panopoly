@@ -9,16 +9,18 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public class Main {
-	public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException {
+	public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException, URISyntaxException, InterruptedException {
 
-		// Finds images from web using the chosen characters.
-		// FindImages findImages = new FindImages(gameSetup.getCharacters());
-		// findImages.Search();
-
-		//SelectionPanel panel = new SelectionPanel(players);
-//		int noOfPlayers = 6;
-//		SetupGame gameSetup = new SetupGame(noOfPlayers);
+	
 		StartingScreen startScreen = new StartingScreen();
+		
+		while(!startScreen.getNumSelected()){
+			Thread.sleep(100);
+		}
+		
+		
+		SetupGame gameSetup = new SetupGame(startScreen.getNoOfPlayers());
+
 
 		/*gameSetup.findCharactersFromThemes(gameSetup.findThemes(0, 0));
          gameSetup.compileChoiceOfCharacters();

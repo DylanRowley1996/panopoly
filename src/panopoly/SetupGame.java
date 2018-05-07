@@ -55,18 +55,18 @@ public class SetupGame {
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
 
 
-		findCharactersFromThemes(findThemes(0, 0, 6/*noCharacters*/));
+		findCharactersFromThemes(findThemes(0, 0, this.noOfPlayers/*noCharacters*/));
 		compileChoiceOfCharacters();
 		
 		//TODO - Uncomment code below when we need queries working
-		/*imageRetriever = new FindImages(characters);
-		imageRetriever.searchForCharacterImages();
-		imageRetriever.resizeAllImages();*/
+//		FindImages imageRetriever = new FindImages(characters, this.noOfPlayers);
+//		imageRetriever.searchForCharacterImages();
+//		imageRetriever.resizeAllImages();
 		
 		resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-
+		addRandomPropertiesToEachPlayer();
 //		addRandomPropertiesToEachPlayer();
 
 		new GUI(players, noBoardRows, locationList);
@@ -536,8 +536,9 @@ public class SetupGame {
 	public void addRandomPropertiesToEachPlayer(){
 		int j=0;
 		for(int i =0;i<players.size();i++){
-			while(j < 20){
+			while(j < 30){
 				if(locationList.get(j) instanceof PrivateProperty){
+					System.out.println(locationList.get(j).getIdentifier());
 					players.get(i).buyProperty((PrivateProperty)locationList.get(j));
 				}
 				j++;
