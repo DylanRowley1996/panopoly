@@ -66,10 +66,6 @@ public class SetupGame {
 		//resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
-<<<<<<< HEAD
-=======
-		//addRandomPropertiesToEachPlayer(); //TODO remove
->>>>>>> 7ba3889a9c9c3059788a903f5d20e9c010912583
 
 		new GUI(players, noBoardRows, locationList);
 	}
@@ -182,10 +178,6 @@ public class SetupGame {
 
 		}
 
-<<<<<<< HEAD
-	
-=======
->>>>>>> 7ba3889a9c9c3059788a903f5d20e9c010912583
 	}
 
 

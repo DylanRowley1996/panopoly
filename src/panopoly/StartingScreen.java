@@ -37,6 +37,7 @@ public class StartingScreen {
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		frame.setVisible(true);
 
 		frame.setLayout(new BorderLayout());
