@@ -154,7 +154,7 @@ public class StartingScreen
             	    {
             	    	if(numbers[i].isSelected())
             	    	{
-            	    		noOfPlayers = i;
+            	    		noOfPlayers = i+1;
             	    		
             	    		numSelected = true;
             	    		
