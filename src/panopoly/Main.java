@@ -14,8 +14,8 @@ public class Main {
 			Thread.sleep(5);
 		}
 		
-		@SuppressWarnings("unused")
-		SetupGame gameSetup = new SetupGame(startScreen.getNoOfPlayers());
-		
+		new SetupGame(startScreen.getNoOfPlayers());
+				
+		startScreen.sleepTime();
 	}
 }

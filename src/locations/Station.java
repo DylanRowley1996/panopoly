@@ -11,10 +11,6 @@ public class Station extends PrivateProperty {
 		return rentArray[super.getGroup().getNumLocsOwned(super.getOwner())-1];
 	}
 	
-	public void travelToStation() {
-		// TODO if player lands on Station and owns another Station they have the option to travel directly to that Station
-	}
-	
 	public String toString() {
 		String str = "";
 		if(super.owner!=null) {

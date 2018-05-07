@@ -34,6 +34,7 @@ public class GUI {
 	private HistoryLog history = new HistoryLog();
 	private PropertyInformationPanel propertyInformationPanel = new PropertyInformationPanel();
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
 	private ButtonPanel buttonPanel = new ButtonPanel();
 	private Board board;
 	private int currentPlayer = 0;
@@ -51,7 +52,7 @@ public class GUI {
 		frame.setIconImage(myGameIcon);
 
 		board = new Board(squares, locations);
-		PartyLeader partyLeader = new PartyLeader(history, board);
+		CommandControl partyLeader = new CommandControl(history, board);
 
 
 		SelectionPanel selectionPanel = new SelectionPanel(players);
@@ -135,7 +136,7 @@ public class GUI {
 		buttonPanel.getSellButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				partyLeader.sell(players.get(currentPlayer), history);
+				partyLeader.sell(players.get(currentPlayer));
 			}
 		});
 

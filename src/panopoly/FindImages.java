@@ -116,8 +116,10 @@ public class FindImages {
     public void resizeAllImages() throws IOException{
     	
     	//TODO - Change so it only loops on number of players
-    	for(int i=0;i<noOfPlayers;i++){
+    	System.out.println(" HERE " +noOfPlayers);
+    	for(int i=0;i<this.noOfPlayers;i++){ 		
     		 BufferedImage originalImage = ImageIO.read(new File("savedImages/"+characters.get(i)+".jpg"));//change path to where file is located
+    		 
              int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
 
              BufferedImage resizeImageJpg = resizeImage(originalImage, type, 150, 150);
