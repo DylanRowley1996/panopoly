@@ -50,10 +50,11 @@ public class PartyLeader {
 		}
 		else {
 			int moveCount;
-			String str = "";
+			NamedLocation oldLoc = (NamedLocation) player.getLocation();;
 			ArrayList<Integer> diceFaces;
 			diceFaces = normalDice.getFaces();
 			moveCount = normalDice.rollDice(2, 6);
+			moveCount = locations.size()/4;
 			history.getTextArea().append("-> You have rolled a "+moveCount+"  "+diceFaces+".\n");	
 
 			if(!normalDice.isDouble()) {
@@ -70,8 +71,9 @@ public class PartyLeader {
 				}
 			}
 			for(int i=0;i<moveCount;i++) {
+				//oldLoc=(NamedLocation) player.getLocation();
 				player.setLocation((NamedLocation)player.getNextLoc());
-				board.updateIcons(player);
+				//board.updateIcons(player, oldLoc);
 			}
 			normalDice.refreshDice();
 			history.getTextArea().append("-> You have rolled onto "+player.getLocation().getIdentifier()+".\n\n");
@@ -92,16 +94,15 @@ public class PartyLeader {
 				mcq.createMCQPanel(player, history, null);
 			}
 			if(location instanceof CardLocation) {
+				oldLoc=(NamedLocation) player.getLocation();
 				CardGenerator.createCard(player, history);
-				if(location!=player.getLocation())	board.updateIcons(player);
-				board.repaint();
-				board.revalidate();
 			}
 			if(location instanceof GoToJail) {
 				player.setJail(new Jail(player, history));
 				history.getTextArea().append("-> Go to Jail!\n\n");
+				oldLoc=(NamedLocation) player.getLocation();
 				player.setLocation(locations.get(locations.size()/4));
-				board.updateIcons(player);
+
 			}
 			if(location instanceof TaxableLocation) {
 				history.getTextArea().append("-> " + location.getIdentifier() + "\n");
@@ -119,6 +120,7 @@ public class PartyLeader {
 				player.deductFromBalance(tax);
 			}
 
+			board.updateIcons(player, oldLoc);
 			board.repaint();
 			board.revalidate();
 		}		
@@ -494,7 +496,7 @@ public class PartyLeader {
 	}
 
 	public void declareBankruptcy(Player player, int currentPlayerNumber, JLabel characterImage) throws IOException {
-		history.getTextArea().append(player.getIdentifier()+" has declared bankruptcy and drops out.\n");
+		history.getTextArea().append(player.getIdentifier()+" has declared bankruptcy and drops out.\n#n");
 		board.removeCharacter(player);
 		lostPlayers.add(player);
 		players.remove(player);
