@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.logging.impl.NoOpLog;
+
 /*
  *This class searches the web for images relating to character names
  */
@@ -28,8 +30,10 @@ public class FindImages {
 	private GResults results;
 	private String[] queries;
 	private ArrayList<String> characters;
+	private int noOfPlayers = 0;
 	
-	public FindImages(ArrayList<String> characters){
+	public FindImages(ArrayList<String> characters, int noOfPlayers){
+		this.noOfPlayers = noOfPlayers;
 		this.characters = characters;
 		queries = new String[characters.size()];
 		createQueries(characters);
@@ -111,7 +115,7 @@ public class FindImages {
     public void resizeAllImages() throws IOException{
     	
     	//TODO - Change so it only loops on number of players
-    	for(int i=0;i<6;i++){
+    	for(int i=0;i<noOfPlayers;i++){
     		 BufferedImage originalImage = ImageIO.read(new File("savedImages/"+characters.get(i)+".jpg"));//change path to where file is located
              int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
 

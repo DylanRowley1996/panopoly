@@ -55,13 +55,13 @@ public class SetupGame {
 		int noGroups = (int) ((noLocations*0.8)-8)/3;
 
 
-		findCharactersFromThemes(findThemes(0, 0, 6/*noCharacters*/));
+		findCharactersFromThemes(findThemes(0, 0, this.noOfPlayers/*noCharacters*/));
 		compileChoiceOfCharacters();
 		
 		//TODO - Uncomment code below when we need queries working
-		/*imageRetriever = new FindImages(characters);
+		FindImages imageRetriever = new FindImages(characters, this.noOfPlayers);
 		imageRetriever.searchForCharacterImages();
-		imageRetriever.resizeAllImages();*/
+		imageRetriever.resizeAllImages();
 		
 		resizeAllImages();
 		createPlayers();

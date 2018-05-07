@@ -18,7 +18,9 @@ public class StartingScreen
 	
 	JFrame frame;
 	SetupGame gameSetup;
-	int noOfPlayers = 0;
+	private int noOfPlayers = 0;
+	private boolean numSelected = false;
+
 
 	JLabel background;
 	JPanel buttons;
@@ -31,7 +33,7 @@ public class StartingScreen
 		frame = new JFrame();
 		frame.setTitle("Panopoly");
 //		frame.setSize(910, 910);
-		frame.setSize(screenSize.width, screenSize.height);
+		frame.setSize(screenSize.width, screenSize.height-10);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -148,23 +150,14 @@ public class StartingScreen
             @Override
             public void actionPerformed(ActionEvent e)
             {
-            	boolean numSelected = false;
-
             		while(i < 6 && !numSelected)
             	    {
             	    	if(numbers[i].isSelected())
             	    	{
-            	    		noOfPlayers = i + 1;
-            	    		try
-            				{
-            	    			System.out.print(noOfPlayers+"\n");
-            	    			gameSetup = new SetupGame(noOfPlayers);
-            	    			
-            				} catch (EncryptedDocumentException | InvalidFormatException | IOException | URISyntaxException e1)
-            				{				
-            					e1.printStackTrace();
-            				}
+            	    		noOfPlayers = i;
+            	    		
             	    		numSelected = true;
+            	    		
             	    	}
             	    	else
             	    	{
@@ -174,6 +167,7 @@ public class StartingScreen
             }
 	    });
 	    
+	  
 	    JLabel question = new JLabel("How many players are there:\n");
 	    
 	    playerCount.add(question, BorderLayout.LINE_START);
@@ -188,6 +182,15 @@ public class StartingScreen
 	    
 	    return playerCount;
 	}
+	
+	public boolean getNumSelected(){
+		return numSelected;
+	}
+	
+	public int getNoOfPlayers(){
+		return noOfPlayers;
+	}
+	
 
 //	public static void main(String[] args) throws NullPointerException
 //	{
