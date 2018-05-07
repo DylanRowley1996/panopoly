@@ -54,7 +54,7 @@ public class PartyLeader {
 			ArrayList<Integer> diceFaces;
 			diceFaces = normalDice.getFaces();
 			moveCount = normalDice.rollDice(2, 6);
-			moveCount = locations.size()/4;
+			moveCount = 10;
 			history.getTextArea().append("-> You have rolled a "+moveCount+"  "+diceFaces+".\n");	
 
 			if(!normalDice.isDouble()) {
@@ -71,9 +71,7 @@ public class PartyLeader {
 				}
 			}
 			for(int i=0;i<moveCount;i++) {
-				//oldLoc=(NamedLocation) player.getLocation();
 				player.setLocation((NamedLocation)player.getNextLoc());
-				//board.updateIcons(player, oldLoc);
 			}
 			normalDice.refreshDice();
 			history.getTextArea().append("-> You have rolled onto "+player.getLocation().getIdentifier()+".\n\n");
@@ -89,7 +87,7 @@ public class PartyLeader {
 					history.getTextArea().append("-> You paid $"+rent+ " in rent to "+((PrivateProperty)location).getOwner().getIdentifier()+".\n\n");
 				}
 			}
-			if(location instanceof MCQLocation) { // TODO get rid of !
+			if(location instanceof MCQLocation) {
 				MCQ mcq = new MCQ();
 				mcq.createMCQPanel(player, history, null);
 			}

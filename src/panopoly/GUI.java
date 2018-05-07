@@ -166,7 +166,7 @@ public class GUI {
 
 		});
 
-		buttonPanel.getQuitGameButton().addActionListener(e->history.getTextArea().append("-> Quit Game clicked\n"));
+		buttonPanel.getQuitGameButton().addActionListener(e->history.getTextArea().append("-> Quit Game clicked\n")); //TODO
 		buttonPanel.getBankruptyButton().addActionListener(new ActionListener() {        
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -176,7 +176,6 @@ public class GUI {
 						try{
 							partyLeader.declareBankruptcy(players.get(currentPlayer),currentPlayer,characterImage);
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}			
 					}
@@ -188,6 +187,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				partyLeader.mortgage(players.get(currentPlayer));
+				updatePropCard(players.get(currentPlayer));
 			}
 		});
 
@@ -196,6 +196,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				partyLeader.redeem(players.get(currentPlayer));
+				updatePropCard(players.get(currentPlayer));
 			}
 		});
 
@@ -204,6 +205,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				partyLeader.trade(players.get(currentPlayer));
+				updatePropCard(players.get(currentPlayer));
 			}
 		});
 
