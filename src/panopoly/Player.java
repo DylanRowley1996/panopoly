@@ -220,6 +220,11 @@ public class Player implements Playable {
 	public boolean isAnsweringMCQ() {
 		return isAnsweringMCQ;
 	}
-	
+//	public int getTotalWorth() {
+//		int output;
+//		for()
+//		output = networth;
+//	}
+//	
 }
 

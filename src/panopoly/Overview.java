@@ -11,6 +11,8 @@ public class Overview extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Dimension dimensions = Toolkit.getDefaultToolkit().getScreenSize();
+
 	private JComboBox<?> playerList;
     private ArrayList<Player> players;
     private JLabel playerInformation = new JLabel("");
@@ -53,7 +55,7 @@ public class Overview extends JFrame {
 
         //Add panel to JFrame
         pack();
-        setLocationRelativeTo(null);
+        setLocation((int)(dimensions.getWidth()/5),(int)(dimensions.getHeight()/4));
         setSize(400,300);
         getContentPane().setBackground(Color.decode("#71AE6F"));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

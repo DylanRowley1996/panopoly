@@ -34,6 +34,7 @@ public class GUI {
 	private HistoryLog history = new HistoryLog();
 	private PropertyInformationPanel propertyInformationPanel = new PropertyInformationPanel();
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
 	private ButtonPanel buttonPanel = new ButtonPanel();
 	private Board board;
 	private int currentPlayer = 0;
@@ -166,19 +167,21 @@ public class GUI {
 
 		});
 
-		buttonPanel.getQuitGameButton().addActionListener(e->history.getTextArea().append("-> Quit Game clicked\n")); //TODO
-		buttonPanel.getBankruptyButton().addActionListener(new ActionListener() {        
+		buttonPanel.getQuitGameButton().addActionListener(new ActionListener() { 
+			@Override
+				public void actionPerformed(ActionEvent e) {
+				ConfirmationScreen askForConfirm = new ConfirmationScreen();
+				askForConfirm.ConfirmationQuit(partyLeader,players.get(currentPlayer),currentPlayer,characterImage, frame);
+		}
+	});
+		
+		
+		buttonPanel.getBankruptButton().addActionListener(new ActionListener() {        
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(players.size()>1) {
 					ConfirmationScreen askForConfirm = new ConfirmationScreen();
-					if(askForConfirm.run()) {
-						try{
-							partyLeader.declareBankruptcy(players.get(currentPlayer),currentPlayer,characterImage);
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}			
-					}
+					askForConfirm.ConfirmationBankrupt(partyLeader,players.get(currentPlayer),currentPlayer,characterImage, frame);
 				}
 
 			}
