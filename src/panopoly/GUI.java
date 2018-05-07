@@ -136,7 +136,7 @@ public class GUI {
 		buttonPanel.getSellButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				partyLeader.sell(players.get(currentPlayer), history);
+				partyLeader.sell(players.get(currentPlayer));
 			}
 		});
 
