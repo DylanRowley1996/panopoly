@@ -6,8 +6,7 @@ public class Station extends PrivateProperty {
 		super(name, group);
 	}
 	
-	public int getRent() {
-		//return rentTable[super.getOwner().getNumStationsOwned()-1];
+	public int getRentalAmount() {
 		return rentArray[super.getGroup().getNumLocsOwned(super.getOwner())-1];
 	}
 	

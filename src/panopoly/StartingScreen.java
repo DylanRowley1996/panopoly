@@ -136,7 +136,7 @@ public class StartingScreen {
 						noOfPlayers = i + 2; // Numbers start at 2
 
 						numSelected = true;
-						
+
 						buttons.removeAll();
 						buttons.add(getLoadingScreen());
 						frame.add(buttons);
@@ -145,8 +145,7 @@ public class StartingScreen {
 						i++;
 					}
 				}
-//				sleepTime();
-//				frame.dispose();
+
 			}
 		});
 
@@ -171,7 +170,7 @@ public class StartingScreen {
 	public int getNoOfPlayers() {
 		return noOfPlayers;
 	}
-	
+
 	public void sleepTime()
 	{	
 		try {
@@ -179,20 +178,20 @@ public class StartingScreen {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		frame.dispose();
 	}
-	
+
 	public JPanel getLoadingScreen()
 	{
 		JPanel loadScreen = new JPanel();
 		loadScreen.setBackground(Color.RED);
 		loadScreen.setSize(650, 250);
-		
+
 		JLabel load = new JLabel("Loading...");
-		
+
 		loadScreen.add(load);
-		
+
 		return loadScreen;
 	}
 }

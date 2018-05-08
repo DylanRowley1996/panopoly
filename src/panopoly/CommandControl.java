@@ -150,7 +150,6 @@ public class CommandControl {
 	}
 
 	public void sell(Player player) {
-		// TODO
 
 		//Check if a player even has houses to sell.
 		for(PrivateProperty property : player.getProperties() ){
@@ -165,13 +164,13 @@ public class CommandControl {
 		if(!hasHouses){
 			history.getTextArea().append("-> You don't have any houses to sell.\n\n");
 		}
-		
+
 		else{
 			new Sell(player, history);
 			hasHouses = false;
 		}
-		
-		
+
+
 
 	}
 
@@ -526,7 +525,7 @@ public class CommandControl {
 			}
 		});
 		Collections.reverseOrder();
-		
+
 		Iterator<Player> it = players.iterator();
 
 		while(it.hasNext()) {

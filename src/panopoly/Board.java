@@ -22,7 +22,7 @@ import interfaces.Groupable;
 import locations.*;
 
 public class Board extends JPanel {
-	
+
 	/**
 	 * 
 	 */
@@ -35,12 +35,12 @@ public class Board extends JPanel {
 	private static  Map<Player,JLabel> labelMapping = new HashMap<Player,JLabel>();
 	private static ArrayList<NamedLocation> locations;
 	private static HashMap<NamedLocation, JPanel> locationMap = new HashMap<NamedLocation, JPanel>();
-	
+
 	public Board(int rows, ArrayList<NamedLocation> locList) {
-		
+
 		boardRows = rows;
 		locations = locList;
-		
+
 		FlowLayout layout = new FlowLayout();
 		layout.setVgap(0);
 		layout.setHgap(0);
@@ -48,15 +48,15 @@ public class Board extends JPanel {
 		setPreferredSize(new Dimension(boardWidth, boardHeight));
 		int squareWidth;
 		int squareHeight;
-		
+
 		Iterator<NamedLocation> locIt = locations.iterator();
-		
+
 		for(int i=0; i<boardRows; i++) {
 			for(int j=0; j<boardRows; j++) {
 				JPanel square = new JPanel();
 				squareWidth = boardWidth/boardRows;
 				squareHeight = boardHeight/boardRows;
-				
+
 				if(i==0 || i==(boardRows-2) || j==0 || j==(boardRows-2)) {
 					NamedLocation loc = null;
 					Color locColor = Color.WHITE;
@@ -72,9 +72,9 @@ public class Board extends JPanel {
 					}
 					else	locName = "Unnamed Location";
 					String wrappedName = "<html><div style='text-align: center;'>" + locName + "</div></html>"; 
-				    JLabel nameLabel = new JLabel(wrappedName);
-				    String nameLayout = BorderLayout.CENTER;
-					
+					JLabel nameLabel = new JLabel(wrappedName);
+					String nameLayout = BorderLayout.CENTER;
+
 					if(i==0&&j==0 || i==0&&j==(boardRows-2)  || i==(boardRows-2)&&j==0 || i==(boardRows-2)&&j==(boardRows-2)) {
 						squareWidth = (boardWidth/boardRows)*2;
 						squareHeight = (boardHeight/boardRows)*2;
@@ -96,60 +96,60 @@ public class Board extends JPanel {
 						labelHeight = squareHeight;
 						nameLayout = BorderLayout.WEST;
 					}
-					
+
 					square.setBackground(locColor);
 					square.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-  
+
 					nameLabel.setPreferredSize(new Dimension(labelWidth, labelHeight));
 					//nameLabel.setFont(new Font("Verdana", 1, 12));
 					nameLabel.setFont(new Font(nameLabel.getFont().getFontName(), 1, getFontSizeFit(nameLabel, locName, labelWidth)));
-					
-				    square.setLayout(new BorderLayout());
-				    square.add(nameLabel, nameLayout);
 
-				    locationMap.put(loc, square);
+					square.setLayout(new BorderLayout());
+					square.add(nameLabel, nameLayout);
+
+					locationMap.put(loc, square);
 				}
-				
+
 				square.setPreferredSize(new Dimension(squareWidth, squareHeight));
-				
+
 				squares.add(square);
-				
+
 				if(j==0 || j==(boardRows-2))	j++;
 			}
 			if(i==0 || i==(boardRows-2))	i++;
 		}
-		
+
 		for(JPanel square: squares) {
 			add(square);
 		}
-		
-		
-			
+
+
+
 		return;
 	}
-	
-	
+
+
 	int getFontSizeFit(JLabel label, String text, int w) {
-	    
+
 		Font originalFont = label.getFont();
 
-	    int stringWidth = label.getFontMetrics(originalFont).stringWidth(text);
-	    int componentWidth = w;
+		int stringWidth = label.getFontMetrics(originalFont).stringWidth(text);
+		int componentWidth = w;
 
-	    if (stringWidth > componentWidth) { // Resize only if needed
-	        // Find out how much the font can shrink in width.
-	        double widthRatio = (double)componentWidth / (double)stringWidth;
-	        
-	        int newFontSize = (int)Math.floor(originalFont.getSize() * widthRatio); // Keep the minimum size
+		if (stringWidth > componentWidth) { // Resize only if needed
+			// Find out how much the font can shrink in width.
+			double widthRatio = (double)componentWidth / (double)stringWidth;
 
-	        // Set the label's font size to the newly determined size.
-	        return newFontSize;
-	    } else
-	    	return originalFont.getSize();
+			int newFontSize = (int)Math.floor(originalFont.getSize() * widthRatio); // Keep the minimum size
+
+			// Set the label's font size to the newly determined size.
+			return newFontSize;
+		} else
+			return originalFont.getSize();
 
 	}
-	
-	  void paintCharacterIcons(Player p, BufferedImage x) {
+
+	void paintCharacterIcons(Player p, BufferedImage x) {
 		//for all locations
 		for(int i=0;i<locations.size();i++) {
 			//find location that current player is at
@@ -165,7 +165,7 @@ public class Board extends JPanel {
 					myResizedPicture = x.getScaledInstance(panelSize.width/4, panelSize.height/2, Image.SCALE_SMOOTH);
 				}else {
 					myResizedPicture = x.getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
-					}
+				}
 				//create a label of the players image icon 
 				GridLayout myGrid = new GridLayout(3,3,0,0);
 				locationMap.get(locations.get(i)).setLayout(myGrid);
@@ -176,7 +176,7 @@ public class Board extends JPanel {
 			}
 		}
 	}
-	  
+
 	void updateIcons(Player p, NamedLocation oldLoc) {
 		for(int i=0;i<locations.size();i++) {
 			if(locations.get(i) == p.getLocation()) {
@@ -189,7 +189,7 @@ public class Board extends JPanel {
 					myResizedPicture = p.getIcon().getScaledInstance(panelSize.height/2, panelSize.height/3, Image.SCALE_SMOOTH);
 				}else {
 					myResizedPicture = p.getIcon().getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);
-					}
+				}
 				GridLayout myGrid = new GridLayout(3,3,0,0);
 				JLabel currentLabel = new JLabel(new ImageIcon(myResizedPicture));
 				JLabel oldLabel = labelMapping.get(p);
@@ -200,17 +200,17 @@ public class Board extends JPanel {
 				labelMapping.put(p, currentLabel);
 			}
 			this.revalidate();
-			
+
 		}
 	}
 	NamedLocation getStartLocation() {
 		return locations.get(0);
 	}
-	
+
 	public void refresh(){
 		this.repaint();
 		Iterator<Entry<NamedLocation, JPanel>> it = locationMap.entrySet().iterator();
-		
+
 		while(it.hasNext()){
 			Entry<NamedLocation, JPanel> square = it.next();
 			square.getValue().repaint();

@@ -103,7 +103,7 @@ public class GUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setResizable(false);
-		
+
 		//add player icons to board
 		for(Player p:players) {
 			p.setLocation(this.getStartPosition());
@@ -111,7 +111,7 @@ public class GUI {
 			board.paintCharacterIcons(p , p.getIcon());
 			board.revalidate();
 		}
-		
+
 
 		propertyInformationPanel.getPropNamePane().setText(locations.get(0).getIdentifier());
 		propertyInformationPanel.getPropNamePane().setBackground(Color.WHITE);
@@ -170,13 +170,13 @@ public class GUI {
 
 		buttonPanel.getQuitGameButton().addActionListener(new ActionListener() { 
 			@Override
-				public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				ConfirmationScreen askForConfirm = new ConfirmationScreen();
 				askForConfirm.ConfirmationQuit(partyLeader,players.get(currentPlayer),currentPlayer,characterImage, frame);
-		}
-	});
-		
-		
+			}
+		});
+
+
 		buttonPanel.getBankruptButton().addActionListener(new ActionListener() {        
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -247,8 +247,8 @@ public class GUI {
 
 	}
 
-		
-	
+
+
 	public void updatePropCard(Player player) {
 		Locatable currLoc = player.getLocation();
 		propertyInformationPanel.getPropNamePane().setText(currLoc.getIdentifier());

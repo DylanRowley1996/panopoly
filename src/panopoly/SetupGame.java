@@ -40,9 +40,9 @@ public class SetupGame {
 	private int noOfPlayers;
 	private ArrayList<ArrayList<String>> charactersAndThemes = new ArrayList<ArrayList<String>>(noOfPlayers);
 	private ArrayList<String> characters = new ArrayList<String>();
-	private static ArrayList<NamedLocation> locationList = new ArrayList<NamedLocation>(); // TODO maybe change to ArrayList of ArrayLists for multiple boards
+	private static ArrayList<NamedLocation> locationList = new ArrayList<NamedLocation>();
 	private static ArrayList<Player> players = new ArrayList<Player>();
-	
+
 	Random rand = new Random();
 	private String[] pathsToIcons = null;
 
@@ -57,12 +57,11 @@ public class SetupGame {
 
 		findCharactersFromThemes(findThemes(0, 0, this.noOfPlayers));
 		compileChoiceOfCharacters();
-		
-		//TODO - Uncomment code below when we need queries working
+
 		FindImages imageRetriever = new FindImages(characters, this.noOfPlayers);
 		imageRetriever.searchForCharacterImages();
 		imageRetriever.resizeAllImages();
-		
+
 		//resizeAllImages();
 		createPlayers();
 		setUpLocations(findThemes(1, 1, noGroups), noLocations, noBoardRows);
@@ -267,7 +266,7 @@ public class SetupGame {
 		noLocsAdded = noLocations-4;
 
 		worldsListWb.close();
-		
+
 
 		/* 
 		 * All property names have been gathered.
@@ -320,7 +319,7 @@ public class SetupGame {
 		locationList.get(0).setPrevLoc(locationList.get(noBoardRows-2)); 
 		locationList.get(noBoardRows-3).setNextLoc(locationList.get(noBoardRows-1)); // top right corner
 		locationList.get(noBoardRows-3).setPrevLoc(locationList.get(noBoardRows-4));
-		
+
 		int boardSide = 0;
 		for(int i=noBoardRows-1; i<noLocations-(noBoardRows-1); i++) { // board sides
 			boardSide++;
@@ -338,7 +337,7 @@ public class SetupGame {
 		locationList.get(noBoardRows-2).setPrevLoc(locationList.get(noBoardRows));
 		locationList.get(noLocations-(noBoardRows-1)).setNextLoc(locationList.get(noLocations-1)); // above bottom right corner
 		locationList.get(noLocations-(noBoardRows-1)).setPrevLoc(locationList.get(noLocations-(noBoardRows+1)));
-		
+
 		for(int i=noLocations-(noBoardRows-3); i<noLocations-1; i++) { // bottom row
 			NamedLocation loc = locationList.get(i);
 			loc.setNextLoc(locationList.get(i-1));
@@ -459,7 +458,7 @@ public class SetupGame {
 			players.add(new Player(characterName,pathsToIcons[i]));
 		}
 	}
-	
+
 	public static ArrayList<Player> getPlayers() {
 		return players;
 	}
@@ -486,7 +485,6 @@ public class SetupGame {
 		File dir = new File("savedImages");
 		File[] children = dir.listFiles();
 
-		//TODO - Change so it only loops on number of players
 		for(int i=0;i<pathsToIcons.length;i++){
 			BufferedImage originalImage = ImageIO.read(new File(children[i].toString()));//change path to where file is located
 			int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
