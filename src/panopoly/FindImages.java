@@ -82,9 +82,7 @@ public class FindImages {
             	  saveImage(results.getThing(j).toString(), destinationFile);
             	  conn.disconnect(); 
   		 }
-  		 catch(Exception e){
-  			 System.out.println("CATCH");
-  			 System.out.println(e.getMessage());
+  		 catch(Exception e) {
   			 saveDefaultImage(destinationFile);
   		 }
  	  }

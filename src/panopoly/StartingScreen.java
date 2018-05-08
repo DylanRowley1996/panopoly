@@ -114,7 +114,7 @@ public class StartingScreen {
 		JRadioButton six = new JRadioButton("6");
 		six.setBackground(Color.RED);
 		JButton confirmButton = new JButton("Confirm");
-		confirmButton.setBackground(Color.RED);
+		confirmButton.setBackground(Color.WHITE);
 
 		// Grouping only allows one button to be selected at a time
 		startingButtons.add(two);

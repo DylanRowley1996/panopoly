@@ -55,7 +55,6 @@ public class CommandControl {
 			ArrayList<Integer> diceFaces;
 			diceFaces = normalDice.getFaces();
 			moveCount = normalDice.rollDice(2, 6);
-			moveCount=locations.size()/4;
 			history.getTextArea().append("-> You have rolled a "+moveCount+"  "+diceFaces+".\n");	
 
 			if(!normalDice.isDouble()) {
