@@ -121,6 +121,7 @@ public class SelectionPanel extends JPanel{
     	selectionPanel.pack();
     	selectionPanel.setLocationRelativeTo(null);//Centers JFrame on users screen.
     	selectionPanel.setVisible(true);
+    	selectionPanel.setTitle("Character Selection");
     	selectionPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  }
 	

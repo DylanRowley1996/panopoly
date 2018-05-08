@@ -65,10 +65,7 @@ public class FindImages {
 		boolean failed = false;
 		for(int i =0;i<queries.length;i++){
 			String destinationFile = "savedImages/"+characters.get(i)+".jpg";
-			if(failed){
-				i--;
-				failed = false;
-			}
+
 			try{
 				URL url = new URL("https://www.googleapis.com/customsearch/v1?key="+key+"&cx="+cx+"&q="+queries[i]+"&searchType=image&fileType=jpg");
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
