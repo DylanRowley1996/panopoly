@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,32 +58,38 @@ public class FindImages {
 	
 	
 	 
-    void searchForCharacterImages()  throws MalformedURLException, URISyntaxException, IOException {
-    	  String key = "AIzaSyBsLxIF8LF3t3em5FSidHZMHtMg9AmHEDQ";
-    	  String cx  = "008580275858431148289:yexe3mpvnwg";
-    	      	  
-    	 for(int i =0;i<queries.length;i++){
-    		 try{ 
-    		  URL url = new URL("https://www.googleapis.com/customsearch/v1?key="+key+"&cx="+cx+"&q="+queries[i]+"&searchType=image&fileType=jpg");
-          	  HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-           	  conn.setRequestMethod("GET");
-           	  conn.setRequestProperty("Accept", "application/json");
-              conn.addRequestProperty("User-Agent", "Mozilla/4.0");
+	void searchForCharacterImages()  throws MalformedURLException, URISyntaxException, IOException {
+  	  String key = "AIzaSyBsLxIF8LF3t3em5FSidHZMHtMg9AmHEDQ";
+  	  String cx  = "008580275858431148289:yexe3mpvnwg";
+  	  int j =0;
+  	  boolean failed = false;
+  	 for(int i =0;i<queries.length;i++){
+  		String destinationFile = "savedImages/"+characters.get(i)+".jpg";
+  		 if(failed){
+  			 i--;
+  			 failed = false;
+  		 }
+  		 try{
+  			 URL url = new URL("https://www.googleapis.com/customsearch/v1?key="+key+"&cx="+cx+"&q="+queries[i]+"&searchType=image&fileType=jpg");
+           	  HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            	  conn.setRequestMethod("GET");
+            	  conn.setRequestProperty("Accept", "application/json");
+               conn.addRequestProperty("User-Agent", "Mozilla/4.0");
 
-           	  BufferedReader br = new BufferedReader(new InputStreamReader ( ( conn.getInputStream() ) ) );
-           	  results = new Gson().fromJson(br, GResults.class);
-           	  
-           	  String destinationFile = "savedImages/"+characters.get(i)+".jpg";
-           	  saveImage(results.getThing(0).toString(), destinationFile);
-           	  conn.disconnect();
-           }catch(Exception exception){
-        	   
-           }
-   		
-       	  
-   	  }
- 
-    }
+            	  BufferedReader br = new BufferedReader(new InputStreamReader ( ( conn.getInputStream() ) ) );
+            	  results = new Gson().fromJson(br, GResults.class);
+            	  
+            	  saveImage(results.getThing(j).toString(), destinationFile);
+            	  conn.disconnect(); 
+  		 }
+  		 catch(Exception e){
+  			 System.out.println("CATCH");
+  			 System.out.println(e.getMessage());
+  			 saveDefaultImage(destinationFile);
+  		 }
+ 	  }
+
+  }
   
     
     public static void saveImage(String imageUrl, String destinationFile) throws IOException {
@@ -99,8 +106,24 @@ public class FindImages {
 
 		is.close();
 		os.close();
-	}
-      
+    }
+    
+    public static void saveDefaultImage(String destinationFile) throws IOException {
+ 		File defaultFile = new File("gameImages/default_avatar.jpg");
+ 		InputStream is = new FileInputStream(defaultFile);
+ 		OutputStream os = new FileOutputStream(destinationFile);
+
+ 		byte[] b = new byte[2048];
+ 		int length;
+
+ 		while ((length = is.read(b)) != -1) {
+ 			os.write(b, 0, length);
+ 		}
+
+ 		is.close();
+ 		os.close();
+ 	}
+    
     //https://stackoverflow.com/questions/12620158/save-resized-image-java
     private static BufferedImage resizeImage(BufferedImage originalImage, int type, int IMG_WIDTH, int IMG_HEIGHT) {
 	    BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
