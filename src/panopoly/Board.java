@@ -159,9 +159,9 @@ public class Board extends JPanel {
 				//resize image to a very small icon
 				int locationIndex = i;
 				Image myResizedPicture;
-				if((locationIndex>0 && locationIndex<10) ||(locationIndex>20 && locationIndex<30)) {
+				if((locationIndex>0 && locationIndex<locations.size()/4) ||(locationIndex>locations.size()-1-(locations.size()/4) && locationIndex<locations.size()-1)) {
 					myResizedPicture = x.getScaledInstance(panelSize.width/2, panelSize.height/4, Image.SCALE_SMOOTH);
-				}else if((locationIndex>10 && locationIndex<20) ||(locationIndex>30 && locationIndex<40)) {
+				}else if(locationIndex>locations.size()/4 && locationIndex<locations.size()-1-(locations.size()/4)) {
 					myResizedPicture = x.getScaledInstance(panelSize.width/4, panelSize.height/2, Image.SCALE_SMOOTH);
 				}else {
 					myResizedPicture = x.getScaledInstance(panelSize.width/4, panelSize.height/4, Image.SCALE_SMOOTH);

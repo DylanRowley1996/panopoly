@@ -96,7 +96,6 @@ public class CommandControl {
 				CardGenerator.createCard(player, history);
 			}
 			if(location instanceof CommunismTax) {
-				oldLoc=(NamedLocation) player.getLocation();
 				CommunismTax.spreadWealth(players, history);
 			}
 			if(location instanceof GoToJail) {
@@ -110,7 +109,7 @@ public class CommandControl {
 				history.getTextArea().append("-> " + location.getIdentifier() + "\n");
 				int tax=0;
 				if(rand.nextInt(2)==0) {
-					history.getTextArea().append("-> Pay " + ((TaxableLocation) location).getIncomePercentage() + "% of your total net worth in taxes\n");
+					history.getTextArea().append("-> Pay " + ((TaxableLocation) location).getIncomePercentage()*100 + "% of your total net worth in taxes\n");
 					tax = (int) (player.getNetWorth()*((TaxableLocation) location).getIncomePercentage());
 					history.getTextArea().append("-> "+player.getName()+" paid $"+tax+" in taxes\n\n");
 					player.deductFromBalance(tax);

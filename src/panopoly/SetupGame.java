@@ -373,7 +373,7 @@ public class SetupGame {
 					Collections.shuffle(taxNames);
 					String name = taxNames.get(0);
 					taxNames.remove(0);
-					double iP = ThreadLocalRandom.current().nextDouble(0.05, 0.51);
+					double iP = ThreadLocalRandom.current().nextDouble(0.05, 0.36);
 					int flatAmount = rand.nextInt(300)+50;
 					int fARoundToFive = 5*(Math.round(flatAmount/5));
 					loc = new TaxableLocation(name, iP, fARoundToFive);

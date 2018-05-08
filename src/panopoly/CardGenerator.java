@@ -171,7 +171,7 @@ public class CardGenerator {
 
 		 }else if(effectDecider<37) {			//win or lose a % amount		
 			 randomAmount = (int) (Math.random() * (20 - 5)) + 5;	
-			 double percent = randomAmount/100;
+			 double percent = (double) randomAmount/100.0;
 			 percent = Math.round(randomAmount*100.0)/100.0;
 			 reward = "You take all of "+genderPossesive2+ " cash, increasing your wallet by "+percent+"%!";
 			 penalty = genderDeterminer+" takes "+percent+ "% of your money!";
